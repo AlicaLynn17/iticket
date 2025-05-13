@@ -1,6 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { Box, Typography, Table, TableBody, TableCell, TableHead, TableRow } from "@mui/material";
+import {
+  Box,
+  Typography,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  Paper
+} from "@mui/material";
 import axios from "axios";
+
 
 export const TicketSummary = () => {
   const [summary, setSummary] = useState({
@@ -15,7 +25,6 @@ export const TicketSummary = () => {
         const response = await axios.get("http://localhost:3000/tickets");
         const tickets = response.data;
 
-        // Summarize tickets
         const byCategory: Record<string, number> = {};
         const byStatus: Record<string, number> = {};
         const byPriority: Record<string, number> = {};
@@ -36,47 +45,46 @@ export const TicketSummary = () => {
   }, []);
 
   return (
-    <Box sx={{ maxWidth: 800, margin: "auto", mt: 5 }}>
-      <Table>
-        <TableHead>
-          <TableRow>
-            <TableCell>Metric</TableCell>
-            <TableCell>Details</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          <TableRow>
-            <TableCell>By Category</TableCell>
-            <TableCell>
-              {Object.entries(summary.byCategory).map(([category, count]) => (
-                <div key={category}>
-                  {category}: {count}
-                </div>
-              ))}
-            </TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell>By Status</TableCell>
-            <TableCell>
-              {Object.entries(summary.byStatus).map(([status, count]) => (
-                <div key={status}>
-                  {status}: {count}
-                </div>
-              ))}
-            </TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell>By Priority</TableCell>
-            <TableCell>
-              {Object.entries(summary.byPriority).map(([priority, count]) => (
-                <div key={priority}>
-                  {priority}: {count}
-                </div>
-              ))}
-            </TableCell>
-          </TableRow>
-        </TableBody>
-      </Table>
+    <Box className="ticket-summary-container">
+      <div className="ticket-summary-box">
+        <h1>Ticket Summary Report</h1>
+        <Paper className="ticket-summary-table">
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>Metric</TableCell>
+                <TableCell>Details</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              <TableRow>
+                <TableCell>By Category</TableCell>
+                <TableCell>
+                  {Object.entries(summary.byCategory).map(([category, count]) => (
+                    <div key={category}>{category}: {count}</div>
+                  ))}
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>By Status</TableCell>
+                <TableCell>
+                  {Object.entries(summary.byStatus).map(([status, count]) => (
+                    <div key={status}>{status}: {count}</div>
+                  ))}
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>By Priority</TableCell>
+                <TableCell>
+                  {Object.entries(summary.byPriority).map(([priority, count]) => (
+                    <div key={priority}>{priority}: {count}</div>
+                  ))}
+                </TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>
+        </Paper>
+      </div>
     </Box>
   );
 };

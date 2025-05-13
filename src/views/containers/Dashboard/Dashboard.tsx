@@ -1,16 +1,14 @@
-import { Box, Grid, Paper, Typography, Divider, LinearProgress, Stack } from "@mui/material";
+import React from "react";
+import { Typography, Divider, LinearProgress } from "@mui/material";
 import AssignmentIcon from "@mui/icons-material/Assignment";
 import AssignmentTurnedInIcon from "@mui/icons-material/AssignmentTurnedIn";
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import ThumbUpAltIcon from "@mui/icons-material/ThumbUpAlt";
 import ThumbDownAltIcon from "@mui/icons-material/ThumbDownAlt";
-import { useNavigate } from "react-router-dom";
+import "./Dashboard.css";
 
 export const Dashboard = () => {
-  const navigate = useNavigate();
-
-  // Mock data for demonstration
   const stats = {
     unresolved: 5,
     overdue: 2,
@@ -25,101 +23,66 @@ export const Dashboard = () => {
   };
 
   return (
-    <Box sx={{ p: 3 }}>
-      <Typography variant="h4" gutterBottom>
-        ITicket Help Desk Dashboard
-      </Typography>
-      <Grid container spacing={2} sx={{ mb: 2 }}>
-        {/* Ticket Stats */}
-        <Grid item xs={12} sm={6} md={3}>
-          <Paper sx={{ p: 2, textAlign: "center" }}>
-            <AssignmentIcon color="primary" sx={{ fontSize: 40 }} />
-            <Typography variant="h6">Unresolved</Typography>
-            <Typography variant="h4">{stats.unresolved}</Typography>
-          </Paper>
-        </Grid>
-        <Grid item xs={12} sm={6} md={3}>
-          <Paper sx={{ p: 2, textAlign: "center" }}>
-            <ErrorOutlineIcon color="error" sx={{ fontSize: 40 }} />
-            <Typography variant="h6">Overdue</Typography>
-            <Typography variant="h4">{stats.overdue}</Typography>
-          </Paper>
-        </Grid>
-        <Grid item xs={12} sm={6} md={3}>
-          <Paper sx={{ p: 2, textAlign: "center" }}>
-            <AccessTimeIcon color="warning" sx={{ fontSize: 40 }} />
-            <Typography variant="h6">Due Today</Typography>
-            <Typography variant="h4">{stats.dueToday}</Typography>
-          </Paper>
-        </Grid>
-        <Grid item xs={12} sm={6} md={3}>
-          <Paper sx={{ p: 2, textAlign: "center" }}>
-            <AssignmentTurnedInIcon color="success" sx={{ fontSize: 40 }} />
-            <Typography variant="h6">Resolved</Typography>
-            <Typography variant="h4">{stats.resolved}</Typography>
-          </Paper>
-        </Grid>
-      </Grid>
+    <div className="dashboard-container">
+      <div className="dashboard-header">
+        <h1>Dashboard</h1>
+        <h2>ITicket Help Desk Summary</h2>
+      </div>
 
-      <Grid container spacing={2}>
-        {/* Customer Satisfaction */}
-        <Grid item xs={12} md={6}>
-          <Paper sx={{ p: 3 }}>
-            <Typography variant="h6" gutterBottom>
-              Customer Satisfaction
-            </Typography>
-            <Stack direction="row" spacing={2} alignItems="center" sx={{ mb: 1 }}>
-              <ThumbUpAltIcon color="success" />
-              <Typography>Positive</Typography>
-              <LinearProgress
-                variant="determinate"
-                value={stats.satisfaction.positive}
-                sx={{ flex: 1, mx: 2, height: 10, borderRadius: 5, bgcolor: "#e0f2f1" }}
-                color="success"
-              />
-              <Typography>{stats.satisfaction.positive}%</Typography>
-            </Stack>
-            <Stack direction="row" spacing={2} alignItems="center" sx={{ mb: 1 }}>
-              <ThumbDownAltIcon color="warning" />
-              <Typography>Neutral</Typography>
-              <LinearProgress
-                variant="determinate"
-                value={stats.satisfaction.neutral}
-                sx={{ flex: 1, mx: 2, height: 10, borderRadius: 5, bgcolor: "#fffde7" }}
-                color="warning"
-              />
-              <Typography>{stats.satisfaction.neutral}%</Typography>
-            </Stack>
-            <Stack direction="row" spacing={2} alignItems="center">
-              <ThumbDownAltIcon color="error" />
-              <Typography>Negative</Typography>
-              <LinearProgress
-                variant="determinate"
-                value={stats.satisfaction.negative}
-                sx={{ flex: 1, mx: 2, height: 10, borderRadius: 5, bgcolor: "#ffebee" }}
-                color="error"
-              />
-              <Typography>{stats.satisfaction.negative}%</Typography>
-            </Stack>
-          </Paper>
-        </Grid>
+      <div className="dashboard-grid">
+        <div className="stat-card">
+          <AssignmentIcon className="stat-icon" />
+          <p className="stat-title">Unresolved</p>
+          <p className="stat-value">{stats.unresolved}</p>
+        </div>
+        <div className="stat-card">
+          <ErrorOutlineIcon className="stat-icon" />
+          <p className="stat-title">Overdue</p>
+          <p className="stat-value">{stats.overdue}</p>
+        </div>
+        <div className="stat-card">
+          <AccessTimeIcon className="stat-icon" />
+          <p className="stat-title">Due Today</p>
+          <p className="stat-value">{stats.dueToday}</p>
+        </div>
+        <div className="stat-card">
+          <AssignmentTurnedInIcon className="stat-icon" />
+          <p className="stat-title">Resolved</p>
+          <p className="stat-value">{stats.resolved}</p>
+        </div>
+      </div>
 
-        {/* Agent Performance */}
-        <Grid item xs={12} md={6}>
-          <Paper sx={{ p: 3 }}>
-            <Typography variant="h6" gutterBottom>
-              Agent Performance
-            </Typography>
-            <Typography>
-              <b>Number of Tickets Resolved:</b> {stats.resolved}
-            </Typography>
-            <Divider sx={{ my: 1 }} />
-            <Typography>
-              <b>Average Resolution Time:</b> {stats.avgResolutionTime}
-            </Typography>
-          </Paper>
-        </Grid>
-      </Grid>
-    </Box>
+      <div className="section-card">
+        <h2>Customer Satisfaction</h2>
+
+        <div className="progress-row">
+          <ThumbUpAltIcon style={{ color: "#4CAF50" }} />
+          <p className="progress-label">Positive</p>
+          <LinearProgress variant="determinate" value={stats.satisfaction.positive} className="progress-bar success" />
+          <p className="progress-percent">{stats.satisfaction.positive}%</p>
+        </div>
+
+        <div className="progress-row">
+          <ThumbDownAltIcon style={{ color: "#F89B5D" }} />
+          <p className="progress-label">Neutral</p>
+          <LinearProgress variant="determinate" value={stats.satisfaction.neutral} className="progress-bar warning" />
+          <p className="progress-percent">{stats.satisfaction.neutral}%</p>
+        </div>
+
+        <div className="progress-row">
+          <ThumbDownAltIcon style={{ color: "#F44336" }} />
+          <p className="progress-label">Negative</p>
+          <LinearProgress variant="determinate" value={stats.satisfaction.negative} className="progress-bar error" />
+          <p className="progress-percent">{stats.satisfaction.negative}%</p>
+        </div>
+      </div>
+
+      <div className="section-card">
+        <h2>Agent Performance</h2>
+        <p><strong>Tickets Resolved:</strong> {stats.resolved}</p>
+        <Divider sx={{ my: 1 }} />
+        <p><strong>Average Resolution Time:</strong> {stats.avgResolutionTime}</p>
+      </div>
+    </div>
   );
 };

@@ -1,0 +1,116 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Inter', sans-serif;
+}
+
+.login-container {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  background-color: #ffffff;
+}
+
+.login-form {
+  width: 50%;
+  padding: 2rem 4rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.login-form form {
+  max-width: 450px;
+  
+  margin-left: 50px;
+}
+
+.login-form h1 {
+  color: #3C5759;
+  font-size: 27px;
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.login-form h1::before {
+  content: "";
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  background-color: #F9A26C;
+  border-radius: 4px;
+  transform: rotate(-10deg);
+}
+
+.login-form h2, .login-form h3 {
+  color: #333;
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  margin-top: 20px;
+}
+
+.login-form h3 {
+    font-size: 16px;
+}
+
+label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-size: 12px;
+  color: #666;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+.login-form .MuiTextField-root {
+  margin-bottom: 1rem;
+  background-color: #F5F5F5;
+  border: 1px solid #e7e7e7;
+  border-radius: 2px;
+}
+
+.login-form button {
+  width: 100%;
+  padding: 0.875rem;
+  background-color: #3C5759;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 1rem;
+  transition: background-color 0.2s;
+}
+
+.login-form button:hover {
+  background-color: #2a4042;
+}
+
+.login-form .bottom-text {
+  text-align: center;
+  margin-top: 1rem;
+  font-size: 14px;
+}
+
+.login-form .bottom-text a {
+  color: #3C5759;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.login-form .bottom-text a:hover {
+  text-decoration: underline;
+}
+
+.login-container::after {
+  content: "";
+  width: 50%;
+  background-color: #3C5759;
+}

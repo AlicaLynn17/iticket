@@ -21,8 +21,10 @@ import {
 import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+import VisibilityIcon from "@mui/icons-material/Visibility";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import "./ViewArticles.css"; // ✅ Import CSS here
 
 export const ViewArticles = () => {
   const [articles, setArticles] = useState<any[]>([]);
@@ -62,9 +64,9 @@ export const ViewArticles = () => {
   const handleCloseSnackbar = () => setSnackbar({ ...snackbar, open: false });
 
   return (
-    <Box sx={{ maxWidth: 900, margin: "auto", mt: 5 }}>
-      <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 3 }}>
-        <Typography variant="h4">Articles</Typography>
+    <Box className="view-articles-container">
+      <Stack direction="row" className="articles-header">
+        <h1>Articles</h1>
         <Button
           variant="contained"
           startIcon={<AddIcon />}
@@ -73,7 +75,7 @@ export const ViewArticles = () => {
           New Article
         </Button>
       </Stack>
-      <Paper sx={{ p: 2 }}>
+      <Paper className="article-table-wrapper">
         <Table>
           <TableHead>
             <TableRow>
@@ -86,7 +88,7 @@ export const ViewArticles = () => {
           <TableBody>
             {articles.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={4} align="center">
+                <TableCell colSpan={4} className="no-articles">
                   No articles found.
                 </TableCell>
               </TableRow>
@@ -101,6 +103,15 @@ export const ViewArticles = () => {
                       : "-"}
                   </TableCell>
                   <TableCell align="center">
+                    <Tooltip title="View">
+                      <IconButton
+                        color="secondary"
+                        onClick={() => navigate(`/view-article/${article.id}`)}
+                      >
+                        <VisibilityIcon />
+                      </IconButton>
+                    </Tooltip>
+
                     <Tooltip title="Edit">
                       <IconButton
                         color="primary"
@@ -124,6 +135,7 @@ export const ViewArticles = () => {
           </TableBody>
         </Table>
       </Paper>
+
       <Dialog open={deleteDialogOpen} onClose={handleCancelDelete}>
         <DialogTitle>Confirm Delete</DialogTitle>
         <DialogContent>
@@ -138,6 +150,7 @@ export const ViewArticles = () => {
           </Stack>
         </DialogContent>
       </Dialog>
+
       <Snackbar
         open={snackbar.open}
         autoHideDuration={1500}

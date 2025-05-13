@@ -37,6 +37,30 @@
       "email": "me@asa.com",
       "role": "user",
       "password": "me"
+    },
+    {
+      "id": "84b2",
+      "name": "Franka",
+      "email": "frankaong@iticket.com",
+      "role": "admin",
+      "password": "123"
+    },
+    {
+      "id": "2822",
+      "name": "Sungchan Jung",
+      "email": "jsc@iticket.com",
+      "password": "123",
+      "role": "admin",
+      "preferences": {
+        "defaultView": "Open Tickets"
+      }
+    },
+    {
+      "id": "2713",
+      "name": "Anton Lee",
+      "email": "leeanton@iticket.com",
+      "password": "123",
+      "role": "user"
     }
   ],
   "tickets": [
@@ -46,7 +70,7 @@
       "category": "Technical",
       "priority": "High",
       "status": "Closed",
-      "attachment": "qqq",
+      "attachment": "aaa",
       "assignedTo": "5a46",
       "createdAt": "2023-05-01T10:00:00Z",
       "resolvedAt": "2023-05-02T12:00:00Z"
@@ -71,6 +95,17 @@
       "status": "Open",
       "assignedTo": "4e4b",
       "createdAt": "2025-05-13T05:43:11.630Z",
+      "resolvedAt": null
+    },
+    {
+      "id": "072b",
+      "description": "hhh",
+      "category": "Billing",
+      "priority": "Medium",
+      "attachment": "",
+      "status": "Open",
+      "assignedTo": "4e4b",
+      "createdAt": "2025-05-13T14:25:20.556Z",
       "resolvedAt": null
     }
   ],
@@ -128,6 +163,14 @@
       "userId": "13ec",
       "ticketId": "4dae",
       "createdAt": "2025-05-13T07:46:45.148Z"
+    },
+    {
+      "id": "9aa1",
+      "rating": 4,
+      "comments": "hello",
+      "userId": "13ec",
+      "ticketId": "4dae",
+      "createdAt": "2025-05-13T15:27:33.907Z"
     }
   ]
 }

@@ -4,6 +4,10 @@ export const PATHS = {
     path: "/",
     label: "Not Found"
   },
+  SIGNUP: {
+    path: "/signup",
+    label: "Signup"
+  },
   LOGIN: {
     path: "/login",
     label: "Login"
@@ -26,7 +30,7 @@ export const PATHS = {
 // SIDE BAR MENU PATH
 export const SIDE_BAR_MENU = [
   { path: "/dashboard", label: "Dashboard" },
-  { path: "/view-users", label: "Users" },
+  { path: "/view-users", label: "Users", role: "admin" },
   { path: "/view-tickets", label: "Tickets" },
   { path: "/reports", label: "Reports" },
   { path: "/view-articles", label: "Knowledge Base" },

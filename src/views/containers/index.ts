@@ -1,6 +1,7 @@
 export * from "./Dashboard";
 export * from "./Feedback";
 export * from "./KnowledgeBase";
+export * from "./Signup";
 export * from "./Login";
 export * from "./Logout";
 export * from "./Main";

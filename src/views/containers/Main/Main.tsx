@@ -10,7 +10,6 @@ import Typography from "@mui/material/Typography";
 import { useTheme } from "@mui/material/styles";
 import MenuIcon from "@mui/icons-material/Menu";
 import { styled } from "@mui/material/styles";
-// import MainLayoutComponent from "../../components/Main";
 import AppBar from "../../components/AppBar";
 import Divider from "@mui/material/Divider";
 import Toolbar from "@mui/material/Toolbar";
@@ -21,8 +20,7 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 
-
-// Material UI icons for each menu item
+// Material UI icons
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import PeopleIcon from "@mui/icons-material/People";
 import AssignmentIcon from "@mui/icons-material/Assignment";
@@ -33,7 +31,7 @@ import MenuBookIcon from "@mui/icons-material/MenuBook";
 import FeedbackIcon from "@mui/icons-material/Feedback";
 import LogoutIcon from "@mui/icons-material/Logout";
 
-// Map menu labels to icons
+// Icon map
 const iconMap: Record<string, React.ReactNode> = {
   Dashboard: <DashboardIcon />,
   Users: <PeopleIcon />,
@@ -47,23 +45,23 @@ const iconMap: Record<string, React.ReactNode> = {
 };
 
 export const Main = () => {
-  // NAVIGATE TO SPECIFIC USER
   const navigate = useNavigate();
   const location = useLocation();
-
-  // OPEN DRAWER LEFT SIDE
   const [openDrawer, setOpenDrawer] = React.useState(true);
-
   const drawerWidth = openDrawer ? drawerWidthOpen : drawerWidthClosed;
-
-  // THEME CUSTOMIZATION
   const theme = useTheme();
 
   useEffect(() => {
-    // AUTO DIRECT USER TO DASHBOARD WHEN PATH IS DEFAULT
     if (location.pathname === PATHS.MAIN.path) navigate(PATHS.LOGIN.path);
   }, [location.pathname, navigate]);
 
+  // ✅ Get logged-in user
+  const user = JSON.parse(localStorage.getItem("user") || "{}");
+
+  // ✅ Filter sidebar menu based on role
+  const filteredMenu = SIDE_BAR_MENU.filter(
+    (item) => !item.role || item.role === user.role
+  );
 
   return (
     <Fragment>
@@ -75,10 +73,7 @@ export const Main = () => {
             aria-label="open drawer"
             onClick={() => setOpenDrawer(!openDrawer)}
             edge="start"
-            sx={[
-              { mr: 2 },
-              openDrawer && { display: "none" }
-            ]}
+            sx={[{ mr: 2 }, openDrawer && { display: "none" }]}
           >
             <MenuIcon />
           </IconButton>
@@ -87,9 +82,10 @@ export const Main = () => {
           </Typography>
         </Toolbar>
       </AppBar>
-      {/* SIDE BAR DRAWER */}
+
+      {/* Sidebar Drawer */}
       <Drawer
-       sx={{
+        sx={{
           width: drawerWidth,
           flexShrink: 0,
           "& .MuiDrawer-paper": {
@@ -100,21 +96,27 @@ export const Main = () => {
             borderRight: 0,
             overflowX: "hidden",
             transition: "width 0.3s",
-          }
+          },
         }}
         variant="persistent"
         anchor="left"
         open={openDrawer}
       >
-        {/* Close button at the top */}
-          <IconButton onClick={() => setOpenDrawer(!openDrawer)} sx={{ color: "#fff", mt: 1, mb: 1 }}>
-            {theme.direction === "ltr" ? <ChevronLeftIcon /> : <ChevronRightIcon />}
-          </IconButton>
-        
+        <IconButton
+          onClick={() => setOpenDrawer(!openDrawer)}
+          sx={{ color: "#fff", mt: 1, mb: 1 }}
+        >
+          {theme.direction === "ltr" ? (
+            <ChevronLeftIcon />
+          ) : (
+            <ChevronRightIcon />
+          )}
+        </IconButton>
+
         <Divider sx={{ borderColor: "#3e5c6d" }} />
-        {/* SIDE BAR MENU ITEMS */}
+
         <List>
-          {SIDE_BAR_MENU.map((item) => (
+          {filteredMenu.map((item) => (
             <ListItem key={item.path} disablePadding sx={{ display: "block" }}>
               <NavLink
                 to={item.path}
@@ -124,7 +126,7 @@ export const Main = () => {
                   background: isActive ? "#3e5c6d" : "inherit",
                   borderRadius: 8,
                   margin: "8px 4px",
-                  display: "block"
+                  display: "block",
                 })}
               >
                 <ListItemButton
@@ -144,7 +146,7 @@ export const Main = () => {
                     primaryTypographyProps={{
                       fontSize: 12,
                       textAlign: "center",
-                      color: "#fff"
+                      color: "#fff",
                     }}
                   />
                 </ListItemButton>
@@ -153,6 +155,7 @@ export const Main = () => {
           ))}
         </List>
       </Drawer>
+
       <MainLayout open={openDrawer}>
         <DrawerHeader />
         <Outlet />
@@ -165,14 +168,14 @@ export const drawerWidthOpen = 140;
 export const drawerWidthClosed = 56;
 
 const MainLayout = styled("main", {
-  shouldForwardProp: (prop) => prop !== "open"
+  shouldForwardProp: (prop) => prop !== "open",
 })<{ open?: boolean }>(({ theme, open }) => ({
   flexGrow: 1,
   padding: theme.spacing(3),
   marginLeft: open ? drawerWidthOpen : drawerWidthClosed,
   transition: theme.transitions.create("margin", {
     easing: theme.transitions.easing.sharp,
-    duration: theme.transitions.duration.leavingScreen
+    duration: theme.transitions.duration.leavingScreen,
   }),
 }));
 
