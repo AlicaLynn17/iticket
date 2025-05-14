@@ -51,7 +51,7 @@ export const EditArticle = () => {
   return (
     <Box sx={{ maxWidth: 600, margin: "auto", mt: 5 }}>
       <Typography variant="h5" gutterBottom>
-        Edit Knowledge Base Article
+        Edit Article
       </Typography>
       <form onSubmit={handleSubmit}>
         <TextField

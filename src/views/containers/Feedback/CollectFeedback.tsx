@@ -44,9 +44,12 @@ export const CollectFeedback = () => {
   const handleCloseSnackbar = () => setSnackbar({ ...snackbar, open: false });
 
   return (
-    <Box sx={{ maxWidth: 600, margin: "auto", mt: 5 }}>
+    <Box sx={{ maxWidth: 800, margin: "auto", mt: 5 }}>
       <Typography variant="h5" gutterBottom>
         Provide Feedback
+      </Typography>
+      <Typography variant="subtitle2" color="text.secondary" sx={{ mb: 1 }}>
+        Ticket ID: <b>{ticketId}</b>
       </Typography>
       <form onSubmit={handleSubmit}>
         <Typography component="legend">Rating</Typography>

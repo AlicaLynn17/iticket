@@ -1,1 +1,1 @@
-export * from "./SetPreferences";
+export { SetPreferences } from "./SetPreferences";

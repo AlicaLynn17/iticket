@@ -1,9 +1,37 @@
 import React, { useEffect, useState } from "react";
-import { Box, Typography, Table, TableBody, TableCell, TableHead, TableRow } from "@mui/material";
+import {
+  Box,
+  Typography,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  Paper,
+  Stack,
+  Avatar,
+  Rating
+} from "@mui/material";
 import axios from "axios";
+
+type User = {
+  id: string;
+  name: string;
+  // add other fields if needed
+};
+
+type FeedbackItem = {
+  id: string;
+  userId: string;
+  ticketId: string;
+  rating: number;
+  comments: string;
+  createdAt: string;
+};
 
 export const ViewFeedback = () => {
   const [feedback, setFeedback] = useState([]);
+  const [users, setUsers] = useState<User[]>([]);
 
   useEffect(() => {
     const fetchFeedback = async () => {
@@ -14,37 +42,65 @@ export const ViewFeedback = () => {
         console.error("Error fetching feedback:", error);
       }
     };
-
+    const fetchUsers = async () => {
+      try {
+        const response = await axios.get("http://localhost:3000/users");
+        setUsers(response.data);
+      } catch (error) {
+        // ignore
+      }
+    };
     fetchFeedback();
+    fetchUsers();
   }, []);
 
+  const getUserName = (userId: string) =>
+    users.find((u: any) => String(u.id) === String(userId))?.name || userId;
+
   return (
-    <Box sx={{ maxWidth: 800, margin: "auto", mt: 5 }}>
-      <Typography variant="h5" gutterBottom>
+    <Box sx={{ maxWidth: 1000, margin: "auto", mt: 5 }}>
+      <Typography variant="h4" fontWeight={700} gutterBottom>
         Customer Feedback
       </Typography>
-      <Table>
-        <TableHead>
-          <TableRow>
-            <TableCell>Ticket ID</TableCell>
-            <TableCell>User ID</TableCell>
-            <TableCell>Rating</TableCell>
-            <TableCell>Comments</TableCell>
-            <TableCell>Submitted At</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {feedback.map((item: any) => (
-            <TableRow key={item.id}>
-              <TableCell>{item.ticketId}</TableCell>
-              <TableCell>{item.userId}</TableCell>
-              <TableCell>{item.rating}</TableCell>
-              <TableCell>{item.comments}</TableCell>
-              <TableCell>{new Date(item.createdAt).toLocaleString()}</TableCell>
+      <Paper sx={{ p: 2, borderRadius: 2 }}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>User</TableCell>
+              <TableCell>Ticket ID</TableCell>
+              <TableCell>Rating</TableCell>
+              <TableCell>Comments</TableCell>
+              <TableCell>Submitted At</TableCell>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+          </TableHead>
+          <TableBody>
+            {feedback.map((item: any) => (
+              <TableRow key={item.id} hover>
+                <TableCell>
+                  <Stack direction="row" alignItems="center" spacing={1}>
+                    <Avatar sx={{ width: 32, height: 32, bgcolor: "#3e5c6d" }}>
+                      {getUserName(item.userId)[0]?.toUpperCase()}
+                    </Avatar>
+                    <Typography>{getUserName(item.userId)}</Typography>
+                  </Stack>
+                </TableCell>
+                <TableCell>{item.ticketId}</TableCell>
+                <TableCell>
+                  <Rating value={item.rating} readOnly size="small" />
+                </TableCell>
+                <TableCell>
+                  <Typography sx={{ whiteSpace: "pre-line" }}>
+                    {item.comments}
+                  </Typography>
+                </TableCell>
+                <TableCell>
+                  {new Date(item.createdAt).toLocaleString()}
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </Paper>
     </Box>
   );
 };

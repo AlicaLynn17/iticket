@@ -17,7 +17,8 @@ import {
   Dialog,
   DialogContent,
   DialogTitle,
-  Snackbar
+  Snackbar,
+  Divider
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import AssignmentIcon from "@mui/icons-material/Assignment";
@@ -41,6 +42,7 @@ export const ViewTickets = () => {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [ticketToDelete, setTicketToDelete] = useState<any | null>(null);
   const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "success" });
+  const [selectedTicket, setSelectedTicket] = useState<any | null>(null);
 
   useEffect(() => {
     axios.get("http://localhost:3000/tickets").then(res => setTickets(res.data));
@@ -73,7 +75,7 @@ export const ViewTickets = () => {
   const highPriority = tickets.filter((t) => t.priority === "High").length;
 
   return (
-    <Box sx={{ maxWidth: 1100, margin: "auto", mt: 5 }}>
+    <Box sx={{ maxWidth: 1300, margin: "auto", mt: 5 }}>
       <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 3 }}>
         <Typography variant="h4">Ticket Dashboard</Typography>
         <Button
@@ -125,82 +127,217 @@ export const ViewTickets = () => {
           <TableHead>
             <TableRow>
               <TableCell>ID</TableCell>
-              <TableCell>Description</TableCell>
+              <TableCell>Name</TableCell>
+              <TableCell>Title</TableCell>
               <TableCell>Category</TableCell>
-              <TableCell>Priority</TableCell>
-              <TableCell>Status</TableCell>
+              <TableCell align="center">Priority</TableCell>
+              <TableCell align="center">Status</TableCell>
               <TableCell>Assigned To</TableCell> 
               <TableCell align="center">Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {tickets.map((ticket) => (
-              <TableRow key={ticket.id}>
-                <TableCell>{ticket.id}</TableCell>
-                <TableCell>{ticket.description}</TableCell>
-                <TableCell>{ticket.category}</TableCell>
-                <TableCell>
-                  <Chip
-                    label={ticket.priority}
-                    color={
-                      ticket.priority === "High"
-                        ? "error"
-                        : ticket.priority === "Medium"
-                        ? "warning"
-                        : "success"
-                    }
-                    size="small"
-                  />
-                </TableCell>
-                <TableCell>
-                  <Chip
-                    label={ticket.status}
-                    color={ticket.status === "Closed" ? "success" : "primary"}
-                    size="small"
-                  />
-                </TableCell>
-                <TableCell>
-                  {ticket.assignedTo
-                    ? getAssignedUserName(ticket.assignedTo, users)
-                    : "Unassigned"}
-                </TableCell>
-                <TableCell align="center">
-                  <IconButton
-                    color="primary"
-                    onClick={() => navigate(`/assign-ticket/${ticket.id}`)}
-                    title="Assign"
+            {tickets.map((ticket) => {
+              const user = JSON.parse(localStorage.getItem("user") || "{}");
+              const isAdmin = user.role === "admin" || user.role === "superadmin";
+              const isAgent = user.role === "agent";
+              const isUser = user.role === "user";
+              const isTicketOwner = String(ticket.createdBy) === String(user.id);
+              const creator = users.find(u => String(u.id) === String(ticket.createdBy));
+              console.log("ticket.createdBy:", ticket.createdBy, "user.id:", user.id, "users:", users);
+              
+              return (
+                <TableRow
+                    key={ticket.id}
+                    hover
+                    sx={{ cursor: "pointer" }}
+                    onClick={() => setSelectedTicket(ticket)}
                   >
-                    <AssignmentIndIcon />
-                  </IconButton>
-                  <IconButton
-                    color="secondary"
-                    onClick={() => navigate(`/edit-ticket/${ticket.id}`)}
-                    title="Edit"
-                  >
-                    <EditIcon />
-                  </IconButton>
-                  <IconButton
-                    color="success"
-                    onClick={() => navigate(`/collect-feedback/${ticket.id}`)}
-                    title="Feedback"
-                  >
-                    <FeedbackIcon />
-                  </IconButton>
-                <IconButton
-                  color="error"
-                  onClick={() => {
-                    setTicketToDelete(ticket);
-                    setDeleteDialogOpen(true);
-                  }}
-                >
-                  <DeleteIcon />
-                </IconButton>
-                </TableCell>
-              </TableRow>
-            ))}
+                  <TableCell>{ticket.id}</TableCell>
+                  <TableCell>{creator ? creator.name : "Unknown"}</TableCell>
+                  <TableCell>{ticket.title}</TableCell>
+                  <TableCell>{ticket.category}</TableCell>
+                  <TableCell align="center">
+                    <Chip
+                      label={ticket.priority}
+                      color={
+                        ticket.priority === "High"
+                          ? "error"
+                          : ticket.priority === "Medium"
+                          ? "warning"
+                          : "success"
+                      }
+                      size="small"
+                    />
+                  </TableCell>
+                  <TableCell align="center">
+                    <Chip
+                      label={ticket.status}
+                      color={ticket.status === "Closed" ? "success" : "primary"}
+                      size="small"
+                    />
+                  </TableCell>
+                  <TableCell>
+                    {ticket.assignedTo
+                      ? getAssignedUserName(ticket.assignedTo, users)
+                      : "Unassigned"}
+                  </TableCell >
+                  <TableCell align="center" onClick={e => e.stopPropagation()}>
+                    {/* Assign: Only for admin/agent */}
+                    {(isAdmin || isAgent) && (
+                      <IconButton
+                        color="primary"
+                        onClick={() => navigate(`/assign-ticket/${ticket.id}`)}
+                        title="Assign"
+                      >
+                        <AssignmentIndIcon />
+                      </IconButton>
+                    )}
+
+                    {/* Edit: Admin/agent, or user if owner */}
+                    {(isAdmin || isAgent || (isUser && isTicketOwner)) && (
+                      <IconButton
+                        color="secondary"
+                        onClick={() => navigate(`/edit-ticket/${ticket.id}`)}
+                        title="Edit"
+                      >
+                        <EditIcon />
+                      </IconButton>
+                    )}
+
+                    {/* Feedback: All can give feedback on own/assigned */}
+                    {(isAdmin || isAgent || (isUser && isTicketOwner)) && (
+                      <IconButton
+                        color="success"
+                        onClick={() => navigate(`/collect-feedback/${ticket.id}`)}
+                        title="Feedback"
+                      >
+                        <FeedbackIcon />
+                      </IconButton>
+                    )}
+
+                    {/* Delete: Only admin/agent */}
+                    {(isAdmin || isAgent) && (
+                      <IconButton
+                        color="error"
+                        onClick={() => {
+                          setTicketToDelete(ticket);
+                          setDeleteDialogOpen(true);
+                        }}
+                      >
+                        <DeleteIcon />
+                      </IconButton>
+                    )}
+                  </TableCell>
+                </TableRow>
+              );
+            })}
           </TableBody>
         </Table>
       </Paper>
+      <Dialog
+        open={!!selectedTicket}
+        onClose={() => setSelectedTicket(null)}
+        maxWidth="sm"
+        fullWidth
+      >
+        <DialogTitle>Ticket Details</DialogTitle>
+        <DialogContent dividers>
+          {selectedTicket && (
+            <Box>
+              <Typography variant="h5" fontWeight={700} mb={1}>
+                {selectedTicket.title}
+              </Typography>
+              <Stack direction="row" spacing={2} alignItems="center" mb={2}>
+                <Chip
+                  label={selectedTicket.status}
+                  color={
+                    selectedTicket.status === "Closed"
+                      ? "success"
+                      : selectedTicket.status === "Resolved"
+                      ? "info"
+                      : selectedTicket.status === "In Progress"
+                      ? "warning"
+                      : "primary"
+                  }
+                  size="small"
+                />
+                <Chip
+                  label={selectedTicket.priority}
+                  color={
+                    selectedTicket.priority === "High"
+                      ? "error"
+                      : selectedTicket.priority === "Medium"
+                      ? "warning"
+                      : "success"
+                  }
+                  size="small"
+                />
+                <Chip
+                  label={selectedTicket.category}
+                  color="default"
+                  size="small"
+                />
+              </Stack>
+              <Divider sx={{ mb: 2 }} />
+              <Typography variant="subtitle2" color="text.secondary" gutterBottom>
+                Description
+              </Typography>
+              <Typography mb={2}>{selectedTicket.description}</Typography>
+              <Divider sx={{ mb: 2 }} />
+              <Grid container spacing={2}>
+                <Grid item xs={12} sm={6}>
+                  <Typography variant="subtitle2" color="text.secondary">
+                    Ticket ID
+                  </Typography>
+                  <Typography mb={1}>{selectedTicket.id}</Typography>
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <Typography variant="subtitle2" color="text.secondary">
+                    Assigned To
+                  </Typography>
+                  <Typography mb={1}>
+                    {selectedTicket.assignedTo
+                      ? getAssignedUserName(selectedTicket.assignedTo, users)
+                      : "Unassigned"}
+                  </Typography>
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <Typography variant="subtitle2" color="text.secondary">
+                    Created By
+                  </Typography>
+                  <Typography mb={1}>
+                    {users.find(u => String(u.id) === String(selectedTicket.createdBy))?.name || "Unknown"}
+                  </Typography>
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <Typography variant="subtitle2" color="text.secondary">
+                    Created At
+                  </Typography>
+                  <Typography mb={1}>
+                    {selectedTicket.createdAt
+                      ? new Date(selectedTicket.createdAt).toLocaleString()
+                      : "N/A"}
+                  </Typography>
+                </Grid>
+                {selectedTicket.attachment && (
+                  <Grid item xs={12}>
+                    <Typography variant="subtitle2" color="text.secondary">
+                      Attachment
+                    </Typography>
+                    <Typography mb={1}>{selectedTicket.attachment}</Typography>
+                  </Grid>
+                )}
+              </Grid>
+            </Box>
+          )}
+        </DialogContent>
+        <Stack direction="row" spacing={2} sx={{ p: 2, justifyContent: "flex-end" }}>
+          <Button onClick={() => setSelectedTicket(null)} color="primary" variant="outlined">
+            Close
+          </Button>
+        </Stack>
+      </Dialog>
       <Dialog open={deleteDialogOpen} onClose={handleCancelDelete}>
       <DialogTitle>Confirm Delete</DialogTitle>
       <DialogContent>

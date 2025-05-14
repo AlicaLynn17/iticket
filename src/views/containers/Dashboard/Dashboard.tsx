@@ -1,4 +1,4 @@
-import { Box, Grid, Paper, Typography, Divider, LinearProgress, Stack } from "@mui/material";
+import { Box, Grid, Paper, Typography, Divider, LinearProgress, Stack, Button } from "@mui/material";
 import AssignmentIcon from "@mui/icons-material/Assignment";
 import AssignmentTurnedInIcon from "@mui/icons-material/AssignmentTurnedIn";
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
@@ -6,9 +6,17 @@ import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import ThumbUpAltIcon from "@mui/icons-material/ThumbUpAlt";
 import ThumbDownAltIcon from "@mui/icons-material/ThumbDownAlt";
 import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 export const Dashboard = () => {
   const navigate = useNavigate();
+  const user = JSON.parse(localStorage.getItem("user") || "{}");
+
+  useEffect(() => {
+    if (user.role === "user") {
+      navigate("/view-tickets", { replace: true });
+    }
+  }, [user, navigate]);
 
   // Mock data for demonstration
   const stats = {
@@ -25,10 +33,16 @@ export const Dashboard = () => {
   };
 
   return (
-    <Box sx={{ p: 3 }}>
+    <Box sx={{ p: 3, maxWidth: 1300, margin: "auto" }}>
+        {user.name && (
+        <Typography variant="h6" sx={{ mb: 2 }}>
+          Welcome, {user.name}!
+        </Typography>
+      )}
       <Typography variant="h4" gutterBottom>
         ITicket Help Desk Dashboard
       </Typography>
+      {/* Role-based action buttons */}
       <Grid container spacing={2} sx={{ mb: 2 }}>
         {/* Ticket Stats */}
         <Grid item xs={12} sm={6} md={3}>
@@ -70,36 +84,36 @@ export const Dashboard = () => {
             </Typography>
             <Stack direction="row" spacing={2} alignItems="center" sx={{ mb: 1 }}>
               <ThumbUpAltIcon color="success" />
-              <Typography>Positive</Typography>
+              <Typography sx={{ minWidth: 70 }}>Positive</Typography>
               <LinearProgress
                 variant="determinate"
                 value={stats.satisfaction.positive}
                 sx={{ flex: 1, mx: 2, height: 10, borderRadius: 5, bgcolor: "#e0f2f1" }}
                 color="success"
               />
-              <Typography>{stats.satisfaction.positive}%</Typography>
+              <Typography sx={{ minWidth: 40 }}>{stats.satisfaction.positive}%</Typography>
             </Stack>
             <Stack direction="row" spacing={2} alignItems="center" sx={{ mb: 1 }}>
               <ThumbDownAltIcon color="warning" />
-              <Typography>Neutral</Typography>
+              <Typography sx={{ minWidth: 70 }}>Neutral</Typography>
               <LinearProgress
                 variant="determinate"
                 value={stats.satisfaction.neutral}
                 sx={{ flex: 1, mx: 2, height: 10, borderRadius: 5, bgcolor: "#fffde7" }}
                 color="warning"
               />
-              <Typography>{stats.satisfaction.neutral}%</Typography>
+              <Typography sx={{ minWidth: 40 }}>{stats.satisfaction.neutral}%</Typography>
             </Stack>
             <Stack direction="row" spacing={2} alignItems="center">
               <ThumbDownAltIcon color="error" />
-              <Typography>Negative</Typography>
+              <Typography sx={{ minWidth: 70 }}>Negative</Typography>
               <LinearProgress
                 variant="determinate"
                 value={stats.satisfaction.negative}
                 sx={{ flex: 1, mx: 2, height: 10, borderRadius: 5, bgcolor: "#ffebee" }}
                 color="error"
               />
-              <Typography>{stats.satisfaction.negative}%</Typography>
+              <Typography sx={{ minWidth: 40 }}>{stats.satisfaction.negative}%</Typography>
             </Stack>
           </Paper>
         </Grid>
