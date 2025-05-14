@@ -2,9 +2,10 @@
   "users": [
     {
       "id": "13ec",
-      "name": "Admin",
-      "email": "credentials.email",
+      "name": "Admin User",
+      "email": "admin@example.com",
       "role": "admin",
+      "password": "adminpass",
       "preferences": {
         "defaultView": "All Tickets",
         "notifications": false
@@ -12,122 +13,305 @@
     },
     {
       "id": "4e4b",
-      "name": "alicalynn",
-      "email": "alica@email.com",
-      "role": "agent",
-      "password": "alica"
+      "name": "Super Admin",
+      "email": "superadmin@example.com",
+      "role": "superadmin",
+      "password": "superpass"
     },
     {
       "id": "e3e7",
-      "name": "test2",
-      "email": "test2@test2",
-      "role": "user",
-      "password": "test2"
+      "name": "Support Agent",
+      "email": "agent@example.com",
+      "role": "agent",
+      "password": "agentpass"
+    },
+    {
+      "id": "c456",
+      "name": "John Smith",
+      "email": "john@example.com",
+      "role": "agent",
+      "password": "johnpass"
+    },
+    {
+      "id": "a789",
+      "name": "Maria Garcia",
+      "email": "maria.garcia@example.com",
+      "role": "agent",
+      "password": "mariapass"
+    },
+    {
+      "id": "b321",
+      "name": "Liam Wong",
+      "email": "liam.wong@example.com",
+      "role": "agent",
+      "password": "liampass"
+    },
+    {
+      "id": "d654",
+      "name": "Priya Patel",
+      "email": "priya.patel@example.com",
+      "role": "agent",
+      "password": "priyapass"
     },
     {
       "id": "5a46",
-      "name": "agent3",
-      "email": "agent3@agent3",
-      "role": "agent",
-      "password": "agent"
+      "name": "Regular User",
+      "email": "user@example.com",
+      "role": "user",
+      "password": "userpass",
+      "preferences": {
+        "notifications": true,
+        "defaultView": "All Tickets"
+      }
     },
     {
       "id": "736e",
       "name": "me",
       "email": "me@asa.com",
       "role": "user",
-      "password": "me"
+      "password": "me",
+      "preferences": {
+        "notifications": true,
+        "defaultView": "All Tickets"
+      }
+    },
+    {
+      "id": "b123",
+      "name": "Jane Doe",
+      "email": "jane@example.com",
+      "role": "user",
+      "password": "janepass"
     }
   ],
   "tickets": [
     {
-      "id": "4dae",
-      "description": "help",
-      "category": "Technical",
-      "priority": "High",
-      "status": "Closed",
-      "attachment": "qqq",
-      "assignedTo": "5a46",
-      "createdAt": "2023-05-01T10:00:00Z",
-      "resolvedAt": "2023-05-02T12:00:00Z"
-    },
-    {
-      "id": "b5b9",
-      "description": "awaasa",
-      "category": "Technical",
+      "id": "55cb",
+      "title": "Cannot access VPN",
+      "description": "I am unable to connect to the company VPN from home.",
+      "category": "Network",
       "priority": "Medium",
-      "status": "In Progress",
-      "attachment": "asa",
-      "assignedTo": "4e4b",
-      "createdAt": "2023-05-03T14:00:00Z",
-      "resolvedAt": null
-    },
-    {
-      "id": "501a",
-      "description": "hardware na basa",
-      "category": "Technical",
-      "priority": "Low",
       "attachment": "",
       "status": "Open",
-      "assignedTo": "4e4b",
-      "createdAt": "2025-05-13T05:43:11.630Z",
-      "resolvedAt": null
+      "assignedTo": "e3e7",
+      "createdAt": "2025-05-14T12:00:22.423Z",
+      "resolvedAt": null,
+      "createdBy": "13ec"
+    },
+    {
+      "id": "a1b2",
+      "title": "Printer not working",
+      "description": "The printer in the 2nd floor is showing a paper jam error.",
+      "category": "Hardware",
+      "priority": "High",
+      "attachment": "",
+      "status": "In Progress",
+      "assignedTo": "c456",
+      "createdAt": "2025-05-13T09:15:00.000Z",
+      "resolvedAt": null,
+      "createdBy": "5a46"
+    },
+    {
+      "id": "c3d4",
+      "title": "Password reset needed",
+      "description": "I forgot my password and can't log in.",
+      "category": "Access/Account",
+      "priority": "Low",
+      "attachment": "",
+      "status": "Resolved",
+      "assignedTo": "e3e7",
+      "createdAt": "2025-05-12T08:30:00.000Z",
+      "resolvedAt": "2025-05-13T10:00:00.000Z",
+      "createdBy": "736e"
+    },
+    {
+      "id": "e5f6",
+      "title": "Software installation request",
+      "description": "Please install Adobe Photoshop on my workstation.",
+      "category": "Software",
+      "priority": "Medium",
+      "attachment": "",
+      "status": "Open",
+      "assignedTo": "a789",
+      "createdAt": "2025-05-14T10:00:00.000Z",
+      "resolvedAt": null,
+      "createdBy": "b123"
+    },
+    {
+      "id": "g7h8",
+      "title": "Email not syncing",
+      "description": "My Outlook is not syncing emails since yesterday.",
+      "category": "Email",
+      "priority": "High",
+      "attachment": "",
+      "status": "Open",
+      "assignedTo": "c456",
+      "createdAt": "2025-05-13T14:45:00.000Z",
+      "resolvedAt": null,
+      "createdBy": "b123"
+    },
+    {
+      "id": "i9j0",
+      "title": "Suspicious login detected",
+      "description": "I received an alert about a suspicious login to my account.",
+      "category": "Security",
+      "priority": "High",
+      "attachment": "",
+      "status": "Open",
+      "assignedTo": "e3e7",
+      "createdAt": "2025-05-14T08:20:00.000Z",
+      "resolvedAt": null,
+      "createdBy": "4e4b"
+    },
+    {
+      "id": "k1l2",
+      "title": "Monitor flickering",
+      "description": "My monitor keeps flickering intermittently.",
+      "category": "Hardware",
+      "priority": "Medium",
+      "attachment": "",
+      "status": "In Progress",
+      "assignedTo": "b321",
+      "createdAt": "2025-05-12T11:00:00.000Z",
+      "resolvedAt": null,
+      "createdBy": "736e"
+    },
+    {
+      "id": "m3n4",
+      "title": "Cannot install updates",
+      "description": "Windows updates fail with error code 0x80070005.",
+      "category": "Software",
+      "priority": "High",
+      "attachment": "",
+      "status": "Open",
+      "assignedTo": "d654",
+      "createdAt": "2025-05-13T16:30:00.000Z",
+      "resolvedAt": null,
+      "createdBy": "5a46"
+    },
+    {
+      "id": "o5p6",
+      "title": "Wi-Fi disconnects frequently",
+      "description": "My laptop keeps losing Wi-Fi connection.",
+      "category": "Network",
+      "priority": "Medium",
+      "attachment": "",
+      "status": "Resolved",
+      "assignedTo": "a789",
+      "createdAt": "2025-05-11T13:00:00.000Z",
+      "resolvedAt": "2025-05-12T09:00:00.000Z",
+      "createdBy": "b123"
+    },
+    {
+      "id": "q7r8",
+      "title": "Spam emails increasing",
+      "description": "I'm receiving a lot of spam emails lately.",
+      "category": "Email",
+      "priority": "Low",
+      "attachment": "",
+      "status": "Closed",
+      "assignedTo": "d654",
+      "createdAt": "2025-05-10T10:00:00.000Z",
+      "resolvedAt": "2025-05-11T12:00:00.000Z",
+      "createdBy": "b123"
+    },
+    {
+      "id": "b2e4",
+      "title": "qwerty",
+      "description": "qwerty",
+      "category": "Hardware",
+      "priority": "Medium",
+      "attachment": "",
+      "status": "Open",
+      "assignedTo": "c456",
+      "createdAt": "2025-05-14T14:24:55.817Z",
+      "resolvedAt": null,
+      "createdBy": "13ec"
     }
   ],
   "knowledgeBase": [
     {
       "id": "1",
       "title": "How to reset your password",
-      "content": "To reset your password, go to the login page and click 'Forgot Password'. lol",
+      "content": "To reset your password, go to the login page and click 'Forgot Password'.",
       "author": "test1",
       "createdAt": "2023-05-01T10:00:00Z"
     },
     {
       "id": "d41c",
-      "title": "na baaassssaaaaaaa",
-      "content": "help omg i need rice",
-      "author": "test1",
+      "title": "How to connect to VPN",
+      "content": "Open the VPN client and enter your credentials provided by IT.",
+      "author": "Support Agent",
       "createdAt": "2025-05-13T06:18:47.295Z"
     },
     {
       "id": "dfa4",
-      "title": "sdsd",
-      "content": "sdsd",
-      "author": "Admin",
+      "title": "Printer troubleshooting steps",
+      "content": "Check for paper jams, ensure the printer is powered on, and reinstall drivers if needed.",
+      "author": "Admin User",
       "createdAt": "2025-05-13T06:30:54.417Z"
     },
     {
       "id": "5944",
-      "title": "dfgh",
-      "content": "fghm",
-      "author": "Admin",
+      "title": "Setting up company email",
+      "content": "Use the Outlook setup wizard and enter your company email and password.",
+      "author": "Admin User",
       "createdAt": "2025-05-13T08:17:15.090Z"
+    },
+    {
+      "id": "08d2",
+      "title": "Reporting phishing emails",
+      "content": "Forward suspicious emails to security@example.com.",
+      "author": "Super Admin",
+      "createdAt": "2025-05-14T01:21:10.390Z"
+    },
+    {
+      "id": "adff",
+      "title": "Lorem Ipsum",
+      "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+      "author": "Admin User",
+      "createdAt": "2025-05-14T14:00:21.504Z"
     }
   ],
   "feedback": [
     {
       "id": "1",
-      "ticketId": "4dae",
-      "userId": null,
+      "ticketId": "c3d4",
+      "userId": "736e",
       "rating": 5,
       "comments": "Great support! Resolved my issue quickly.",
-      "createdAt": "2023-05-03T10:00:00Z"
+      "createdAt": "2025-05-13T12:00:00Z"
     },
     {
       "id": "6148",
+      "ticketId": "a1b2",
+      "userId": "5a46",
       "rating": 3,
-      "comments": "3?!",
-      "userId": null,
-      "ticketId": "4dae",
-      "createdAt": "2025-05-13T07:00:10.860Z"
+      "comments": "Printer took a while to fix.",
+      "createdAt": "2025-05-13T15:00:00Z"
     },
     {
       "id": "f979",
-      "rating": 2,
-      "comments": "xxzzz",
+      "ticketId": "55cb",
       "userId": "13ec",
-      "ticketId": "4dae",
-      "createdAt": "2025-05-13T07:46:45.148Z"
+      "rating": 4,
+      "comments": "VPN issue was resolved, thanks!",
+      "createdAt": "2025-05-14T13:00:00Z"
+    },
+    {
+      "id": "b2c3",
+      "ticketId": "g7h8",
+      "userId": "b123",
+      "rating": 2,
+      "comments": "Still having some email sync problems.",
+      "createdAt": "2025-05-14T15:00:00Z"
+    },
+    {
+      "id": "a02a",
+      "rating": 5,
+      "comments": "qwerty",
+      "userId": "13ec",
+      "ticketId": "b2e4",
+      "createdAt": "2025-05-14T14:25:05.961Z"
     }
   ]
 }

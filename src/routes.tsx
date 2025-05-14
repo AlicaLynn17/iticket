@@ -1,50 +1,142 @@
 import { BrowserRouter, Route, Routes } from "react-router";
 import * as Views from "./views/containers";
 import { PATHS } from "./constant";
-import { AddUser } from "./views/containers/UserManagement/AddUser";
 import { PrivateRoute } from "./views/components/PrivateRoute";
-import { ViewUsers } from "./views/containers/UserManagement/ViewUsers";
-import { EditUser } from "./views/containers/UserManagement/EditUser";
-import { CreateTicket } from "./views/containers/TicketManagement/CreateTicket";
-import { ViewTickets } from "./views/containers/TicketManagement/ViewTickets";
-import { EditTicket } from "./views/containers/TicketManagement/EditTicket";
-import { AssignTicket } from "./views/containers/TicketManagement/AssignTicket";
-import { ReportsDashboard } from "./views/containers/Reports/ReportsDashboard";
-import { TicketSummary } from "./views/containers/Reports/TicketSummary";
-import { AgentPerformanceReport } from "./views/containers/Reports/AgentPerformanceReport";
-import { SetPreferences } from "./views/containers/Settings/SetPreferences";
-import { CreateArticle } from "./views/containers/KnowledgeBase/CreateArticle";
-import { ViewArticles } from "./views/containers/KnowledgeBase/ViewArticles";
-import { EditArticle } from "./views/containers/KnowledgeBase/EditArticle";
-import { CollectFeedback } from "./views/containers/Feedback/CollectFeedback";
-import { ViewFeedback } from "./views/containers/Feedback/ViewFeedback";
-
 
 export const AppRoutes = () => {
   return (
     <BrowserRouter>
       <Routes>
         <Route path={PATHS.MAIN.path} element={<Views.Main />}>
-          {/* ADD PPRIVATE ROUTES HERE (Routes that can only access after login like Dashboard, Account Setting, etc.) */}
-          <Route path={PATHS.DASHBOARD.path} element={<PrivateRoute><Views.Dashboard /></PrivateRoute>} />
-          <Route path="/add-user" element={<AddUser />} />
-          <Route path="/view-users" element={<ViewUsers />} />
-          <Route path="/edit-user/:id" element={<EditUser />} />
-          <Route path="/create-ticket" element={<CreateTicket />} />
-          <Route path="/view-tickets" element={<ViewTickets />} />
-          <Route path="/edit-ticket/:id" element={<EditTicket />} />
-          <Route path="/assign-ticket/:id" element={<AssignTicket />} />
-          <Route path="/reports" element={<ReportsDashboard />} />
-          <Route path="/ticket-summary" element={<TicketSummary />} />
-          <Route path="/agent-performance" element={<AgentPerformanceReport />} />
-          <Route path="/set-preferences" element={<SetPreferences />} />
-          <Route path="/create-article" element={<CreateArticle />} />
-          <Route path="/view-articles" element={<ViewArticles />} />
-          <Route path="/edit-article/:id" element={<EditArticle />} />
-          <Route path="/collect-feedback/:ticketId" element={<CollectFeedback />} />
-          <Route path="/view-feedback" element={<ViewFeedback />} />
+          {/* Private Routes */}
+          <Route
+            path={PATHS.DASHBOARD.path}
+            element={<PrivateRoute><Views.Dashboard /></PrivateRoute>}
+          />
+          <Route
+            path={PATHS.ADD_USER?.path || "/add-user"}
+            element={
+              <PrivateRoute allowedRoles={["admin", "superadmin"]}>
+                <Views.AddUser />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path={PATHS.VIEW_USERS.path}
+            element={
+              <PrivateRoute allowedRoles={["admin", "superadmin"]}>
+                <Views.ViewUsers />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path={PATHS.EDIT_USER.path}
+            element={
+              <PrivateRoute allowedRoles={["admin", "superadmin"]}>
+                <Views.EditUser />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path={PATHS.CREATE_TICKET.path}
+            element={
+              <PrivateRoute allowedRoles={["user", "agent", "admin"]}>
+                <Views.CreateTicket />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path={PATHS.VIEW_TICKETS.path}
+            element={
+              <PrivateRoute allowedRoles={["user", "agent", "admin"]}>
+                <Views.ViewTickets />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path={PATHS.EDIT_TICKET.path}
+            element={
+              <PrivateRoute allowedRoles={["user", "agent", "admin"]}>
+                <Views.EditTicket />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path={PATHS.ASSIGN_TICKET.path}
+            element={
+              <PrivateRoute allowedRoles={["agent", "admin"]}>
+                <Views.AssignTicket />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path={PATHS.REPORTS.path}
+            element={
+              <PrivateRoute allowedRoles={["agent", "admin", "superadmin"]}>
+                <Views.ReportsDashboard />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path={PATHS.SET_PREFERENCES.path}
+            element={
+              <PrivateRoute>
+                <Views.SetPreferences />
+              </PrivateRoute>
+            }
+          />
+          {/* Knowledge Base */}
+          <Route
+            path={PATHS.CREATE_ARTICLE.path}
+            element={
+              <PrivateRoute allowedRoles={["agent", "admin", "superadmin"]}>
+                <Views.CreateArticle />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path={PATHS.VIEW_ARTICLES.path}
+            element={
+              <PrivateRoute>
+                <Views.ViewArticles />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path={PATHS.ARTICLE_DETAILS.path}
+            element={
+              <PrivateRoute>
+                <Views.ViewArticle />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path={PATHS.EDIT_ARTICLE.path}
+            element={
+              <PrivateRoute allowedRoles={["agent", "admin", "superadmin"]}>
+                <Views.EditArticle />
+              </PrivateRoute>
+            }
+          />
+          {/* Feedback */}
+          <Route
+            path={PATHS.COLLECT_FEEDBACK.path}
+            element={
+              <PrivateRoute>
+                <Views.CollectFeedback />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path={PATHS.VIEW_FEEDBACK.path}
+            element={
+              <PrivateRoute>
+                <Views.ViewFeedback />
+              </PrivateRoute>
+            }
+          />
         </Route>
-        {/* ADD PUBLIC ROUTES HERE (e.g., Login, Sign Up, Forgot Pass, etc. ) */}
+        {/* Public Routes */}
         <Route path={PATHS.LOGIN.path} element={<Views.Login />} />
         <Route path={PATHS.LOGOUT.path} element={<Views.Logout />} />
         <Route path={PATHS.NOT_FOUND.path} element={<Views.NotFound />} />

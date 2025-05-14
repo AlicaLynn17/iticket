@@ -35,6 +35,7 @@ export const ViewUsers = () => {
   const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "success" });
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [userToDelete, setUserToDelete] = useState<any | null>(null);
+  const user = JSON.parse(localStorage.getItem("user") || "{}");
 
   useEffect(() => {
     axios.get("http://localhost:3000/users")
@@ -95,16 +96,21 @@ export const ViewUsers = () => {
   
 
   return (
-    <Box sx={{ maxWidth: 1000, margin: "auto", mt: 5 }}>
+    <Box sx={{ maxWidth: 1100, margin: "auto", mt: 5 }}>
       <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 3 }}>
         <Typography variant="h4">Users Dashboard</Typography>
-        <Button
-          variant="contained"
-          startIcon={<AddIcon />}
-          onClick={() => navigate("/add-user")}
-        >
-          New User
-        </Button>
+        {/* Conditionally render Add User button for admin */}
+        {user.role === "admin" && (
+          <Button
+            variant="contained"
+            color="primary"
+            sx={{ mb: 2 }}
+            startIcon={<AddIcon />}
+            onClick={() => navigate("/add-user")}
+          >
+            New User
+          </Button>
+        )}
       </Stack>
       <Paper sx={{ p: 2 }}>
         <Typography variant="h6" sx={{ mb: 2 }}>
@@ -132,9 +138,6 @@ export const ViewUsers = () => {
                   {getTicketsAssignedCount(user.id)}
                 </TableCell>
                 <TableCell align="center">
-                  <IconButton color="primary" onClick={() => handleDialogOpen(user)}>
-                    <VisibilityIcon />
-                  </IconButton>
                   <IconButton color="info" onClick={() => handleEdit(user)}>
                     <EditIcon />
                   </IconButton>
@@ -151,29 +154,6 @@ export const ViewUsers = () => {
         </Table>
       </Paper>
 
-      {/* User Details Dialog */}
-      <Dialog open={openDialog} onClose={handleDialogClose} maxWidth="sm" fullWidth>
-        <DialogTitle>
-          User Details
-          <IconButton
-            aria-label="close"
-            onClick={handleDialogClose}
-            sx={{ position: "absolute", right: 8, top: 8 }}
-          >
-            <CloseIcon />
-          </IconButton>
-        </DialogTitle>
-        <DialogContent dividers>
-          {selectedUser && (
-            <Box>
-              <Typography><b>Name:</b> {selectedUser.name}</Typography>
-              <Typography><b>Email:</b> {selectedUser.email}</Typography>
-              <Typography><b>Role:</b> {selectedUser.role}</Typography>
-              {/* Add more user details here if needed */}
-            </Box>
-          )}
-        </DialogContent>
-      </Dialog>
       <Dialog open={deleteDialogOpen} onClose={handleCancelDelete}>
         <DialogTitle>Confirm Delete</DialogTitle>
         <DialogContent>

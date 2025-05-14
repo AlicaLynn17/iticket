@@ -7,7 +7,7 @@ export const SetPreferences = () => {
   const userId = user?.id;
   const [preferences, setPreferences] = useState({
     notifications: true,
-    defaultView: "Open Tickets",
+    defaultView: "All Tickets",
   });
 
   const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "success" });
@@ -70,14 +70,15 @@ export const SetPreferences = () => {
               onChange={handleChange} />
       </Box>
       <FormControl fullWidth margin="normal">
-          <InputLabel>Default Ticket View</InputLabel>
+          <InputLabel shrink>Default Ticket View</InputLabel>
           <Select
               name="defaultView"
               value={preferences.defaultView}
               onChange={handleSelectChange}
           >
-              <MenuItem value="Open Tickets">Open Tickets</MenuItem>
               <MenuItem value="All Tickets">All Tickets</MenuItem>
+              <MenuItem value="Open Tickets">In Progress Tickets</MenuItem>
+              <MenuItem value="Open Tickets">Open Tickets</MenuItem>
               <MenuItem value="Resolved Tickets">Resolved Tickets</MenuItem>
           </Select>
       </FormControl>

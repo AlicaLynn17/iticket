@@ -1,82 +1,63 @@
 import React, { useEffect, useState } from "react";
-import { Box, Typography, Table, TableBody, TableCell, TableHead, TableRow } from "@mui/material";
+import { Box, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, Typography, Table, TableBody, TableCell, TableHead, TableRow, Paper } from "@mui/material";
 import axios from "axios";
 
+const summaryOptions = [
+  { value: "category", label: "Category" },
+  { value: "status", label: "Status" },
+  { value: "priority", label: "Priority" }
+];
+
 export const TicketSummary = () => {
-  const [summary, setSummary] = useState({
-    byCategory: {} as Record<string, number>,
-    byStatus: {} as Record<string, number>,
-    byPriority: {} as Record<string, number>,
-  });
+  const [tickets, setTickets] = useState([]);
+  const [summaryBy, setSummaryBy] = useState("category");
+  const [summary, setSummary] = useState<{ [key: string]: number }>({});
 
   useEffect(() => {
-    const fetchSummary = async () => {
-      try {
-        const response = await axios.get("http://localhost:3000/tickets");
-        const tickets = response.data;
-
-        // Summarize tickets
-        const byCategory: Record<string, number> = {};
-        const byStatus: Record<string, number> = {};
-        const byPriority: Record<string, number> = {};
-
-        tickets.forEach((ticket: any) => {
-          byCategory[ticket.category] = (byCategory[ticket.category] || 0) + 1;
-          byStatus[ticket.status] = (byStatus[ticket.status] || 0) + 1;
-          byPriority[ticket.priority] = (byPriority[ticket.priority] || 0) + 1;
-        });
-
-        setSummary({ byCategory, byStatus, byPriority });
-      } catch (error) {
-        console.error("Error fetching ticket summary:", error);
-      }
-    };
-
-    fetchSummary();
+    axios.get("http://localhost:3000/tickets").then(res => setTickets(res.data));
   }, []);
 
+  useEffect(() => {
+    const counts: { [key: string]: number } = {};
+    tickets.forEach(ticket => {
+      const key = ticket[summaryBy] || "Unknown";
+      counts[key] = (counts[key] || 0) + 1;
+    });
+    setSummary(counts);
+  }, [tickets, summaryBy]);
+
+  const handleChange = (e: SelectChangeEvent<string>) => {
+    setSummaryBy(e.target.value);
+  };
+
   return (
-    <Box sx={{ maxWidth: 800, margin: "auto", mt: 5 }}>
-      <Table>
-        <TableHead>
-          <TableRow>
-            <TableCell>Metric</TableCell>
-            <TableCell>Details</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          <TableRow>
-            <TableCell>By Category</TableCell>
-            <TableCell>
-              {Object.entries(summary.byCategory).map(([category, count]) => (
-                <div key={category}>
-                  {category}: {count}
-                </div>
-              ))}
-            </TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell>By Status</TableCell>
-            <TableCell>
-              {Object.entries(summary.byStatus).map(([status, count]) => (
-                <div key={status}>
-                  {status}: {count}
-                </div>
-              ))}
-            </TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell>By Priority</TableCell>
-            <TableCell>
-              {Object.entries(summary.byPriority).map(([priority, count]) => (
-                <div key={priority}>
-                  {priority}: {count}
-                </div>
-              ))}
-            </TableCell>
-          </TableRow>
-        </TableBody>
-      </Table>
+    <Box>
+      <FormControl size="small" sx={{ minWidth: 180, mb: 2 }}>
+        <InputLabel>Summary By</InputLabel>
+        <Select value={summaryBy} label="Summary By" onChange={handleChange}>
+          {summaryOptions.map(opt => (
+            <MenuItem key={opt.value} value={opt.value}>{opt.label}</MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+      <Paper variant="outlined" sx={{ mt: 1 }}>
+        <Table size="small">
+          <TableHead>
+            <TableRow>
+              <TableCell sx={{ fontWeight: 700 }}>{summaryOptions.find(opt => opt.value === summaryBy)?.label}</TableCell>
+              <TableCell sx={{ fontWeight: 700 }}>Count</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {Object.entries(summary).map(([key, count]) => (
+              <TableRow key={key}>
+                <TableCell>{key}</TableCell>
+                <TableCell>{count}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </Paper>
     </Box>
   );
 };

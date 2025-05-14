@@ -1,3 +1,3 @@
-export * from "./TicketSummary";
-export * from "./AgentPerformanceReport";
-export * from "./ReportsDashboard";
+export { ReportsDashboard } from "./ReportsDashboard";
+export { TicketSummary } from "./TicketSummary";
+export { AgentPerformanceReport } from "./AgentPerformanceReport";
