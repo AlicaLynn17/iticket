@@ -16,7 +16,7 @@ import axios from "axios";
 import "./AssignTicket.css";
 
 export const AssignTicket = () => {
-  const { id } = useParams(); // Ticket ID
+  const { id } = useParams();
   const navigate = useNavigate();
   const [agents, setAgents] = useState([]);
   const [assignedTo, setAssignedTo] = useState("");

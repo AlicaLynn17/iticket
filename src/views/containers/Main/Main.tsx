@@ -55,10 +55,8 @@ export const Main = () => {
     if (location.pathname === PATHS.MAIN.path) navigate(PATHS.LOGIN.path);
   }, [location.pathname, navigate]);
 
-  // ✅ Get logged-in user
   const user = JSON.parse(localStorage.getItem("user") || "{}");
 
-  // ✅ Filter sidebar menu based on role
   const filteredMenu = SIDE_BAR_MENU.filter(
     (item) => !item.role || item.role === user.role
   );
@@ -77,13 +75,12 @@ export const Main = () => {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap component="div">
+          <Typography variant="h6" noWrap component="div" sx={{ color: "#29404a" }}>
             ITicket Help Desk
           </Typography>
         </Toolbar>
       </AppBar>
 
-      {/* Sidebar Drawer */}
       <Drawer
         sx={{
           width: drawerWidth,
@@ -117,7 +114,12 @@ export const Main = () => {
 
         <List>
           {filteredMenu.map((item) => (
-            <ListItem key={item.path} disablePadding sx={{ display: "block" }}>
+            <ListItem
+              key={item.path}
+              disablePadding
+              sx={{ display: "block", mb: 2 }} 
+            >
+
               <NavLink
                 to={item.path}
                 style={({ isActive }) => ({
@@ -131,37 +133,42 @@ export const Main = () => {
               >
                 <ListItemButton
                   sx={{
-                    flexDirection: "column",
-                    alignItems: "center",
-                    py: 2,
-                    minHeight: 56,
+                    justifyContent: openDrawer ? "flex-start" : "center",
+                    px: 1.5,
+                    py: 1,
+                    minHeight: 48,
+                    gap: 1,
                   }}
                   selected={location.pathname.startsWith(item.path)}
                 >
-                  <ListItemIcon sx={{ color: "#fff", minWidth: 0, mb: 0.5 }}>
-                    {iconMap[item.label] || <DashboardIcon />}
-                  </ListItemIcon>
-                  <ListItemText
-                    primary={openDrawer ? item.label : ""}
-                    primaryTypographyProps={{
-                      fontSize: 12,
-                      textAlign: "center",
-                      color: "#fff",
-                    }}
-                  />
-                </ListItemButton>
-              </NavLink>
-            </ListItem>
-          ))}
-        </List>
-      </Drawer>
+                <ListItemIcon
+                  sx={{ color: "#fff", minWidth: 0, mr: openDrawer ? 1.5 : 0 }}
+                >
+                {iconMap[item.label] || <DashboardIcon />}
+              </ListItemIcon>
+              {openDrawer && (
+                <ListItemText
+                  primary={item.label}
+                  primaryTypographyProps={{
+                    fontSize: 13,
+                    fontWeight: 500,
+                  }}
+                />
+            )}
+            </ListItemButton>
 
-      <MainLayout open={openDrawer}>
-        <DrawerHeader />
-        <Outlet />
-      </MainLayout>
-    </Fragment>
-  );
+                          </NavLink>
+                        </ListItem>
+                      ))}
+                    </List>
+                  </Drawer>
+
+                  <MainLayout open={openDrawer}>
+                    <DrawerHeader />
+                    <Outlet />
+                  </MainLayout>
+                </Fragment>
+              );
 };
 
 export const drawerWidthOpen = 140;

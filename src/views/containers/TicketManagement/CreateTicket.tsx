@@ -20,12 +20,15 @@ import "./CreateTicket.css";
 
 export const CreateTicket = () => {
   const [formData, setFormData] = useState({
+    title: "",
     description: "",
     category: "",
     priority: "Medium",
     attachment: "",
     assignedTo: "",
+    dueDate: "" 
   });
+
   const [users, setUsers] = useState<any[]>([]);
   const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "success" });
   const navigate = useNavigate();
@@ -36,22 +39,24 @@ export const CreateTicket = () => {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name!]: value });
+    setFormData({ ...formData, [name]: value });
   };
 
   const handleSelectChange = (e: SelectChangeEvent<string>) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name!]: value });
+    setFormData({ ...formData, [name]: value });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
     const newTicket = {
       ...formData,
       status: "Open",
       createdAt: new Date().toISOString(),
       resolvedAt: null
     };
+
     try {
       await axios.post("http://localhost:3000/tickets", newTicket);
       setSnackbar({ open: true, message: "Ticket created successfully!", severity: "success" });
@@ -69,6 +74,19 @@ export const CreateTicket = () => {
         <h2>Fill in the details to submit an issue</h2>
         <form onSubmit={handleSubmit}>
           <div className="form-group">
+
+            <div className="form-group">
+            <label>Ticket Title</label>
+            <TextField
+              fullWidth
+              name="title"
+              value={formData.title || ""}
+              onChange={handleInputChange}
+              required
+              size="small"
+            />
+          </div>
+
             <label>Issue Description</label>
             <TextField
               fullWidth
@@ -131,15 +149,28 @@ export const CreateTicket = () => {
           </div>
 
           <div className="form-group">
-            <label>Attachment (URL)</label>
+            <label>Due Date</label>
             <TextField
               fullWidth
-              name="attachment"
-              value={formData.attachment}
+              type="date"
+              name="dueDate"
+              value={formData.dueDate}
               onChange={handleInputChange}
               size="small"
+              required
+              InputLabelProps={{ shrink: true }}
             />
           </div>
+
+          <div className="form-group">
+            <label>Attachments</label>
+            <Box className="drop-zone">
+              <Typography variant="body2" color="textSecondary">
+                Drag & drop files here or click to upload
+              </Typography>
+            </Box>
+          </div>
+
 
           <Stack direction="row" spacing={2} sx={{ mt: 2 }}>
             <Button
@@ -160,21 +191,6 @@ export const CreateTicket = () => {
           </Stack>
         </form>
       </div>
-
-      <Snackbar
-        open={snackbar.open}
-        autoHideDuration={1500}
-        onClose={() => setSnackbar({ ...snackbar, open: false })}
-        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-      >
-        <Alert
-          onClose={() => setSnackbar({ ...snackbar, open: false })}
-          severity={snackbar.severity as any}
-          sx={{ width: "100%" }}
-        >
-          {snackbar.message}
-        </Alert>
-      </Snackbar>
     </Box>
   );
 };

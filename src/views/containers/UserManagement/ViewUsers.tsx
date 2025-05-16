@@ -35,6 +35,9 @@ export const ViewUsers = () => {
   const [userToDelete, setUserToDelete] = useState<any | null>(null);
   const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "success" });
   const navigate = useNavigate();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [roleFilter, setRoleFilter] = useState("");
+
 
   useEffect(() => {
     axios.get("http://localhost:3000/users").then((res) => setUsers(res.data));
@@ -87,13 +90,30 @@ export const ViewUsers = () => {
         </Button>
       </div>
 
+      <div className="user-filters-toolbar">
+        <input
+          type="text"
+          placeholder="Search users..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="user-search-input"
+        />
+        <select
+          value={roleFilter}
+          onChange={(e) => setRoleFilter(e.target.value)}
+          className="user-role-select"
+        >
+          <option value="">All Roles</option>
+          <option value="admin">Admin</option>
+          <option value="user">User</option>
+        </select>
+      </div>
+
       <Paper className="user-table-paper">
-        <Typography variant="h6" className="table-title">User List</Typography>
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>ID</TableCell>
-              <TableCell>Name</TableCell>
+              <TableCell>Full Name</TableCell>
               <TableCell>Email</TableCell>
               <TableCell>Role</TableCell>
               <TableCell>Tickets</TableCell>
@@ -101,21 +121,25 @@ export const ViewUsers = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {users.map((user) => (
-              <TableRow key={user.id}>
-                <TableCell>{user.id}</TableCell>
-                <TableCell>{user.name}</TableCell>
-                <TableCell>{user.email}</TableCell>
-                <TableCell>{user.role}</TableCell>
-                <TableCell>{getTicketsAssignedCount(user.id)}</TableCell>
-                <TableCell align="center">
-                  <IconButton color="primary" onClick={() => handleDialogOpen(user)}><VisibilityIcon /></IconButton>
-                  <IconButton color="info" onClick={() => handleEdit(user)}><EditIcon /></IconButton>
-                  <IconButton color="error" onClick={() => { setUserToDelete(user); setDeleteDialogOpen(true); }}>
-                    <DeleteIcon />
-                  </IconButton>
-                </TableCell>
-              </TableRow>
+            {users
+              .filter((user) =>
+                user.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                user.email.toLowerCase().includes(searchQuery.toLowerCase())
+              )
+              .filter((user) => (roleFilter ? user.role === roleFilter : true))
+              .map((user) => (
+                <TableRow key={user.id}>
+                  <TableCell>{user.name}</TableCell>
+                  <TableCell>{user.email}</TableCell>
+                  <TableCell>{user.role}</TableCell>
+                  <TableCell>{getTicketsAssignedCount(user.id)}</TableCell>
+                  <TableCell align="center">
+                    <IconButton color="info" onClick={() => handleEdit(user)}><EditIcon /></IconButton>
+                    <IconButton color="error" onClick={() => { setUserToDelete(user); setDeleteDialogOpen(true); }}>
+                      <DeleteIcon />
+                    </IconButton>
+                  </TableCell>
+                </TableRow>
             ))}
           </TableBody>
         </Table>
@@ -132,36 +156,23 @@ export const ViewUsers = () => {
         <DialogContent dividers>
           {selectedUser && (
             <Box>
-              <Typography><b>Name:</b> {selectedUser.name}</Typography>
+              <Typography><b>Full Name:</b> {selectedUser.name}</Typography>
               <Typography><b>Email:</b> {selectedUser.email}</Typography>
               <Typography><b>Role:</b> {selectedUser.role}</Typography>
             </Box>
           )}
         </DialogContent>
       </Dialog>
-
-      {/* Confirm Delete Dialog */}
       <Dialog open={deleteDialogOpen} onClose={() => setDeleteDialogOpen(false)}>
         <DialogTitle>Confirm Delete</DialogTitle>
         <DialogContent>
           <Typography>Are you sure you want to delete this user?</Typography>
         </DialogContent>
         <Stack direction="row" spacing={2} sx={{ p: 2, justifyContent: "flex-end" }}>
-          <Button variant="outlined" onClick={() => setDeleteDialogOpen(false)}>Cancel</Button>
-          <Button variant="contained" color="error" onClick={handleConfirmDelete}>Delete</Button>
+          <Button variant="outlined" onClick={() => setDeleteDialogOpen(false)}>No</Button>
+          <Button variant="contained" color="error" onClick={handleConfirmDelete}>Yes</Button>
         </Stack>
       </Dialog>
-
-      <Snackbar
-        open={snackbar.open}
-        autoHideDuration={1500}
-        onClose={() => setSnackbar({ ...snackbar, open: false })}
-        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-      >
-        <Alert onClose={() => setSnackbar({ ...snackbar, open: false })} severity={snackbar.severity as any}>
-          {snackbar.message}
-        </Alert>
-      </Snackbar>
     </Box>
   );
 };

@@ -47,7 +47,6 @@ export const TicketSummary = () => {
   return (
     <Box className="ticket-summary-container">
       <div className="ticket-summary-box">
-        <h1>Ticket Summary Report</h1>
         <Paper className="ticket-summary-table">
           <Table>
             <TableHead>

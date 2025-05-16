@@ -5,7 +5,6 @@ import {
   TextField,
   Typography,
   FormControl,
-  InputLabel,
   Select,
   MenuItem,
   SelectChangeEvent,
@@ -32,12 +31,12 @@ export const AddUser = () => {
     e: React.ChangeEvent<HTMLInputElement | { name?: string; value: unknown }>
   ) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name!] : value });
+    setFormData({ ...formData, [name!]: value });
   };
 
   const handleSelectChange = (e: SelectChangeEvent<string>) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name!] : value });
+    setFormData({ ...formData, [name!]: value });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -45,7 +44,12 @@ export const AddUser = () => {
     try {
       await axios.post("http://localhost:3000/users", formData);
       setSnackbar({ open: true, message: "User added successfully!", severity: "success" });
-      setFormData({ name: "", email: "", role: "", password: "" });
+      setFormData({
+        name: "",
+        email: "",
+        role: "",
+        password: "",
+      });
       setTimeout(() => navigate("/view-users"), 1000);
     } catch {
       setSnackbar({ open: true, message: "Failed to add user.", severity: "error" });
@@ -92,9 +96,7 @@ export const AddUser = () => {
                 onChange={handleSelectChange}
                 required
               >
-                <MenuItem value="superadmin">Superadmin</MenuItem>
                 <MenuItem value="admin">Admin</MenuItem>
-                <MenuItem value="agent">Agent</MenuItem>
                 <MenuItem value="user">User</MenuItem>
               </Select>
             </FormControl>
@@ -131,6 +133,7 @@ export const AddUser = () => {
           </Stack>
         </form>
       </div>
+
       <Snackbar
         open={snackbar.open}
         autoHideDuration={3000}

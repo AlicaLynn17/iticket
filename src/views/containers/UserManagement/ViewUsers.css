@@ -27,16 +27,6 @@
   gap: 0.5rem;
 }
 
-.view-users-header h1::before {
-  content: "";
-  width: 24px;
-  height: 24px;
-  background-color: #F89B5D;
-  border-radius: 4px;
-  transform: rotate(-10deg);
-  display: inline-block;
-}
-
 .user-table-paper {
   padding: 1.5rem;
   border-radius: 12px;
@@ -49,4 +39,39 @@
   font-weight: 600;
   color: #3C5759;
   margin-bottom: 1rem;
+}
+
+.user-table-paper th {
+  font-weight: 600;
+  font-size: 17px;
+}
+
+.MuiSnackbar-root {
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+}
+
+.user-filters-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 1rem 0;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.user-search-input {
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  width: 190px;
+  font-size: 14px;
+  margin-left: 710px;
+}
+
+.user-role-select {
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
 }

@@ -1,14 +1,14 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
 * {
-  box-sizing: border-box;
   font-family: 'Inter', sans-serif;
+  box-sizing: border-box;
 }
 
 .create-article-container {
   background-color: #ffffff;
+  padding: 4rem 2rem;
   min-height: 100vh;
-  padding: 3rem 4rem;
   display: flex;
   justify-content: center;
   align-items: flex-start;
@@ -16,42 +16,31 @@
 }
 
 .create-article-box {
-  background-color: #f5f5f5;
-  padding: 2rem 3rem;
+  background-color: #fff;
+  padding: 2.5rem 3rem;
   border-radius: 12px;
   width: 100%;
-  max-width: 600px;
+  max-width: 700px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  border: 1px solid #e6e6e6;
 }
 
 .create-article-box h1 {
+  font-size: 28px;
+  font-weight: 600;
   color: #3C5759;
-  font-size: 27px;
   margin-bottom: 0.5rem;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.create-article-box h1::before {
-  content: "";
-  width: 24px;
-  height: 24px;
-  background-color: #F89B5D;
-  border-radius: 4px;
-  transform: rotate(-10deg);
-  display: inline-block;
 }
 
 .create-article-box h2 {
-  color: #333;
   font-size: 16px;
   font-weight: 500;
-  margin-bottom: 1.5rem;
+  color: #3C5759;
+  margin-bottom: 2rem;
 }
 
 .form-group {
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
 }
 
 .form-group label {
@@ -63,12 +52,41 @@
   text-transform: uppercase;
 }
 
+.MuiInputBase-root {
+  background-color: #f9f9f9;
+  border-radius: 4px !important;
+}
+
+.MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+  border-color: #3C5759;
+}
+
+.MuiInputLabel-root.Mui-focused {
+  color: #3C5759;
+}
+
 button.MuiButton-contained {
   background-color: #3C5759;
   color: white;
   font-weight: 600;
+  border-radius: 6px;
+  text-transform: none;
+  padding: 0.7rem 1.5rem;
 }
 
 button.MuiButton-contained:hover {
   background-color: #2a4042;
+}
+
+button.MuiButton-outlined {
+  text-transform: none;
+  border-color: #3C5759;
+  color: #3C5759;
+  font-weight: 600;
+}
+
+button.MuiButton-outlined:hover {
+  background-color: rgba(60, 87, 89, 0.05);
+  border-color: #2a4042;
+  color: #2a4042;
 }

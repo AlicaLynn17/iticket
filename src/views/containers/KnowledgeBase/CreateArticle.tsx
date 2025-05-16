@@ -6,44 +6,43 @@ import {
   Typography,
   Snackbar,
   Alert,
-  Stack
+  Stack,
 } from "@mui/material";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "./CreateArticle.css";
 
 export const CreateArticle = () => {
   const navigate = useNavigate();
-  const user = JSON.parse(localStorage.getItem("user") || "{}");
 
   const [formData, setFormData] = useState({
     title: "",
     content: "",
-    author: user.name || "",
+    author: "",
   });
 
-  const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "success" });
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    severity: "success",
+  });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    try {
-      await axios.post("http://localhost:3000/knowledgeBase", {
-        ...formData,
-        createdAt: new Date().toISOString(),
-      });
+    const handleSubmit = async (e: React.FormEvent) => {
+      e.preventDefault();
+
       setSnackbar({ open: true, message: "Article created successfully!", severity: "success" });
-      setFormData({ title: "", content: "", author: user.name || "" });
-      setTimeout(() => navigate("/view-articles"), 1000);
-    } catch (error) {
-      console.error("Error creating article:", error);
-      setSnackbar({ open: true, message: "Failed to create article.", severity: "error" });
-    }
-  };
+
+      setTimeout(() => {
+        navigate("/view-articles");
+      }, 1200); 
+    };
+
 
   return (
     <Box className="create-article-container">
@@ -76,7 +75,11 @@ export const CreateArticle = () => {
             />
           </div>
           <Stack direction="row" spacing={2} sx={{ mt: 2 }}>
-            <Button variant="outlined" fullWidth onClick={() => navigate("/view-articles")}>
+            <Button
+              variant="outlined"
+              fullWidth
+              onClick={() => navigate("/view-articles")}
+            >
               Cancel
             </Button>
             <Button type="submit" variant="contained" fullWidth>

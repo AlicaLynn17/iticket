@@ -8,49 +8,37 @@ import {
   Alert,
   Stack
 } from "@mui/material";
-import { useParams, useNavigate } from "react-router-dom";
-import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import "./EditArticle.css";
 
 export const EditArticle = () => {
-  const { id } = useParams();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     title: "",
     content: "",
     author: "",
+    description: "",
+    createdAt: ""
   });
 
   const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "success" });
 
   useEffect(() => {
-    const fetchArticle = async () => {
-      try {
-        const response = await axios.get(`http://localhost:3000/knowledgeBase/${id}`);
-        setFormData(response.data);
-      } catch (error) {
-        console.error("Error fetching article:", error);
-      }
-    };
-
-    fetchArticle();
-  }, [id]);
+    const stored = localStorage.getItem("selectedArticle");
+    if (stored) {
+      setFormData(JSON.parse(stored));
+    }
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    try {
-      await axios.put(`http://localhost:3000/knowledgeBase/${id}`, formData);
-      setSnackbar({ open: true, message: "Article updated successfully!", severity: "success" });
-      setTimeout(() => navigate("/view-articles"), 1000);
-    } catch (error) {
-      console.error("Error updating article:", error);
-      setSnackbar({ open: true, message: "Failed to update article.", severity: "error" });
-    }
+    setSnackbar({ open: true, message: "Article updated locally!", severity: "success" });
+    setTimeout(() => navigate("/view-articles"), 1000);
   };
 
   return (
@@ -70,6 +58,19 @@ export const EditArticle = () => {
               size="small"
             />
           </div>
+
+          <div className="form-group">
+            <label>Description</label>
+            <TextField
+              fullWidth
+              name="description"
+              value={formData.description}
+              onChange={handleChange}
+              required
+              size="small"
+            />
+          </div>
+
           <div className="form-group">
             <label>Content</label>
             <TextField
@@ -83,6 +84,7 @@ export const EditArticle = () => {
               size="small"
             />
           </div>
+
           <Stack direction="row" spacing={2} sx={{ mt: 2 }}>
             <Button variant="outlined" fullWidth onClick={() => navigate("/view-articles")}>
               Cancel

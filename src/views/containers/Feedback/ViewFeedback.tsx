@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import {
   Box,
   Typography,
@@ -8,29 +8,40 @@ import {
   TableHead,
   TableRow,
   Paper,
-  Stack
+  Stack,
 } from "@mui/material";
 import StarIcon from "@mui/icons-material/Star";
 import StarHalfIcon from "@mui/icons-material/StarHalf";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
-import axios from "axios";
 import "./ViewFeedback.css";
 
 export const ViewFeedback = () => {
-  const [feedback, setFeedback] = useState([]);
-
-  useEffect(() => {
-    const fetchFeedback = async () => {
-      try {
-        const response = await axios.get("http://localhost:3000/feedback");
-        setFeedback(response.data);
-      } catch (error) {
-        console.error("Error fetching feedback:", error);
-      }
-    };
-
-    fetchFeedback();
-  }, []);
+  const feedback = [
+    {
+      id: "1",
+      ticketDescription: "App crashes when submitting form",
+      user: "Franka Ong",
+      rating: 4.5,
+      comments: "Very helpful team. They fixed it fast.",
+      createdAt: "2024-10-12T14:20:00",
+    },
+    {
+      id: "2",
+      ticketDescription: "Password reset email not sent",
+      user: "Lhea Dizon",
+      rating: 5,
+      comments: "Smooth support experience!",
+      createdAt: "2024-11-02T09:45:00",
+    },
+    {
+      id: "3",
+      ticketDescription: "UI glitch on dark mode",
+      user: null,
+      rating: 3.5,
+      comments: "It works now but the fix took a while.",
+      createdAt: "2024-12-01T18:10:00",
+    },
+  ];
 
   const renderStars = (rating: number) => {
     const stars = [];
@@ -54,8 +65,8 @@ export const ViewFeedback = () => {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell>Ticket ID</TableCell>
-                <TableCell>User ID</TableCell>
+                <TableCell>Ticket Description</TableCell>
+                <TableCell>User</TableCell>
                 <TableCell>Rating</TableCell>
                 <TableCell>Comments</TableCell>
                 <TableCell>Submitted At</TableCell>
@@ -69,10 +80,14 @@ export const ViewFeedback = () => {
                   </TableCell>
                 </TableRow>
               ) : (
-                feedback.map((item: any) => (
+                feedback.map((item) => (
                   <TableRow key={item.id}>
-                    <TableCell>{item.ticketId}</TableCell>
-                    <TableCell>{item.userId || "Anonymous"}</TableCell>
+                    <TableCell>
+                      {item.ticketDescription.length > 40
+                        ? item.ticketDescription.slice(0, 40) + "..."
+                        : item.ticketDescription}
+                    </TableCell>
+                    <TableCell>{item.user || "Anonymous"}</TableCell>
                     <TableCell>{renderStars(item.rating)}</TableCell>
                     <TableCell>{item.comments}</TableCell>
                     <TableCell>

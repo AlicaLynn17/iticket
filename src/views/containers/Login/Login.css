@@ -12,6 +12,7 @@
   height: 100vh;
   width: 100vw;
   background-color: #ffffff;
+  margin-left: 90px;
 }
 
 .login-form {
@@ -29,35 +30,58 @@
 }
 
 .login-form h1 {
+  position: relative;
   color: #3C5759;
   font-size: 27px;
   margin-bottom: 0.5rem;
+  padding-left: 40px; 
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  font-weight: 500;
 }
 
 .login-form h1::before {
   content: "";
-  display: inline-block;
+  position: absolute;
+  top: 2px;
+  left: 0;
   width: 24px;
   height: 24px;
   background-color: #F9A26C;
   border-radius: 4px;
   transform: rotate(-10deg);
+  z-index: 2;
 }
 
-.login-form h2, .login-form h3 {
+.login-form h1::after {
+  content: "";
+  position: absolute;
+  top: 6px;    
+  left: 4px;   
+  width: 24px;
+  height: 24px;
+  background-color: #CEEAF7;
+  border-radius: 4px;
+  transform: rotate(-10deg);
+  z-index: 1;
+}
+
+.login-form h2 {
   color: #333;
-  font-size: 20px;
+  font-size: 25px;
   font-weight: 600;
   margin-bottom: 20px;
   margin-top: 20px;
 }
 
-.login-form h3 {
-    font-size: 16px;
+.welcome {
+  font-size: 15px;
+  font-weight: 600;
+  color: #3C5759;
+  margin-top: 25px;
+  margin-bottom: -10px;
 }
+
 
 label {
   display: block;
@@ -68,7 +92,7 @@ label {
   font-weight: 500;
 }
 
-.login-form .MuiTextField-root {
+.login-form input {
   margin-bottom: 1rem;
   background-color: #F5F5F5;
   border: 1px solid #e7e7e7;
@@ -111,6 +135,7 @@ label {
 
 .login-container::after {
   content: "";
-  width: 50%;
+  width: 800px;
   background-color: #3C5759;
+  margin-left: 80px;
 }

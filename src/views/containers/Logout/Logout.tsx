@@ -25,15 +25,6 @@ export const Logout = () => {
         justifyContent: "center"
       }}
     >
-      <Snackbar
-        open={snackbarOpen}
-        anchorOrigin={{ vertical: "top", horizontal: "center" }}
-        sx={{ "& .MuiSnackbarContent-root": { minWidth: 350, fontSize: 20 } }}
-      >
-        <Alert severity="info" sx={{ width: "100%", fontSize: 20, py: 3, justifyContent: "center" }}>
-          You have been logged out.
-        </Alert>
-      </Snackbar>
     </Box>
   );
 };

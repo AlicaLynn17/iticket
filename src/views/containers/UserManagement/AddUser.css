@@ -8,44 +8,33 @@
 .add-user-container {
   background-color: #ffffff;
   min-height: 100vh;
-  padding: 3rem 4rem;
+  padding: 4rem 6rem;
   display: flex;
   justify-content: center;
   align-items: flex-start;
   margin-left: -140px;
+  margin-top: -70px
 }
 
 .add-user-box {
-  background-color: #f5f5f5;
-  padding: 2rem 3rem;
-  border-radius: 12px;
+  background-color: #fff;
+  padding: 2rem 2.5rem;
+  border-radius: 8px;
   width: 100%;
   max-width: 500px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  border: 1px solid #e0e0e0;
 }
 
 .add-user-box h1 {
   color: #3C5759;
-  font-size: 27px;
-  margin-bottom: 0.5rem;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.add-user-box h1::before {
-  content: "";
-  width: 24px;
-  height: 24px;
-  background-color: #F89B5D;
-  border-radius: 4px;
-  transform: rotate(-10deg);
-  display: inline-block;
+  font-size: 26px;
+  margin-bottom: 9px;
 }
 
 .add-user-box h2 {
-  color: #333;
-  font-size: 16px;
+  color: #3C5759;
+  font-size: 15px;
   font-weight: 500;
   margin-bottom: 1.5rem;
 }
@@ -58,18 +47,43 @@
   display: block;
   margin-bottom: 0.4rem;
   font-size: 12px;
-  color: #555;
+  color: #444;
   font-weight: 500;
   text-transform: uppercase;
+}
+
+.MuiInputBase-root {
+  background-color: #f9f9f9;
+  border-radius: 4px !important;
+}
+
+.MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+  border-color: #3C5759;
+}
+
+.MuiInputLabel-root.Mui-focused {
+  color: #3C5759;
 }
 
 button.MuiButton-contained {
   background-color: #3C5759;
   color: white;
   font-weight: 600;
-  border-radius: 5px;
+  border-radius: 4px;
+  text-transform: none;
 }
 
 button.MuiButton-contained:hover {
   background-color: #2a4042;
+}
+
+button.MuiButton-outlined {
+  border-color: #3C5759;
+  color: #3C5759;
+  text-transform: none;
+}
+
+button.MuiButton-outlined:hover {
+  background-color: rgba(60, 87, 89, 0.04);
+  border-color: #2a4042;
 }

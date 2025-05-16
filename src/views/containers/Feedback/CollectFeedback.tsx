@@ -20,7 +20,7 @@ export const CollectFeedback = () => {
   const [formData, setFormData] = useState({
     rating: 0,
     comments: "",
-    userId: "13ec", // Replace with dynamic user ID in production
+    userId: "13ec", 
   });
 
   const [snackbar, setSnackbar] = useState({
@@ -57,8 +57,10 @@ export const CollectFeedback = () => {
   return (
     <Box className="collect-feedback-container">
       <div className="collect-feedback-box">
-        <h1>Provide Feedback</h1>
-        <h2>Rate the support you received</h2>
+        <h1 className="feedback-header">Give Feedback</h1>
+        <Typography variant="subtitle1" className="feedback-subtext">
+          How was your support experience?
+        </Typography>
         <form onSubmit={handleSubmit}>
           <div className="form-group">
             <label>Rating</label>
@@ -78,6 +80,7 @@ export const CollectFeedback = () => {
               onChange={handleChange}
               multiline
               rows={4}
+              placeholder="Tell us what went well or what we can improve..."
               size="small"
             />
           </div>

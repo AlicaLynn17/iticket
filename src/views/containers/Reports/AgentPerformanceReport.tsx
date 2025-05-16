@@ -58,7 +58,6 @@ export const AgentPerformanceReport = () => {
   return (
     <Box className="performance-report-container">
       <div className="performance-report-box">
-        <h1>Agent Performance Report</h1>
         <Paper className="report-table-wrapper">
           <Table>
             <TableHead>

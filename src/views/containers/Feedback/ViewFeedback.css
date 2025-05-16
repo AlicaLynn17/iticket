@@ -29,16 +29,6 @@
   gap: 0.5rem;
 }
 
-.view-feedback-box h1::before {
-  content: "";
-  width: 24px;
-  height: 24px;
-  background-color: #F89B5D;
-  border-radius: 4px;
-  transform: rotate(-10deg);
-  display: inline-block;
-}
-
 .feedback-table-wrapper {
   background-color: #f5f5f5;
   padding: 1.5rem;
@@ -50,4 +40,10 @@
   text-align: center;
   padding: 1rem;
   color: #888;
+}
+
+.MuiTableHead-root th {
+  font-weight: 600;
+  color: #3C5759;
+  font-size: 17px;
 }

@@ -12,8 +12,7 @@ export const SignUp: React.FC = () => {
     lastName: "",
     email: "",
     password: "",
-    confirmPassword: "",
-    role: "user",
+    confirmPassword: ""
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -33,8 +32,7 @@ export const SignUp: React.FC = () => {
       id: uuidv4().slice(0, 4), 
       name: `${formData.firstName} ${formData.lastName}`,
       email: formData.email,
-      password: formData.password,
-      role: formData.role,
+      password: formData.password
     };
 
     try {
@@ -80,20 +78,12 @@ export const SignUp: React.FC = () => {
           <input type="password" id="confirmPassword" name="confirmPassword" value={formData.confirmPassword} onChange={handleChange} required />
         </div>
 
-        <div className="form-group">
-          <label htmlFor="role">Role</label>
-          <select name="role" id="role" value={formData.role} onChange={handleChange}>
-            <option value="user">User</option>
-            <option value="admin">Admin</option>
-          </select>
-        </div>
-
         <button type="submit">Sign Up</button>
 
-        <div style={{ textAlign: "center", marginTop: "1rem" }}>
+        <div className="login">
             <span>Already have an account? </span>
-            <a href="/login" style={{ color: "#3C5759", fontWeight: "bold", textDecoration: "none" }}>
-                Log in
+            <a href="/login" className="login-span">
+                LOGIN
             </a>
         </div>
 

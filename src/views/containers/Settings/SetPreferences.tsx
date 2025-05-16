@@ -74,32 +74,73 @@ export const SetPreferences = () => {
   return (
     <Box className="set-preferences-container">
       <div className="set-preferences-box">
-        <h1>User Preferences</h1>
+        <h1 className="set-preferences-header">User Preferences</h1>
+
+        <div className="section-label">Notifications</div>
+
         <div className="form-group switch-row">
-          <Typography>Enable Notifications</Typography>
-          <Switch
-            name="notifications"
-            checked={preferences.notifications}
-            onChange={handleChange}
-          />
+          <Typography>Email Notifications</Typography>
+          <Switch name="emailNotifications" checked />
         </div>
+        <div className="form-group switch-row">
+          <Typography>Push Notifications</Typography>
+          <Switch name="pushNotifications" checked />
+        </div>
+
+        <div className="section-label">Display Settings</div>
+
         <div className="form-group">
           <InputLabel sx={{ mb: 1 }}>Default Ticket View</InputLabel>
           <FormControl fullWidth size="small">
-            <Select
-              name="defaultView"
-              value={preferences.defaultView}
-              onChange={handleSelectChange}
-            >
+            <Select name="defaultView" value={preferences.defaultView} onChange={handleSelectChange}>
               <MenuItem value="Open Tickets">Open Tickets</MenuItem>
               <MenuItem value="All Tickets">All Tickets</MenuItem>
               <MenuItem value="Resolved Tickets">Resolved Tickets</MenuItem>
             </Select>
           </FormControl>
         </div>
-        <Button variant="contained" fullWidth sx={{ mt: 2 }} onClick={handleSave}>
+
+        <div className="form-group">
+          <InputLabel sx={{ mb: 1 }}>Theme</InputLabel>
+          <FormControl fullWidth size="small">
+            <Select name="theme" value="system">
+              <MenuItem value="light">Light</MenuItem>
+              <MenuItem value="dark">Dark</MenuItem>
+              <MenuItem value="system">System</MenuItem>
+            </Select>
+          </FormControl>
+        </div>
+
+        <div className="section-label">Language & Region</div>
+
+        <div className="form-group">
+          <InputLabel sx={{ mb: 1 }}>Language</InputLabel>
+          <FormControl fullWidth size="small">
+            <Select name="language" value="en">
+              <MenuItem value="en">English</MenuItem>
+              <MenuItem value="fil">Filipino</MenuItem>
+              <MenuItem value="es">Spanish</MenuItem>
+            </Select>
+          </FormControl>
+        </div>
+
+        <div className="form-group">
+          <InputLabel sx={{ mb: 1 }}>Timezone</InputLabel>
+          <FormControl fullWidth size="small">
+            <Select name="timezone" value="Asia/Manila">
+              <MenuItem value="Asia/Manila">GMT+8:00 (Manila)</MenuItem>
+              <MenuItem value="UTC">UTC</MenuItem>
+              <MenuItem value="America/New_York">GMT-5:00 (New York)</MenuItem>
+            </Select>
+          </FormControl>
+        </div>
+
+        <Button className="save-button" onClick={handleSave}>
           Save Preferences
         </Button>
+
+
+
       </div>
 
       <Snackbar
