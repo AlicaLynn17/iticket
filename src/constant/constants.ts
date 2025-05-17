@@ -32,7 +32,7 @@ export const SIDE_BAR_MENU = [
   { path: "/dashboard", label: "Dashboard" },
   { path: "/view-users", label: "Users", role: "admin" },
   { path: "/view-tickets", label: "Tickets" },
-  { path: "/reports", label: "Reports" },
+  { path: "/reports", label: "Reports", role: "admin" },
   { path: "/view-articles", label: "Knowledge Base" },
   { path: "/view-feedback", label: "Feedback" },
   { path: "/set-preferences", label: "Settings" },

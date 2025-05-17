@@ -30,6 +30,7 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import MenuBookIcon from "@mui/icons-material/MenuBook";
 import FeedbackIcon from "@mui/icons-material/Feedback";
 import LogoutIcon from "@mui/icons-material/Logout";
+import { Avatar, Box } from "@mui/material";
 
 // Icon map
 const iconMap: Record<string, React.ReactNode> = {
@@ -91,7 +92,7 @@ export const Main = () => {
             bgcolor: "#29404a",
             color: "#fff",
             borderRight: 0,
-            overflowX: "hidden",
+            overflowY: "auto",
             transition: "width 0.3s",
           },
         }}
@@ -99,6 +100,7 @@ export const Main = () => {
         anchor="left"
         open={openDrawer}
       >
+
         <IconButton
           onClick={() => setOpenDrawer(!openDrawer)}
           sx={{ color: "#fff", mt: 1, mb: 1 }}
@@ -112,6 +114,29 @@ export const Main = () => {
 
         <Divider sx={{ borderColor: "#3e5c6d" }} />
 
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            py: 1,
+          }}
+        >
+          <Avatar
+            src={user.profilePic || ""}
+            sx={{ width: 50, height:50, bgcolor: "#3C5759", fontSize: 28, mb: 1 }}
+          >
+            {!user.profilePic && user.name ? user.name[0] : ""}
+          </Avatar>
+          <Typography variant="subtitle1" sx={{ color: "#fff", fontSize: 15}}>
+            {user.name || "User"}
+          </Typography>
+
+          <Typography variant="caption" sx={{ color: "#b0bec5" }}>
+            {user.role ? user.role.charAt(0).toUpperCase() + user.role.slice(1) : ""}
+          </Typography>
+        </Box>
+        <Divider sx={{ borderColor: "#3e5c6d" }} />
         <List>
           {filteredMenu.map((item) => (
             <ListItem
@@ -171,7 +196,7 @@ export const Main = () => {
               );
 };
 
-export const drawerWidthOpen = 140;
+export const drawerWidthOpen = 180;
 export const drawerWidthClosed = 56;
 
 const MainLayout = styled("main", {
