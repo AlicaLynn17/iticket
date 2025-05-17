@@ -23,6 +23,19 @@
       "email": "leeanton@iticket.com",
       "password": "123",
       "role": "user"
+    },
+    {
+      "id": "6260",
+      "name": "Wonbin Park",
+      "email": "wonbin@iticket.com",
+      "password": "123"
+    },
+    {
+      "id": "5c83",
+      "name": "Osaki Shotaro",
+      "email": "sho@iticket.com",
+      "password": "123",
+      "role": "user"
     }
   ],
   "tickets": [
@@ -53,8 +66,6 @@
       "resolvedAt": null
     }
   ],
-  "knowledgeBase": [
-  ],
-  "feedback": [
-  ]
+  "knowledgeBase": [],
+  "feedback": []
 }

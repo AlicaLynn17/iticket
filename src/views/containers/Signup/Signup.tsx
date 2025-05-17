@@ -12,7 +12,8 @@ export const SignUp: React.FC = () => {
     lastName: "",
     email: "",
     password: "",
-    confirmPassword: ""
+    confirmPassword: "",
+    
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -32,7 +33,8 @@ export const SignUp: React.FC = () => {
       id: uuidv4().slice(0, 4), 
       name: `${formData.firstName} ${formData.lastName}`,
       email: formData.email,
-      password: formData.password
+      password: formData.password,
+      role: "user"
     };
 
     try {
