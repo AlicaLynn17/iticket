@@ -25,15 +25,16 @@
       "role": "user"
     },
     {
-      "id": "6260",
-      "name": "Wonbin Park",
-      "email": "wonbin@iticket.com",
-      "password": "123"
-    },
-    {
       "id": "5c83",
       "name": "Osaki Shotaro",
       "email": "sho@iticket.com",
+      "password": "123",
+      "role": "user"
+    },
+    {
+      "id": "ba3e",
+      "name": "Lhea Baclayo",
+      "email": "lhea@iticket.com",
       "password": "123",
       "role": "user"
     }
@@ -63,6 +64,19 @@
       "dueDate": "2025-05-23",
       "status": "Resolved",
       "createdAt": "2025-05-16T11:55:02.971Z",
+      "resolvedAt": null
+    },
+    {
+      "id": "40e4",
+      "title": "Broken PC",
+      "description": "My PC is broken, I want a replacement.",
+      "category": "Technical",
+      "priority": "Low",
+      "attachment": "",
+      "assignedTo": "2713",
+      "dueDate": "2025-05-15",
+      "status": "Open",
+      "createdAt": "2025-05-17T02:55:34.497Z",
       "resolvedAt": null
     }
   ],

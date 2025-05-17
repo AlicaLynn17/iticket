@@ -8,7 +8,6 @@ import React, { Fragment, useEffect } from "react";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import { useTheme } from "@mui/material/styles";
-import MenuIcon from "@mui/icons-material/Menu";
 import { styled } from "@mui/material/styles";
 import AppBar from "../../components/AppBar";
 import Divider from "@mui/material/Divider";
@@ -24,7 +23,6 @@ import ListItemText from "@mui/material/ListItemText";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import PeopleIcon from "@mui/icons-material/People";
 import AssignmentIcon from "@mui/icons-material/Assignment";
-import TrackChangesIcon from "@mui/icons-material/TrackChanges";
 import BarChartIcon from "@mui/icons-material/BarChart";
 import SettingsIcon from "@mui/icons-material/Settings";
 import MenuBookIcon from "@mui/icons-material/MenuBook";
@@ -45,12 +43,14 @@ const iconMap: Record<string, React.ReactNode> = {
   Logout: <LogoutIcon />,
 };
 
+export const drawerWidthOpen = 160;
+
 export const Main = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const [openDrawer, setOpenDrawer] = React.useState(true);
-  const drawerWidth = openDrawer ? drawerWidthOpen : drawerWidthClosed;
   const theme = useTheme();
+
+  const openDrawer = true; // permanently open
 
   useEffect(() => {
     if (location.pathname === PATHS.MAIN.path) navigate(PATHS.LOGIN.path);
@@ -67,15 +67,6 @@ export const Main = () => {
       <CssBaseline />
       <AppBar position="fixed" open={openDrawer}>
         <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            onClick={() => setOpenDrawer(!openDrawer)}
-            edge="start"
-            sx={[{ mr: 2 }, openDrawer && { display: "none" }]}
-          >
-            <MenuIcon />
-          </IconButton>
           <Typography variant="h6" noWrap component="div" sx={{ color: "#29404a" }}>
             ITicket Help Desk
           </Typography>
@@ -84,10 +75,10 @@ export const Main = () => {
 
       <Drawer
         sx={{
-          width: drawerWidth,
+          width: drawerWidthOpen,
           flexShrink: 0,
           "& .MuiDrawer-paper": {
-            width: drawerWidth,
+            width: drawerWidthOpen,
             boxSizing: "border-box",
             bgcolor: "#29404a",
             color: "#fff",
@@ -98,20 +89,8 @@ export const Main = () => {
         }}
         variant="persistent"
         anchor="left"
-        open={openDrawer}
+        open={true}
       >
-
-        <IconButton
-          onClick={() => setOpenDrawer(!openDrawer)}
-          sx={{ color: "#fff", mt: 1, mb: 1 }}
-        >
-          {theme.direction === "ltr" ? (
-            <ChevronLeftIcon />
-          ) : (
-            <ChevronRightIcon />
-          )}
-        </IconButton>
-
         <Divider sx={{ borderColor: "#3e5c6d" }} />
 
         <Box
@@ -124,27 +103,23 @@ export const Main = () => {
         >
           <Avatar
             src={user.profilePic || ""}
-            sx={{ width: 50, height:50, bgcolor: "#3C5759", fontSize: 28, mb: 1 }}
+            sx={{ width: 50, height: 50, bgcolor: "#3C5759", fontSize: 28, mb: 1 }}
           >
             {!user.profilePic && user.name ? user.name[0] : ""}
           </Avatar>
-          <Typography variant="subtitle1" sx={{ color: "#fff", fontSize: 15}}>
+          <Typography variant="subtitle1" sx={{ color: "#fff", fontSize: 15 }}>
             {user.name || "User"}
           </Typography>
-
           <Typography variant="caption" sx={{ color: "#b0bec5" }}>
             {user.role ? user.role.charAt(0).toUpperCase() + user.role.slice(1) : ""}
           </Typography>
         </Box>
+
         <Divider sx={{ borderColor: "#3e5c6d" }} />
+
         <List>
           {filteredMenu.map((item) => (
-            <ListItem
-              key={item.path}
-              disablePadding
-              sx={{ display: "block", mb: 2 }} 
-            >
-
+            <ListItem key={item.path} disablePadding sx={{ display: "block", mb: 2 }}>
               <NavLink
                 to={item.path}
                 style={({ isActive }) => ({
@@ -158,7 +133,7 @@ export const Main = () => {
               >
                 <ListItemButton
                   sx={{
-                    justifyContent: openDrawer ? "flex-start" : "center",
+                    justifyContent: "flex-start",
                     px: 1.5,
                     py: 1,
                     minHeight: 48,
@@ -166,45 +141,37 @@ export const Main = () => {
                   }}
                   selected={location.pathname.startsWith(item.path)}
                 >
-                <ListItemIcon
-                  sx={{ color: "#fff", minWidth: 0, mr: openDrawer ? 1.5 : 0 }}
-                >
-                {iconMap[item.label] || <DashboardIcon />}
-              </ListItemIcon>
-              {openDrawer && (
-                <ListItemText
-                  primary={item.label}
-                  primaryTypographyProps={{
-                    fontSize: 13,
-                    fontWeight: 500,
-                  }}
-                />
-            )}
-            </ListItemButton>
+                  <ListItemIcon sx={{ color: "#fff", minWidth: 0, mr: 1.5 }}>
+                    {iconMap[item.label] || <DashboardIcon />}
+                  </ListItemIcon>
+                  <ListItemText
+                    primary={item.label}
+                    primaryTypographyProps={{
+                      fontSize: 13,
+                      fontWeight: 500,
+                    }}
+                  />
+                </ListItemButton>
+              </NavLink>
+            </ListItem>
+          ))}
+        </List>
+      </Drawer>
 
-                          </NavLink>
-                        </ListItem>
-                      ))}
-                    </List>
-                  </Drawer>
-
-                  <MainLayout open={openDrawer}>
-                    <DrawerHeader />
-                    <Outlet />
-                  </MainLayout>
-                </Fragment>
-              );
+      <MainLayout open={openDrawer}>
+        <DrawerHeader />
+        <Outlet />
+      </MainLayout>
+    </Fragment>
+  );
 };
-
-export const drawerWidthOpen = 180;
-export const drawerWidthClosed = 56;
 
 const MainLayout = styled("main", {
   shouldForwardProp: (prop) => prop !== "open",
 })<{ open?: boolean }>(({ theme, open }) => ({
   flexGrow: 1,
   padding: theme.spacing(3),
-  marginLeft: open ? drawerWidthOpen : drawerWidthClosed,
+  marginLeft: drawerWidthOpen,
   transition: theme.transitions.create("margin", {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
