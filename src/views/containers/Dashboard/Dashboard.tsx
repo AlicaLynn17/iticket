@@ -25,6 +25,8 @@ export const Dashboard = () => {
     negative: 5
   };
 
+  const user = JSON.parse(localStorage.getItem("user") || "{}");
+
   useEffect(() => {
     axios.get("http://localhost:3000/tickets").then((res) => {
       setTickets(res.data);
@@ -98,30 +100,33 @@ export const Dashboard = () => {
         </div>
       </div>
 
-      <div className="section-card">
-        <h2>Customer Satisfaction</h2>
+      {/* Only show satisfaction stats for admins */}
+      {user.role === "admin" && (
+        <div className="section-card">
+          <h2>Customer Satisfaction</h2>
 
-        <div className="progress-row">
-          <ThumbUpAltIcon style={{ color: "#4CAF50" }} />
-          <p className="progress-label">Positive</p>
-          <LinearProgress variant="determinate" value={satisfaction.positive} className="progress-bar success" />
-          <p className="progress-percent">{satisfaction.positive}%</p>
-        </div>
+          <div className="progress-row">
+            <ThumbUpAltIcon style={{ color: "#4CAF50" }} />
+            <p className="progress-label">Positive</p>
+            <LinearProgress variant="determinate" value={satisfaction.positive} className="progress-bar success" />
+            <p className="progress-percent">{satisfaction.positive}%</p>
+          </div>
 
-        <div className="progress-row">
-          <ThumbDownAltIcon style={{ color: "#F89B5D" }} />
-          <p className="progress-label">Neutral</p>
-          <LinearProgress variant="determinate" value={satisfaction.neutral} className="progress-bar warning" />
-          <p className="progress-percent">{satisfaction.neutral}%</p>
-        </div>
+          <div className="progress-row">
+            <ThumbDownAltIcon style={{ color: "#F89B5D" }} />
+            <p className="progress-label">Neutral</p>
+            <LinearProgress variant="determinate" value={satisfaction.neutral} className="progress-bar warning" />
+            <p className="progress-percent">{satisfaction.neutral}%</p>
+          </div>
 
-        <div className="progress-row">
-          <ThumbDownAltIcon style={{ color: "#F44336" }} />
-          <p className="progress-label">Negative</p>
-          <LinearProgress variant="determinate" value={satisfaction.negative} className="progress-bar error" />
-          <p className="progress-percent">{satisfaction.negative}%</p>
+          <div className="progress-row">
+            <ThumbDownAltIcon style={{ color: "#F44336" }} />
+            <p className="progress-label">Negative</p>
+            <LinearProgress variant="determinate" value={satisfaction.negative} className="progress-bar error" />
+            <p className="progress-percent">{satisfaction.negative}%</p>
+          </div>
         </div>
-      </div>
+      )}
 
       <div className="section-card">
         <h2>Agent Performance</h2>

@@ -26,8 +26,20 @@ export const Login: React.FC = () => {
       );
 
       if (matchedUser) {
+        // Assign role based on email before saving user
+        let role = "user";
+        if (matchedUser.email.toLowerCase() === "jsc@iticket.com") {
+          role = "admin";
+        }
+
+        const userWithRole = { ...matchedUser, role };
+
+        // Save user and token in localStorage
         localStorage.setItem("authToken", "sampleToken");
-        localStorage.setItem("user", JSON.stringify(matchedUser));
+        localStorage.setItem("user", JSON.stringify(userWithRole));
+
+        console.log("User logged in:", userWithRole); // Optional debug
+
         alert("Login successful!");
         navigate("/dashboard");
       } else {
