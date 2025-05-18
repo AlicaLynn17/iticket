@@ -34,7 +34,7 @@ export const SIDE_BAR_MENU = [
   { path: "/view-tickets", label: "Tickets" },
   { path: "/reports", label: "Reports" },
   { path: "/view-articles", label: "Knowledge Base" },
-  { path: "/view-feedback", label: "Feedback" },
+  { path: "/view-feedback", label: "Feedback", role: "admin" },  // Add this role restriction
   { path: "/set-preferences", label: "Settings" },
   { path: "/logout", label: "Logout" }
 ];
