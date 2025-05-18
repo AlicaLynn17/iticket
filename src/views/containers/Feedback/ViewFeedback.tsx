@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Box,
   Typography,
@@ -13,9 +13,22 @@ import {
 import StarIcon from "@mui/icons-material/Star";
 import StarHalfIcon from "@mui/icons-material/StarHalf";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
+import { useNavigate } from "react-router-dom";
 import "./ViewFeedback.css";
 
 export const ViewFeedback = () => {
+  const navigate = useNavigate();
+
+  const user = JSON.parse(localStorage.getItem("user") || "{}");
+  const isAdmin = user.role === "admin";
+
+  useEffect(() => {
+    if (!isAdmin) {
+      alert("You are not authorized to access this page.");
+      navigate("/dashboard");
+    }
+  }, [isAdmin, navigate]);
+
   const feedback = [
     {
       id: "1",
