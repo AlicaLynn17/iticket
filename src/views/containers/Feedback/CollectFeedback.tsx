@@ -42,9 +42,12 @@ export const CollectFeedback = () => {
     e.preventDefault();
     try {
       await axios.post("http://localhost:3000/feedback", {
-        ...formData,
+        title: `Feedback for Ticket ${ticketId}`,
+        content: formData.comments,
+        rating: formData.rating,
+        submittedBy: formData.userId,
         ticketId,
-        createdAt: new Date().toISOString(),
+        createdAt: new Date().toISOString()
       });
       setSnackbar({ open: true, message: "Feedback submitted successfully!", severity: "success" });
       setTimeout(() => navigate("/view-tickets"), 1000);

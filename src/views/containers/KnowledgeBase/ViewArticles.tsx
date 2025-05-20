@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Typography,
@@ -12,53 +12,40 @@ import {
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import "./ViewArticles.css";
-
-const articles = [
-  {
-    id: "1",
-    category: "FAQs",
-    title: "What is ITicket?",
-    description: "An overview of the ITicket platform, its purpose, and key features.",
-    author: "Admin",
-    createdAt: "2024-10-12T10:00:00Z",
-  },
-  {
-    id: "2",
-    category: "How-Tos",
-    title: "How to submit a ticket",
-    description: "Step-by-step instructions on how to file a support ticket in ITicket.",
-    author: "Support",
-    createdAt: "2024-09-21T15:30:00Z",
-  },
-  {
-    id: "3",
-    category: "Troubleshooting",
-    title: "Cannot log into ITicket",
-    description: "Solutions for common login issues faced by users.",
-    author: "Agent1",
-    createdAt: "2024-08-05T08:15:00Z",
-  },
-];
-
 
 export const ViewArticles = () => {
   const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem("user") || "{}");
   const isAdmin = user.role === "admin";
 
-  const categories = ["FAQs", "How-Tos", "Troubleshooting"];
-
+  const [articles, setArticles] = useState<any[]>([]);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [selectedArticleId, setSelectedArticleId] = useState<string | null>(null);
+
+  const categories = ["FAQs", "How-Tos", "Troubleshooting", "Other"];
+
+  useEffect(() => {
+    axios.get("http://localhost:3000/knowledgeBase").then((res) => {
+      setArticles(res.data);
+    });
+  }, []);
 
   const handleDelete = (id: string) => {
     setSelectedArticleId(id);
     setDeleteModalOpen(true);
   };
 
-  const confirmDelete = () => {
-    console.log("Deleting article:", selectedArticleId);
+  const confirmDelete = async () => {
+    if (selectedArticleId) {
+      try {
+        await axios.delete(`http://localhost:3000/knowledgeBase/${selectedArticleId}`);
+        setArticles((prev) => prev.filter((a) => a.id !== selectedArticleId));
+      } catch (err) {
+        console.error("Failed to delete article", err);
+      }
+    }
     setDeleteModalOpen(false);
     setSelectedArticleId(null);
   };
@@ -75,7 +62,6 @@ export const ViewArticles = () => {
           >
             New Article
           </Button>
-
         )}
       </div>
 
@@ -96,18 +82,18 @@ export const ViewArticles = () => {
                       navigate(`/view-article/${article.id}`);
                     }}
                   >
-
                     <Typography variant="subtitle1" className="article-title">
                       {article.title}
                     </Typography>
                     <Typography variant="body2" className="article-description">
-                      {article.description}
+                      {article.content.slice(0, 100)}...
                     </Typography>
                     <Typography variant="caption" className="article-meta">
-                      By {article.author} • {new Date(article.createdAt).toLocaleDateString()}
+                      By {article.author} •{" "}
+                      {new Date(article.createdAt).toLocaleDateString("en-GB")}
                     </Typography>
-
                   </div>
+
                   {isAdmin && (
                     <div className="article-actions">
                       <Button
@@ -137,7 +123,7 @@ export const ViewArticles = () => {
           Are you sure you want to delete this article?
         </DialogContent>
         <DialogActions>
-         <Button
+          <Button
             onClick={() => setDeleteModalOpen(false)}
             variant="outlined"
             sx={{ px: 3, py: 1, fontSize: "0.875rem" }}

@@ -19,7 +19,7 @@ import { ViewArticleDetail } from "./views/containers/KnowledgeBase/ViewArticleD
 import { EditArticle } from "./views/containers/KnowledgeBase/EditArticle";
 import { CollectFeedback } from "./views/containers/Feedback/CollectFeedback";
 import { ViewFeedback } from "./views/containers/Feedback/ViewFeedback";
-
+import { TicketsSummary } from "./views/containers/TicketManagement/TicketsSummary";
 
 export const AppRoutes = () => {
   return (
@@ -45,6 +45,7 @@ export const AppRoutes = () => {
           <Route path="/edit-article/:id" element={<EditArticle />} />
           <Route path="/collect-feedback/:ticketId" element={<CollectFeedback />} />
           <Route path="/view-feedback" element={<ViewFeedback />} />
+          <Route path="/ticket/:id" element={<TicketsSummary />} />
         </Route>
         {/* ADD PUBLIC ROUTES HERE (e.g., Login, Sign Up, Forgot Pass, etc. ) */}
         <Route path={PATHS.SIGNUP.path} element={<Views.SignUp />} />

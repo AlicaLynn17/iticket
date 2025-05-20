@@ -3,7 +3,6 @@ import {
   Box,
   Button,
   TextField,
-  Typography,
   Snackbar,
   Alert,
   Stack,
@@ -14,10 +13,14 @@ import "./CreateArticle.css";
 export const CreateArticle = () => {
   const navigate = useNavigate();
 
+  // Get user from localStorage
+  const user = JSON.parse(localStorage.getItem("user") || "{}");
+
   const [formData, setFormData] = useState({
     title: "",
     content: "",
-    author: "",
+    author: user.name || "", // auto-fill author
+    category: "",
   });
 
   const [snackbar, setSnackbar] = useState({
@@ -33,16 +36,36 @@ export const CreateArticle = () => {
     setFormData({ ...formData, [name]: value });
   };
 
-    const handleSubmit = async (e: React.FormEvent) => {
-      e.preventDefault();
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
 
-      setSnackbar({ open: true, message: "Article created successfully!", severity: "success" });
+    try {
+      await fetch("http://localhost:3000/knowledgeBase", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ...formData,
+          createdAt: new Date().toISOString(),
+        }),
+      });
+
+      setSnackbar({
+        open: true,
+        message: "Article created successfully!",
+        severity: "success",
+      });
 
       setTimeout(() => {
         navigate("/view-articles");
-      }, 1200); 
-    };
-
+      }, 1200);
+    } catch (error) {
+      setSnackbar({
+        open: true,
+        message: "Failed to create article.",
+        severity: "error",
+      });
+    }
+  };
 
   return (
     <Box className="create-article-container">
@@ -61,6 +84,7 @@ export const CreateArticle = () => {
               size="small"
             />
           </div>
+
           <div className="form-group">
             <label>Content</label>
             <TextField
@@ -74,6 +98,38 @@ export const CreateArticle = () => {
               size="small"
             />
           </div>
+
+          <div className="form-group">
+            <label>Author</label>
+            <TextField
+              fullWidth
+              name="author"
+              value={formData.author}
+              disabled // 🔒 not editable
+              size="small"
+            />
+          </div>
+
+          <div className="form-group">
+            <label>Category</label>
+            <TextField
+              select
+              fullWidth
+              name="category"
+              value={formData.category}
+              onChange={handleChange}
+              required
+              size="small"
+              SelectProps={{ native: true }}
+            >
+              <option value="">Select Category</option>
+              <option value="FAQs">FAQs</option>
+              <option value="How-Tos">How-Tos</option>
+              <option value="Troubleshooting">Troubleshooting</option>
+              <option value="Other">Other</option>
+            </TextField>
+          </div>
+
           <Stack direction="row" spacing={2} sx={{ mt: 2 }}>
             <Button
               variant="outlined"

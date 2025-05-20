@@ -92,7 +92,6 @@ export const EditUser = () => {
                 onChange={handleSelectChange}
                 required
               >
-                <MenuItem value="superadmin">Superadmin</MenuItem>
                 <MenuItem value="admin">Admin</MenuItem>
                 <MenuItem value="agent">Agent</MenuItem>
                 <MenuItem value="user">User</MenuItem>

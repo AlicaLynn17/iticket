@@ -50,7 +50,7 @@ export const Main = () => {
   const location = useLocation();
   const theme = useTheme();
 
-  const openDrawer = true; // permanently open
+  const openDrawer = true;
 
   useEffect(() => {
     if (location.pathname === PATHS.MAIN.path) navigate(PATHS.LOGIN.path);
@@ -59,7 +59,7 @@ export const Main = () => {
   const user = JSON.parse(localStorage.getItem("user") || "{}");
 
   const filteredMenu = SIDE_BAR_MENU.filter(
-    (item) => !item.role || item.role === user.role
+    (item) => !item.roles || item.roles.includes(user.role)
   );
 
   return (

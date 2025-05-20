@@ -31,8 +31,8 @@ export const ViewArticleDetail = () => {
         <Typography variant="caption" className="article-meta">
           By {article.author} •{" "}
           {article.createdAt
-            ? new Date(article.createdAt).toLocaleString()
-            : "Unknown date"}
+          ? new Date(article.createdAt).toLocaleDateString("en-GB")
+          : "Unknown date"}
         </Typography>
 
         <Typography

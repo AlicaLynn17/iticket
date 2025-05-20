@@ -1,47 +1,50 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
-  Typography,
+  Paper,
   Table,
   TableBody,
   TableCell,
   TableHead,
   TableRow,
-  Paper,
   Stack,
+  Button,
 } from "@mui/material";
 import StarIcon from "@mui/icons-material/Star";
 import StarHalfIcon from "@mui/icons-material/StarHalf";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
+import axios from "axios";
 import "./ViewFeedback.css";
 
 export const ViewFeedback = () => {
-  const feedback = [
-    {
-      id: "1",
-      ticketDescription: "App crashes when submitting form",
-      user: "Franka Ong",
-      rating: 4.5,
-      comments: "Very helpful team. They fixed it fast.",
-      createdAt: "2024-10-12T14:20:00",
-    },
-    {
-      id: "2",
-      ticketDescription: "Password reset email not sent",
-      user: "Lhea Dizon",
-      rating: 5,
-      comments: "Smooth support experience!",
-      createdAt: "2024-11-02T09:45:00",
-    },
-    {
-      id: "3",
-      ticketDescription: "UI glitch on dark mode",
-      user: null,
-      rating: 3.5,
-      comments: "It works now but the fix took a while.",
-      createdAt: "2024-12-01T18:10:00",
-    },
-  ];
+  const [feedbackList, setFeedbackList] = useState<any[]>([]);
+  const [users, setUsers] = useState<any[]>([]);
+  const [tickets, setTickets] = useState<any[]>([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const [feedbackRes, usersRes, ticketsRes] = await Promise.all([
+        axios.get("http://localhost:3000/feedback"),
+        axios.get("http://localhost:3000/users"),
+        axios.get("http://localhost:3000/tickets"),
+      ]);
+      setFeedbackList(feedbackRes.data);
+      setUsers(usersRes.data);
+      setTickets(ticketsRes.data);
+    };
+
+    fetchData();
+  }, []);
+
+  const getUserName = (userId: string) => {
+    const user = users.find((u) => u.id === userId);
+    return user ? user.name : "Anonymous";
+  };
+
+  const getTicketDescription = (ticketId: string) => {
+    const ticket = tickets.find((t) => String(t.id) === String(ticketId));
+    return ticket ? ticket.title || ticket.description : "Unknown Ticket";
+  };
 
   const renderStars = (rating: number) => {
     const stars = [];
@@ -65,7 +68,7 @@ export const ViewFeedback = () => {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell>Ticket Description</TableCell>
+                <TableCell>Ticket</TableCell>
                 <TableCell>User</TableCell>
                 <TableCell>Rating</TableCell>
                 <TableCell>Comments</TableCell>
@@ -73,27 +76,24 @@ export const ViewFeedback = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {feedback.length === 0 ? (
+              {feedbackList.length === 0 ? (
                 <TableRow>
                   <TableCell colSpan={5} className="no-feedback">
                     No feedback found.
                   </TableCell>
                 </TableRow>
               ) : (
-                feedback.map((item) => (
+                feedbackList.map((item) => (
                   <TableRow key={item.id}>
-                    <TableCell>
-                      {item.ticketDescription.length > 40
-                        ? item.ticketDescription.slice(0, 40) + "..."
-                        : item.ticketDescription}
-                    </TableCell>
-                    <TableCell>{item.user || "Anonymous"}</TableCell>
+                    <TableCell>{getTicketDescription(item.ticketId)}</TableCell>
+                    <TableCell>{getUserName(item.userId || item.submittedBy)}</TableCell>
                     <TableCell>{renderStars(item.rating)}</TableCell>
-                    <TableCell>{item.comments}</TableCell>
+                    <TableCell>{item.comments || item.content || "—"}</TableCell>
                     <TableCell>
                       {item.createdAt
-                        ? new Date(item.createdAt).toLocaleString()
-                        : "N/A"}
+                      ? new Date(item.createdAt).toLocaleDateString("en-GB")
+                      : "N/A"}
+
                     </TableCell>
                   </TableRow>
                 ))

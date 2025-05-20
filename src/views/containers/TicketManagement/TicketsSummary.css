@@ -1,0 +1,98 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+* {
+  box-sizing: border-box;
+  font-family: 'Inter', sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+.ticket-summary-container {
+  background-color: #ffffff;
+  min-height: 100vh;
+  padding: 4rem 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  width: 600px;
+  margin-left: 110px;
+  margin-top: -20px;
+
+}
+
+.ticket-summary-box {
+  width: 100%;
+  max-width: 720px;
+  background-color: #fff;
+  padding: 2.5rem 3rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+  border: 1px solid #e0e0e0;
+}
+
+.ticket-summary-box h1 {
+  font-size: 28px;
+  color: #3C5759;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.ticket-summary-box .meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem 2rem;
+  margin-bottom: 1.5rem;
+  color: #444;
+  font-size: 15px;
+}
+
+.ticket-summary-box .meta-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 200px; /* optional: controls wrap behavior */
+}
+
+
+.ticket-summary-box .chip {
+  margin-left: 0.5rem;
+}
+
+.ticket-summary-box p.description {
+  margin-top: 1.5rem;
+  font-size: 16px;
+  line-height: 1.6;
+  color: #333;
+}
+
+.ticket-summary-box .feedback-button {
+  margin-top: 2rem;
+  background-color: #3C5759;
+  color: white;
+  font-weight: 600;
+  border-radius: 6px;
+  padding: 0.7rem 1.5rem;
+  text-transform: none;
+}
+
+.ticket-summary-box .feedback-button:hover {
+  background-color: #2a4042;
+}
+
+.back-button {
+  margin-bottom: 20px;
+  text-transform: none;
+  border-color: #3C5759;
+  color: #3C5759;
+  font-weight: 600;
+}
+
+.back-button:hover {
+  background-color: rgba(60, 87, 89, 0.04);
+  border-color: #2a4042;
+  color: #2a4042;
+}

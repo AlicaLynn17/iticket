@@ -29,12 +29,12 @@ export const PATHS = {
 
 // SIDE BAR MENU PATH
 export const SIDE_BAR_MENU = [
-  { path: "/dashboard", label: "Dashboard" },
-  { path: "/view-users", label: "Users", role: "admin" },
-  { path: "/view-tickets", label: "Tickets" },
-  { path: "/reports", label: "Reports", role: "admin" },
-  { path: "/view-articles", label: "Knowledge Base" },
-  { path: "/view-feedback", label: "Feedback" },
-  { path: "/set-preferences", label: "Settings" },
-  { path: "/logout", label: "Logout" }
+  { path: "/dashboard", label: "Dashboard", roles: ["admin", "superadmin", "agent"] },
+  { path: "/view-users", label: "Users", roles: ["admin", "superadmin"] },
+  { path: "/view-tickets", label: "Tickets", roles: ["admin", "superadmin", "agent", "user"] },
+  { path: "/reports", label: "Reports", roles: ["admin", "superadmin"] },
+  { path: "/view-articles", label: "Knowledge Base", roles: ["admin", "superadmin", "agent", "user"] },
+  { path: "/view-feedback", label: "Feedback", roles: ["admin", "superadmin"] },
+  { path: "/set-preferences", label: "Settings", roles: ["admin", "superadmin", "agent", "user"] },
+  { path: "/logout", label: "Logout", roles: ["admin", "superadmin", "agent", "user"] }
 ];

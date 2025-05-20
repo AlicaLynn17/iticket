@@ -4,18 +4,8 @@
       "id": "84b2",
       "name": "Franka Ong",
       "email": "frankaong@iticket.com",
-      "role": "admin",
-      "password": "123"
-    },
-    {
-      "id": "2822",
-      "name": "Sungchan Jung",
-      "email": "jsc@iticket.com",
       "password": "123",
-      "role": "admin",
-      "preferences": {
-        "defaultView": "Open Tickets"
-      }
+      "role": "admin"
     },
     {
       "id": "2713",
@@ -25,18 +15,39 @@
       "role": "user"
     },
     {
-      "id": "5c83",
-      "name": "Osaki Shotaro",
-      "email": "sho@iticket.com",
+      "id": "dc8f",
+      "name": "Javidil",
+      "email": "javidil@email.com",
       "password": "123",
       "role": "user"
     },
     {
-      "id": "ba3e",
-      "name": "Lhea Baclayo",
-      "email": "lhea@iticket.com",
+      "id": "a001",
+      "name": "Agent Smith",
+      "email": "agent@iticket.com",
+      "password": "123",
+      "role": "agent"
+    },
+    {
+      "id": "e446",
+      "name": "alica lynn",
+      "email": "alica@email.com",
       "password": "123",
       "role": "user"
+    },
+    {
+      "id": "8785",
+      "name": "Madam Test",
+      "email": "test@iticket.com",
+      "role": "user",
+      "password": "123"
+    },
+    {
+      "id": "d32c",
+      "name": "Sungchan Jung",
+      "email": "jsc@iticket.com",
+      "role": "admin",
+      "password": "123"
     }
   ],
   "tickets": [
@@ -47,7 +58,7 @@
       "category": "General",
       "priority": "Medium",
       "attachment": "",
-      "assignedTo": "2713",
+      "assignedTo": "",
       "dueDate": "2025-05-24",
       "status": "Closed",
       "createdAt": "2025-05-16T11:37:40.599Z",
@@ -67,19 +78,104 @@
       "resolvedAt": null
     },
     {
-      "id": "40e4",
-      "title": "Broken PC",
-      "description": "My PC is broken, I want a replacement.",
-      "category": "Technical",
+      "id": "80a2",
+      "title": "hmm",
+      "description": "hmmm",
+      "category": "Billing",
       "priority": "Low",
       "attachment": "",
-      "assignedTo": "2713",
-      "dueDate": "2025-05-15",
+      "assignedTo": "84b2",
+      "dueDate": "2025-05-22",
       "status": "Open",
-      "createdAt": "2025-05-17T02:55:34.497Z",
+      "createdAt": "2025-05-19T12:51:52.011Z",
       "resolvedAt": null
+    },
+    {
+      "id": "7468",
+      "title": "alica",
+      "description": "alica",
+      "category": "Billing",
+      "priority": "High",
+      "attachment": "",
+      "assignedTo": "",
+      "dueDate": "2025-05-21",
+      "status": "Resolved",
+      "createdAt": "2025-05-19T13:55:30.210Z",
+      "resolvedAt": null,
+      "createdBy": "e446"
+    },
+    {
+      "id": "8c81",
+      "title": "Test",
+      "description": "Test",
+      "category": "General",
+      "priority": "High",
+      "attachment": "",
+      "assignedTo": "",
+      "dueDate": "2025-05-22",
+      "status": "Open",
+      "createdAt": "2025-05-20T13:40:33.135Z",
+      "resolvedAt": null,
+      "createdBy": "dc8f"
+    },
+    {
+      "id": "9091",
+      "title": "Test",
+      "description": "teststes",
+      "category": "General",
+      "priority": "Medium",
+      "attachment": "",
+      "assignedTo": "",
+      "dueDate": "2025-05-22",
+      "status": "Open",
+      "createdAt": "2025-05-20T13:52:46.574Z",
+      "resolvedAt": null,
+      "createdBy": "dc8f"
+    },
+    {
+      "id": "edcf",
+      "title": "Test",
+      "description": "11",
+      "category": "Technical",
+      "priority": "Medium",
+      "attachment": "",
+      "assignedTo": "",
+      "dueDate": "2025-05-22",
+      "status": "Open",
+      "createdAt": "2025-05-20T14:13:30.748Z",
+      "resolvedAt": null,
+      "createdBy": "2822"
     }
   ],
-  "knowledgeBase": [],
-  "feedback": []
+  "knowledgeBase": [
+    {
+      "id": "3f7c",
+      "title": "Dance Tutorial",
+      "content": "This is a dance tutorial hehe",
+      "author": "Sungchan Jung",
+      "category": "FAQs",
+      "createdAt": "2025-05-20T15:15:29.048Z",
+      "description": " ",
+      "updatedAt": "2025-05-20T15:17:25.069Z"
+    }
+  ],
+  "feedback": [
+    {
+      "id": "5806",
+      "rating": 5,
+      "comments": "wow",
+      "userId": "13ec",
+      "ticketId": "7468",
+      "createdAt": "2025-05-19T13:57:56.034Z"
+    },
+    {
+      "id": "2ef7",
+      "title": "Feedback for Ticket 7514",
+      "content": "Wow",
+      "rating": 5,
+      "submittedBy": "13ec",
+      "ticketId": "7514",
+      "createdAt": "2025-05-20T14:49:06.424Z"
+    }
+  ]
 }

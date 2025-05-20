@@ -42,6 +42,16 @@ export const AddUser = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
+      const existingUsers = await axios.get("http://localhost:3000/users");
+      const isEmailTaken = existingUsers.data.some(
+        (user: any) => user.email.toLowerCase() === formData.email.toLowerCase()
+      );
+
+      if (isEmailTaken) {
+        setSnackbar({ open: true, message: "Email is already registered", severity: "error" });
+        return;
+      }
+
       await axios.post("http://localhost:3000/users", formData);
       setSnackbar({ open: true, message: "User added successfully!", severity: "success" });
       setFormData({
@@ -55,6 +65,7 @@ export const AddUser = () => {
       setSnackbar({ open: true, message: "Failed to add user.", severity: "error" });
     }
   };
+
 
   return (
     <Box className="add-user-container">

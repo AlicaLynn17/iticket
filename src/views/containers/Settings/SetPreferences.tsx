@@ -76,17 +76,6 @@ export const SetPreferences = () => {
       <div className="set-preferences-box">
         <h1 className="set-preferences-header">User Preferences</h1>
 
-        <div className="section-label">Notifications</div>
-
-        <div className="form-group switch-row">
-          <Typography>Email Notifications</Typography>
-          <Switch name="emailNotifications" checked />
-        </div>
-        <div className="form-group switch-row">
-          <Typography>Push Notifications</Typography>
-          <Switch name="pushNotifications" checked />
-        </div>
-
         <div className="section-label">Display Settings</div>
 
         <div className="form-group">
@@ -138,8 +127,6 @@ export const SetPreferences = () => {
         <Button className="save-button" onClick={handleSave}>
           Save Preferences
         </Button>
-
-
 
       </div>
 

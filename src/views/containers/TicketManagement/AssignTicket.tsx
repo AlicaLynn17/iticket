@@ -69,11 +69,13 @@ export const AssignTicket = () => {
             required
             label="Assign To"
           >
-            {agents.map((agent: any) => (
-              <MenuItem key={agent.id} value={agent.id}>
-                {agent.name}
-              </MenuItem>
-            ))}
+            {agents
+              .filter((agent: any) => agent.role === "admin" || agent.role === "agent")
+              .map((agent: any) => (
+                <MenuItem key={agent.id} value={agent.id}>
+                  {agent.name} ({agent.role})
+                </MenuItem>
+              ))}
           </Select>
         </FormControl>
         <Stack direction="row" spacing={2} sx={{ mt: 2 }}>
