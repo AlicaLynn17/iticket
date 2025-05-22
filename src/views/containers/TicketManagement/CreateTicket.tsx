@@ -26,7 +26,7 @@ export const CreateTicket = () => {
     priority: "Medium",
     attachment: "",
     assignedTo: "",
-    dueDate: "" 
+    dueDate: ""
   });
 
   const [users, setUsers] = useState<any[]>([]);
@@ -35,8 +35,11 @@ export const CreateTicket = () => {
   const [dragActive, setDragActive] = useState(false);
 
   const user = JSON.parse(localStorage.getItem("user") || "{}");
-  const isAdminOrAgent = user.role === "admin" || user.role === "superadmin" || user.role === "agent";
+  const isAdmin = user.role === "admin";
   const [customCategory, setCustomCategory] = useState("");
+
+
+  const todayDate = new Date().toISOString().split("T")[0];
 
   useEffect(() => {
     axios.get("http://localhost:3000/users").then(res => setUsers(res.data));
@@ -74,7 +77,6 @@ export const CreateTicket = () => {
     }
   };
 
-    // Drag and drop handlers for attachment
   const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     setDragActive(true);
@@ -87,7 +89,6 @@ export const CreateTicket = () => {
     e.preventDefault();
     setDragActive(false);
     if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-      // For demo, just store the file name. You can upload the file if needed.
       setFormData({ ...formData, attachment: e.dataTransfer.files[0].name });
     }
   };
@@ -103,161 +104,151 @@ export const CreateTicket = () => {
         <div className="create-ticket-box">
           <h1>Create Ticket</h1>
           <h2>Fill in the details to submit an issue</h2>
-            <div className="form-group">
 
-              <div className="form-group">
-              <label>Ticket Title</label>
-              <TextField
-                fullWidth
-                name="title"
-                value={formData.title || ""}
-                onChange={handleInputChange}
+          <div className="form-group">
+            <label>Ticket Title</label>
+            <TextField
+              fullWidth
+              name="title"
+              value={formData.title || ""}
+              onChange={handleInputChange}
+              required
+              size="small"
+            />
+          </div>
+
+          <div className="form-group">
+            <label>Issue Description</label>
+            <TextField
+              fullWidth
+              name="description"
+              value={formData.description}
+              onChange={handleInputChange}
+              required
+              size="small"
+              multiline
+              rows={4}
+            />
+          </div>
+
+          <div className="form-group">
+            <label>Category</label>
+            <FormControl fullWidth size="small">
+              <Select
+                name="category"
+                value={formData.category}
+                onChange={handleSelectChange}
                 required
                 size="small"
-              />
-            </div>
+              >
+                <MenuItem value="Technical">Technical</MenuItem>
+                <MenuItem value="Billing">Billing</MenuItem>
+                <MenuItem value="General">General</MenuItem>
+                <MenuItem value="Other">Other</MenuItem>
+              </Select>
+            </FormControl>
 
-              <label>Issue Description</label>
+            {formData.category === "Other" && (
               <TextField
+                label="Specify Category"
                 fullWidth
-                name="description"
-                value={formData.description}
-                onChange={handleInputChange}
-                required
                 size="small"
-                multiline
-                rows={4}
+                value={customCategory}
+                onChange={(e) => setCustomCategory(e.target.value)}
+                sx={{ mt: 1 }}
+                required
               />
-            </div>
+            )}
+          </div>
 
+          <div className="form-group">
+            <label>Priority</label>
+            <FormControl fullWidth size="small">
+              <Select
+                name="priority"
+                value={formData.priority}
+                onChange={handleSelectChange}
+                required
+              >
+                <MenuItem value="Low">Low</MenuItem>
+                <MenuItem value="Medium">Medium</MenuItem>
+                <MenuItem value="High">High</MenuItem>
+              </Select>
+            </FormControl>
+          </div>
+
+          {isAdmin && (
             <div className="form-group">
-              <label>Category</label>
-              <FormControl fullWidth size="small">
+              <label>Assign to Agent</label>
+              <FormControl fullWidth size="small" sx={{ mt: 2 }}>
+                <InputLabel id="assignedTo-label">Assign To</InputLabel>
                 <Select
-                  name="category"
-                  value={formData.category}
+                  labelId="assignedTo-label"
+                  name="assignedTo"
+                  value={formData.assignedTo}
+                  label="Assign To"
                   onChange={handleSelectChange}
-                  required
-                  size="small"
                 >
-                  <MenuItem value="Technical">Technical</MenuItem>
-                  <MenuItem value="Billing">Billing</MenuItem>
-                  <MenuItem value="General">General</MenuItem>
-                  <MenuItem value="Other">Other</MenuItem>
+                  <MenuItem value="">Unassigned</MenuItem>
+                  {users
+                    .filter(user => user.role === "agent" || user.role === "admin")
+                    .map((user) => (
+                      <MenuItem key={user.id} value={user.id}>
+                        {user.name} ({user.role})
+                      </MenuItem>
+                    ))}
                 </Select>
               </FormControl>
-
-              {formData.category === "Other" && (
-                <TextField
-                  label="Specify Category"
-                  fullWidth
-                  size="small"
-                  value={customCategory}
-                  onChange={(e) => setCustomCategory(e.target.value)}
-                  sx={{ mt: 1 }}
-                  required
-                />
-              )}
             </div>
+          )}
 
-            <div className="form-group">
-              <label>Priority</label>
-              <FormControl fullWidth size="small">
-                <Select
-                  name="priority"
-                  value={formData.priority}
-                  onChange={handleSelectChange}
-                  required
-                >
-                  <MenuItem value="Low">Low</MenuItem>
-                  <MenuItem value="Medium">Medium</MenuItem>
-                  <MenuItem value="High">High</MenuItem>
-                </Select>
-              </FormControl>
-            </div>
+          <div className="form-group">
+            <label>Due Date</label>
+            <TextField
+              fullWidth
+              type="date"
+              name="dueDate"
+              value={formData.dueDate}
+              onChange={handleInputChange}
+              size="small"
+              required
+              InputLabelProps={{ shrink: true }}
+              inputProps={{ min: todayDate }} 
+            />
+          </div>
 
-            <div className="form-group">
-              {isAdminOrAgent && (
-                <>
-                  <label>Assign to Agent</label>
-                  <FormControl fullWidth size="small" sx={{ mt: 2 }}>
-                    <InputLabel id="assignedTo-label">Assign To</InputLabel>
-                    <Select
-                      labelId="assignedTo-label"
-                      name="assignedTo"
-                      value={formData.assignedTo}
-                      label="Assign To"
-                      onChange={handleSelectChange}
-                    >
-                      <MenuItem value="">Unassigned</MenuItem>
-                      {users
-                        .filter(user => user.role === "agent" || user.role === "admin")
-                        .map((user) => (
-                          <MenuItem key={user.id} value={user.id}>
-                            {user.name} ({user.role})
-                          </MenuItem>
-                        ))}
-                    </Select>
-                  </FormControl>
-                </>
-              )}
-            </div>
-
-            <div className="form-group">
-              <label>Due Date</label>
-              <TextField
-                fullWidth
-                type="date"
-                name="dueDate"
-                value={formData.dueDate}
-                onChange={handleInputChange}
-                size="small"
-                required
-                InputLabelProps={{ shrink: true }}
+          <div className="form-group">
+            <label>Attachments</label>
+            <Box
+              className="drop-zone"
+              onDragOver={handleDragOver}
+              onDragLeave={handleDragLeave}
+              onDrop={handleDrop}
+              onClick={() => document.getElementById("attachment-input")?.click()}
+            >
+              <Typography variant="body2" color="textSecondary" sx={{ fontSize: 13 }}>
+                Drag a file here or choose a file to upload
+              </Typography>
+              <input
+                id="attachment-input"
+                type="file"
+                style={{ display: "none" }}
+                onChange={handleFileChange}
               />
-            </div>
+              {formData.attachment && (
+                <Typography sx={{ mt: 1, fontSize: 13 }}>{formData.attachment}</Typography>
+              )}
+            </Box>
+          </div>
 
-            <div className="form-group">
-              <label>Attachments</label>
-              <Box className="drop-zone"
-                onDragOver={handleDragOver}
-                onDragLeave={handleDragLeave}
-                onDrop={handleDrop}
-                onClick={() => document.getElementById("attachment-input")?.click()}
-              >
-                <Typography variant="body2" color="textSecondary" sx={{ fontSize: 13 }}>
-                  Drag a file here or choose a file to upload
-                </Typography>
-                <input
-                  id="attachment-input"
-                  type="file"
-                  style={{ display: "none" }}
-                  onChange={handleFileChange}
-                />
-                {formData.attachment && (
-                  <Typography sx={{ mt: 1, fontSize: 13 }}>{formData.attachment}</Typography>
-                )}
-              </Box>
-            </div>
-
-
-            <Stack direction="row" spacing={2} sx={{ mt: 2 }}>
-              <Button
-                variant="outlined"
-                fullWidth
-                onClick={() => navigate("/view-tickets")}
-                type="button"
-              >
-                Cancel
-              </Button>
-              <Button
-                type="submit"
-                variant="contained"
-                fullWidth
-              >
-                Submit Ticket
-              </Button>
-            </Stack>
+          <Stack direction="row" spacing={2} sx={{ mt: 2 }}>
+            <Button variant="outlined" fullWidth onClick={() => navigate("/view-tickets")} type="button">
+              Cancel
+            </Button>
+            <Button type="submit" variant="contained" fullWidth>
+              Submit Ticket
+            </Button>
+          </Stack>
         </div>
       </Box>
     </form>

@@ -13,13 +13,13 @@ import "./CreateArticle.css";
 export const CreateArticle = () => {
   const navigate = useNavigate();
 
-  // Get user from localStorage
+
   const user = JSON.parse(localStorage.getItem("user") || "{}");
 
   const [formData, setFormData] = useState({
     title: "",
     content: "",
-    author: user.name || "", // auto-fill author
+    author: user.name || "", 
     category: "",
   });
 
@@ -105,7 +105,7 @@ export const CreateArticle = () => {
               fullWidth
               name="author"
               value={formData.author}
-              disabled // 🔒 not editable
+              disabled 
               size="small"
             />
           </div>

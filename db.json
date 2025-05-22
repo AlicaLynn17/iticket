@@ -149,14 +149,36 @@
   ],
   "knowledgeBase": [
     {
-      "id": "3f7c",
-      "title": "Dance Tutorial",
-      "content": "This is a dance tutorial hehe",
+      "id": "1366",
+      "title": "How to setup your ITicket account",
+      "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+      "author": "Sungchan Jung",
+      "category": "How-Tos",
+      "createdAt": "2025-05-22T07:15:18.150Z"
+    },
+    {
+      "id": "b1a4",
+      "title": "Why is my ticket unassigned upon creation?",
+      "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
       "author": "Sungchan Jung",
       "category": "FAQs",
-      "createdAt": "2025-05-20T15:15:29.048Z",
-      "description": " ",
-      "updatedAt": "2025-05-20T15:17:25.069Z"
+      "createdAt": "2025-05-22T07:16:21.514Z"
+    },
+    {
+      "id": "72a0",
+      "title": "Cannot Submit Ticket – Form Not Responding",
+      "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+      "author": "Sungchan Jung",
+      "category": "Troubleshooting",
+      "createdAt": "2025-05-22T07:17:32.002Z"
+    },
+    {
+      "id": "a240",
+      "title": "Rating ITicket App on Blankstore",
+      "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+      "author": "Sungchan Jung",
+      "category": "Other",
+      "createdAt": "2025-05-22T07:18:54.311Z"
     }
   ],
   "feedback": [

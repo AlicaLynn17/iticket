@@ -39,6 +39,7 @@ body {
   color: #3C5759;
   font-weight: 600;
   margin-bottom: 1rem;
+  margin-top: 20px;
 }
 
 .ticket-summary-box .meta {
@@ -54,7 +55,7 @@ body {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  min-width: 200px; /* optional: controls wrap behavior */
+  min-width: 200px; 
 }
 
 
@@ -89,6 +90,7 @@ body {
   border-color: #3C5759;
   color: #3C5759;
   font-weight: 600;
+  
 }
 
 .back-button:hover {

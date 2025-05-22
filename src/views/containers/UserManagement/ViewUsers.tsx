@@ -165,7 +165,6 @@ export const ViewUsers = () => {
         </Table>
       </Paper>
 
-      {/* User Details Dialog */}
       <Dialog open={openDialog} onClose={handleDialogClose} maxWidth="sm" fullWidth>
         <DialogTitle>
           User Details
@@ -184,7 +183,6 @@ export const ViewUsers = () => {
         </DialogContent>
       </Dialog>
 
-      {/* Delete Confirmation Dialog */}
       <Dialog open={deleteDialogOpen} onClose={() => setDeleteDialogOpen(false)}>
         <DialogTitle>Confirm Delete</DialogTitle>
         <DialogContent>
