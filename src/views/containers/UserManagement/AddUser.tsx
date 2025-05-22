@@ -108,6 +108,7 @@ export const AddUser = () => {
                 required
               >
                 <MenuItem value="admin">Admin</MenuItem>
+                <MenuItem value="agent">Agent</MenuItem>
                 <MenuItem value="user">User</MenuItem>
               </Select>
             </FormControl>

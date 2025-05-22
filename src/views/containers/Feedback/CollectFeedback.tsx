@@ -16,11 +16,12 @@ import "./CollectFeedback.css";
 export const CollectFeedback = () => {
   const { ticketId } = useParams();
   const navigate = useNavigate();
+  const currentUser = JSON.parse(localStorage.getItem("user") || "{}");
 
   const [formData, setFormData] = useState({
     rating: 0,
     comments: "",
-    userId: "13ec", 
+    userId: currentUser.id || "", 
   });
 
   const [snackbar, setSnackbar] = useState({

@@ -122,6 +122,7 @@ export const ViewUsers = () => {
         >
           <option value="">All Roles</option>
           <option value="admin">Admin</option>
+          <option value="agent">Agent</option>
           <option value="user">User</option>
         </select>
       </div>

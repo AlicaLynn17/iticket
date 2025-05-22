@@ -141,10 +141,12 @@ export const CreateTicket = () => {
                 required
                 size="small"
               >
-                <MenuItem value="Technical">Technical</MenuItem>
-                <MenuItem value="Billing">Billing</MenuItem>
-                <MenuItem value="General">General</MenuItem>
-                <MenuItem value="Other">Other</MenuItem>
+              <MenuItem value="Hardware">Hardware</MenuItem>
+              <MenuItem value="Software">Software</MenuItem>
+              <MenuItem value="Network">Network</MenuItem>
+              <MenuItem value="Access/Account">Access/Account</MenuItem>
+              <MenuItem value="Security">Security</MenuItem>
+              <MenuItem value="Other">Other</MenuItem>
               </Select>
             </FormControl>
 

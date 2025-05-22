@@ -32,7 +32,13 @@ export const Login: React.FC = () => {
         setShowSnackbar(true);
         setTimeout(() => {
           setShowSnackbar(false);
-          navigate("/dashboard");
+          if (matchedUser.role === "admin" || matchedUser.role === "agent") {
+            navigate("/dashboard");
+          } else if (matchedUser.role === "user") {
+            navigate("/view-tickets");
+          } else {
+            navigate("/dashboard");
+          }
         }, 1000);
       } else {
         alert("Invalid email or password.");

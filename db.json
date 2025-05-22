@@ -48,6 +48,20 @@
       "email": "jsc@iticket.com",
       "role": "admin",
       "password": "123"
+    },
+    {
+      "id": "1ddf",
+      "name": "Agent John Doe",
+      "email": "john.doe@iticket.com",
+      "role": "agent",
+      "password": "123"
+    },
+    {
+      "id": "d808",
+      "name": "Agent Maria Cruz",
+      "email": "maria.cruz@iticket.com",
+      "role": "agent",
+      "password": "123"
     }
   ],
   "tickets": [
@@ -58,7 +72,7 @@
       "category": "General",
       "priority": "Medium",
       "attachment": "",
-      "assignedTo": "",
+      "assignedTo": "84b2",
       "dueDate": "2025-05-24",
       "status": "Closed",
       "createdAt": "2025-05-16T11:37:40.599Z",
@@ -97,7 +111,7 @@
       "category": "Billing",
       "priority": "High",
       "attachment": "",
-      "assignedTo": "",
+      "assignedTo": "a001",
       "dueDate": "2025-05-21",
       "status": "Resolved",
       "createdAt": "2025-05-19T13:55:30.210Z",
@@ -111,7 +125,7 @@
       "category": "General",
       "priority": "High",
       "attachment": "",
-      "assignedTo": "",
+      "assignedTo": "1ddf",
       "dueDate": "2025-05-22",
       "status": "Open",
       "createdAt": "2025-05-20T13:40:33.135Z",
@@ -145,6 +159,20 @@
       "createdAt": "2025-05-20T14:13:30.748Z",
       "resolvedAt": null,
       "createdBy": "2822"
+    },
+    {
+      "id": "e351",
+      "title": "blue screen :(",
+      "description": "everything i see is blue",
+      "category": "Software",
+      "priority": "High",
+      "attachment": "",
+      "assignedTo": "1ddf",
+      "dueDate": "2025-05-24",
+      "status": "Resolved",
+      "createdAt": "2025-05-22T09:43:41.003Z",
+      "resolvedAt": null,
+      "createdBy": "e446"
     }
   ],
   "knowledgeBase": [
@@ -179,25 +207,43 @@
       "author": "Sungchan Jung",
       "category": "Other",
       "createdAt": "2025-05-22T07:18:54.311Z"
+    },
+    {
+      "id": "2082",
+      "title": "Email Configuration Guide",
+      "content": "To configure your email, go to Settings > Accounts > Add Account and enter your company email credentials.",
+      "author": "Sungchan Jung",
+      "category": "How-Tos",
+      "createdAt": "2025-05-22T09:44:52.361Z"
     }
   ],
   "feedback": [
-    {
-      "id": "5806",
-      "rating": 5,
-      "comments": "wow",
-      "userId": "13ec",
-      "ticketId": "7468",
-      "createdAt": "2025-05-19T13:57:56.034Z"
-    },
     {
       "id": "2ef7",
       "title": "Feedback for Ticket 7514",
       "content": "Wow",
       "rating": 5,
-      "submittedBy": "13ec",
+      "submittedBy": "dc8f",
       "ticketId": "7514",
       "createdAt": "2025-05-20T14:49:06.424Z"
+    },
+    {
+      "id": "2c7c",
+      "title": "Feedback for Ticket 7468",
+      "content": "TY!",
+      "rating": 5,
+      "submittedBy": "e446",
+      "ticketId": "7468",
+      "createdAt": "2025-05-22T09:43:57.443Z"
+    },
+    {
+      "id": "da6e",
+      "title": "Feedback for Ticket 7468",
+      "content": "NICE!",
+      "rating": 5,
+      "submittedBy": "e446",
+      "ticketId": "7468",
+      "createdAt": "2025-05-22T09:54:04.429Z"
     }
   ]
 }
