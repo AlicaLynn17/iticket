@@ -6,6 +6,7 @@ import "./Login.css";
 export const Login: React.FC = () => {
   const [credentials, setCredentials] = useState({ email: "", password: "" });
   const navigate = useNavigate();
+  const [showSnackbar, setShowSnackbar] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -28,8 +29,11 @@ export const Login: React.FC = () => {
       if (matchedUser) {
         localStorage.setItem("authToken", "sampleToken");
         localStorage.setItem("user", JSON.stringify(matchedUser));
-        alert("Login successful!");
-        navigate("/dashboard");
+        setShowSnackbar(true);
+        setTimeout(() => {
+          setShowSnackbar(false);
+          navigate("/dashboard");
+        }, 1000);
       } else {
         alert("Invalid email or password.");
       }
@@ -81,6 +85,9 @@ export const Login: React.FC = () => {
           </div>
         </form>
       </div>
+      {showSnackbar && (
+        <div className="snackbar">Login Successful!</div>
+      )}
     </div>
   );
 };

@@ -139,3 +139,32 @@ label {
   background-color: #3C5759;
   margin-left: 80px;
 }
+
+
+.snackbar {
+  visibility: visible;
+  min-width: 200px;
+  background-color: #a7ebf6;
+  color: #000000;
+  text-align: center;
+  border-radius: 4px;
+  padding: 16px;
+  position: fixed;
+  left: 50%;
+  bottom: 30px;
+  transform: translateX(-50%);
+  z-index: 1000;
+  font-size: 16px;
+  animation: fadein 0.3s, fadeout 0.3s 1.2s;
+  
+}
+
+@keyframes fadein {
+  from { bottom: 0; opacity: 0; }
+  to { bottom: 30px; opacity: 1; }
+}
+
+@keyframes fadeout {
+  from { bottom: 30px; opacity: 1; }
+  to { bottom: 0; opacity: 0; }
+}
