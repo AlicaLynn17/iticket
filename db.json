@@ -1,66 +1,45 @@
 {
   "users": [
     {
-      "id": "84b2",
-      "name": "Franka Ong",
-      "email": "frankaong@iticket.com",
-      "password": "123",
-      "role": "admin"
-    },
-    {
-      "id": "2713",
-      "name": "Anton Lee",
-      "email": "leeanton@iticket.com",
-      "password": "123",
-      "role": "user"
-    },
-    {
       "id": "dc8f",
-      "name": "Javidil",
+      "name": "Javidil Sy",
       "email": "javidil@email.com",
       "password": "123",
       "role": "user"
     },
     {
-      "id": "a001",
-      "name": "Agent Smith",
-      "email": "agent@iticket.com",
-      "password": "123",
-      "role": "agent"
-    },
-    {
       "id": "e446",
-      "name": "alica lynn",
+      "name": "Alica Lynn",
       "email": "alica@email.com",
       "password": "123",
       "role": "user"
     },
     {
-      "id": "8785",
-      "name": "Madam Test",
-      "email": "test@iticket.com",
-      "role": "user",
-      "password": "123"
-    },
-    {
-      "id": "d32c",
-      "name": "Sungchan Jung",
-      "email": "jsc@iticket.com",
-      "role": "admin",
-      "password": "123"
-    },
-    {
       "id": "1ddf",
-      "name": "Agent John Doe",
+      "name": "John Doe",
       "email": "john.doe@iticket.com",
       "role": "agent",
       "password": "123"
     },
     {
       "id": "d808",
-      "name": "Agent Maria Cruz",
+      "name": "Maria Cruz",
       "email": "maria.cruz@iticket.com",
       "role": "agent",
+      "password": "123"
+    },
+    {
+      "id": "2bd5",
+      "name": "Jose Cruz",
+      "email": "josecruz@iticket.com",
+      "role": "admin",
+      "password": "123"
+    },
+    {
+      "id": "7a02",
+      "name": "Sungchan Jung",
+      "email": "jsc@iticket.com",
+      "role": "admin",
       "password": "123"
     }
   ],
@@ -70,13 +49,14 @@
       "title": "Lost Keys",
       "description": "I lost my keys to the office.",
       "category": "General",
-      "priority": "Medium",
+      "priority": "High",
       "attachment": "",
-      "assignedTo": "84b2",
+      "assignedTo": "d808",
       "dueDate": "2025-05-24",
-      "status": "Closed",
+      "status": "Resolved",
       "createdAt": "2025-05-16T11:37:40.599Z",
-      "resolvedAt": null
+      "resolvedAt": null,
+      "createdBy": "dc8f"
     },
     {
       "id": "e8ac",
@@ -85,91 +65,23 @@
       "category": "Billing",
       "priority": "Medium",
       "attachment": "",
-      "assignedTo": "84b2",
+      "assignedTo": "d808",
       "dueDate": "2025-05-23",
-      "status": "Resolved",
+      "status": "In Progress",
       "createdAt": "2025-05-16T11:55:02.971Z",
-      "resolvedAt": null
-    },
-    {
-      "id": "80a2",
-      "title": "hmm",
-      "description": "hmmm",
-      "category": "Billing",
-      "priority": "Low",
-      "attachment": "",
-      "assignedTo": "84b2",
-      "dueDate": "2025-05-22",
-      "status": "Open",
-      "createdAt": "2025-05-19T12:51:52.011Z",
-      "resolvedAt": null
-    },
-    {
-      "id": "7468",
-      "title": "alica",
-      "description": "alica",
-      "category": "Billing",
-      "priority": "High",
-      "attachment": "",
-      "assignedTo": "a001",
-      "dueDate": "2025-05-21",
-      "status": "Resolved",
-      "createdAt": "2025-05-19T13:55:30.210Z",
-      "resolvedAt": null,
-      "createdBy": "e446"
-    },
-    {
-      "id": "8c81",
-      "title": "Test",
-      "description": "Test",
-      "category": "General",
-      "priority": "High",
-      "attachment": "",
-      "assignedTo": "1ddf",
-      "dueDate": "2025-05-22",
-      "status": "Open",
-      "createdAt": "2025-05-20T13:40:33.135Z",
       "resolvedAt": null,
       "createdBy": "dc8f"
-    },
-    {
-      "id": "9091",
-      "title": "Test",
-      "description": "teststes",
-      "category": "General",
-      "priority": "Medium",
-      "attachment": "",
-      "assignedTo": "",
-      "dueDate": "2025-05-22",
-      "status": "Open",
-      "createdAt": "2025-05-20T13:52:46.574Z",
-      "resolvedAt": null,
-      "createdBy": "dc8f"
-    },
-    {
-      "id": "edcf",
-      "title": "Test",
-      "description": "11",
-      "category": "Technical",
-      "priority": "Medium",
-      "attachment": "",
-      "assignedTo": "",
-      "dueDate": "2025-05-22",
-      "status": "Open",
-      "createdAt": "2025-05-20T14:13:30.748Z",
-      "resolvedAt": null,
-      "createdBy": "2822"
     },
     {
       "id": "e351",
-      "title": "blue screen :(",
+      "title": "Blue Screen ",
       "description": "everything i see is blue",
       "category": "Software",
       "priority": "High",
       "attachment": "",
       "assignedTo": "1ddf",
       "dueDate": "2025-05-24",
-      "status": "Resolved",
+      "status": "Closed",
       "createdAt": "2025-05-22T09:43:41.003Z",
       "resolvedAt": null,
       "createdBy": "e446"
@@ -228,22 +140,13 @@
       "createdAt": "2025-05-20T14:49:06.424Z"
     },
     {
-      "id": "2c7c",
-      "title": "Feedback for Ticket 7468",
-      "content": "TY!",
+      "id": "c7bb",
+      "title": "Feedback for Ticket e351",
+      "content": "Thanks!",
       "rating": 5,
       "submittedBy": "e446",
-      "ticketId": "7468",
-      "createdAt": "2025-05-22T09:43:57.443Z"
-    },
-    {
-      "id": "da6e",
-      "title": "Feedback for Ticket 7468",
-      "content": "NICE!",
-      "rating": 5,
-      "submittedBy": "e446",
-      "ticketId": "7468",
-      "createdAt": "2025-05-22T09:54:04.429Z"
+      "ticketId": "e351",
+      "createdAt": "2025-05-23T09:54:54.599Z"
     }
   ]
 }
