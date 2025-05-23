@@ -85,6 +85,34 @@
       "createdAt": "2025-05-22T09:43:41.003Z",
       "resolvedAt": null,
       "createdBy": "e446"
+    },
+    {
+      "id": "f95d",
+      "title": "Wi-Fi Connectivity Issue",
+      "description": "My laptop frequently disconnects from the office Wi-Fi.",
+      "category": "Network",
+      "priority": "Medium",
+      "attachment": "",
+      "assignedTo": "d808",
+      "dueDate": "2025-05-23",
+      "status": "Open",
+      "createdAt": "2025-05-23T10:22:03.976Z",
+      "resolvedAt": null,
+      "createdBy": "7a02"
+    },
+    {
+      "id": "64d3",
+      "title": "Email Not Syncing",
+      "description": "My ITicket email is not syncing properly with the server.",
+      "category": "Software",
+      "priority": "Medium",
+      "attachment": "",
+      "assignedTo": "7a02",
+      "dueDate": "2025-05-24",
+      "status": "Closed",
+      "createdAt": "2025-05-23T10:23:06.277Z",
+      "resolvedAt": null,
+      "createdBy": "d808"
     }
   ],
   "knowledgeBase": [
