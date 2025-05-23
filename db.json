@@ -113,6 +113,20 @@
       "createdAt": "2025-05-23T10:23:06.277Z",
       "resolvedAt": null,
       "createdBy": "d808"
+    },
+    {
+      "id": "a13a",
+      "title": "VPN Setup Assistance",
+      "description": "Need help setting up VPN on my Mac for remote work.",
+      "category": "Network",
+      "priority": "Medium",
+      "attachment": "",
+      "assignedTo": "2bd5",
+      "dueDate": "2025-05-30",
+      "status": "Closed",
+      "createdAt": "2025-05-23T10:31:01.553Z",
+      "resolvedAt": null,
+      "createdBy": "7a02"
     }
   ],
   "knowledgeBase": [
