@@ -179,7 +179,7 @@ export const CreateTicket = () => {
             </FormControl>
           </div>
 
-          {isAdmin && (
+          {(isAdmin || user.role === "agent") && (
             <div className="form-group">
               <label>Assign to Agent</label>
               <FormControl fullWidth size="small" sx={{ mt: 2 }}>

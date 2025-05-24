@@ -14,7 +14,6 @@ import {
 import AddIcon from "@mui/icons-material/Add";
 import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
 import EditIcon from "@mui/icons-material/Edit";
-import FeedbackIcon from "@mui/icons-material/Feedback";
 import DeleteIcon from "@mui/icons-material/Delete";
 import TablePagination from "@mui/material/TablePagination";
 import { useNavigate } from "react-router-dom";
@@ -179,32 +178,38 @@ export const ViewTickets = () => {
         <Table className="MuiTable-root MuiTable-stickyHeader">
           <TableHead>
             <TableRow>
+              <TableCell>Created By</TableCell>
               <TableCell>Title</TableCell>
               <TableCell>Category</TableCell>
               <TableCell>Priority</TableCell>
               <TableCell>Status</TableCell>
               <TableCell>Due Date</TableCell>
               <TableCell>Assigned To</TableCell>
-              <TableCell align="center">Actions</TableCell>
+              {!isUser && <TableCell align="center">Actions</TableCell>}
             </TableRow>
           </TableHead>
           <TableBody>
             {paginatedTickets.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={7} align="center" sx={{ py: 4, color: "#888" }}>
+                <TableCell colSpan={isUser ? 7 : 8} align="center" sx={{ py: 4, color: "#888" }}>
                   No tickets found.
                 </TableCell>
               </TableRow>
             ) : (
               paginatedTickets.map((ticket) => {
-                const isTicketOwner = String(ticket.createdBy) === String(user.id);
+                const isOwner = String(ticket.createdBy) === String(user.id);
+
                 return (
                   <TableRow
                     key={ticket.id}
-                    hover
-                    sx={{ cursor: "pointer" }}
-                    onClick={() => navigate(`/ticket/${ticket.id}`)}
+                    hover={isOwner}
+                    onClick={() => {
+                      if (isOwner) {
+                        navigate(`/ticket/${ticket.id}`);
+                      }
+                    }}
                   >
+                    <TableCell>{getAssignedUserName(ticket.createdBy, users)}</TableCell>
                     <TableCell>{ticket.title}</TableCell>
                     <TableCell>{ticket.category}</TableCell>
                     <TableCell>
@@ -231,49 +236,36 @@ export const ViewTickets = () => {
                         ? getAssignedUserName(ticket.assignedTo, users)
                         : "Unassigned"}
                     </TableCell>
-                    <TableCell align="center" onClick={(e) => e.stopPropagation()}>
-                      {(isAdmin || isAgent) && (
-                        <IconButton
-                          color="primary"
-                          onClick={() => navigate(`/assign-ticket/${ticket.id}`)}
-                          title="Assign"
-                        >
-                          <AssignmentIndIcon />
-                        </IconButton>
-                      )}
-                      {(isAdmin || isAgent || (isUser && isTicketOwner && ticket.status !== "Resolved" && ticket.status !== "Closed")) && (
-                        <IconButton
-                          color="secondary"
-                          onClick={() => navigate(`/edit-ticket/${ticket.id}`)}
-                          title="Edit"
-                        >
-                          <EditIcon />
-                        </IconButton>
-                      )}
-                      {(ticket.status === "Resolved" || ticket.status === "Closed") &&
-                        isUser &&
-                        isTicketOwner && (
+                    {!isUser && (
+                      <TableCell align="center" onClick={(e) => e.stopPropagation()}>
+                        <Box display="flex" justifyContent="center" gap={1}>
                           <IconButton
-                            color="success"
-                            onClick={() => navigate(`/collect-feedback/${ticket.id}`)}
-                            title="Feedback"
+                            color="primary"
+                            onClick={() => navigate(`/assign-ticket/${ticket.id}`)}
+                            title="Assign"
                           >
-                            <FeedbackIcon />
+                            <AssignmentIndIcon />
                           </IconButton>
-                        )}
-                      {(isAdmin || isAgent) && (
-                        <IconButton
-                          color="error"
-                          onClick={() => {
-                            setTicketToDelete(ticket);
-                            setDeleteDialogOpen(true);
-                          }}
-                          title="Delete"
-                        >
-                          <DeleteIcon />
-                        </IconButton>
-                      )}
-                    </TableCell>
+                          <IconButton
+                            color="secondary"
+                            onClick={() => navigate(`/edit-ticket/${ticket.id}`)}
+                            title="Edit"
+                          >
+                            <EditIcon />
+                          </IconButton>
+                          <IconButton
+                            color="error"
+                            onClick={() => {
+                              setTicketToDelete(ticket);
+                              setDeleteDialogOpen(true);
+                            }}
+                            title="Delete"
+                          >
+                            <DeleteIcon />
+                          </IconButton>
+                        </Box>
+                      </TableCell>
+                    )}
                   </TableRow>
                 );
               })

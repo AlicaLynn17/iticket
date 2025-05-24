@@ -25,6 +25,7 @@ interface Ticket {
   status: string;
   dueDate?: string;
   assignedTo?: string;
+  createdBy: string;
 }
 
 interface TicketTableProps {
@@ -68,6 +69,7 @@ const handleMenuClose = () => {
       <Table>
         <TableHead>
           <TableRow>
+            <TableCell>Created By</TableCell>
             <TableCell>Title</TableCell>
             <TableCell>Description</TableCell>
             <TableCell>Category</TableCell>
@@ -81,7 +83,7 @@ const handleMenuClose = () => {
         <TableBody>
           {tickets.length === 0 ? (
             <TableRow>
-              <TableCell colSpan={7} align="center">
+              <TableCell colSpan={9} align="center">
                 <Typography color="textSecondary" sx={{ py: 2 }}>
                   No tickets found matching the filters.
                 </Typography>
@@ -90,6 +92,7 @@ const handleMenuClose = () => {
           ) : (
             tickets.map((ticket) => (
               <TableRow key={ticket.id}>
+                <TableCell>{getAssignedUserName(ticket.createdBy, users)}</TableCell>
                 <TableCell>{ticket.title}</TableCell>
                 <TableCell>{ticket.description}</TableCell>
                 <TableCell>{ticket.category}</TableCell>
