@@ -41,6 +41,13 @@
       "email": "jsc@iticket.com",
       "role": "admin",
       "password": "123"
+    },
+    {
+      "id": "4807",
+      "name": "franky ssss",
+      "email": "asd@asd",
+      "password": "123",
+      "role": "user"
     }
   ],
   "tickets": [
