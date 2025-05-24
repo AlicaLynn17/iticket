@@ -1,14 +1,19 @@
 import React from "react";
 import {
-  Box, Paper, Typography, IconButton, Button,
-  Select, MenuItem
+  Box,
+  Paper,
+  Typography,
+  IconButton,
+  Button,
+  Select,
+  MenuItem
 } from "@mui/material";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import FilterListIcon from "@mui/icons-material/FilterList";
 
 interface TicketFiltersProps {
   tempFilters: Filters;
-  users: { id: string; name: string }[];
+  users: { id: string; name: string; role: string }[];
   showFilters: boolean;
   onToggle: () => void;
   onChange: (newFilters: Filters) => void;
@@ -35,6 +40,11 @@ export const TicketFilters: React.FC<TicketFiltersProps> = ({
   onReset,
   onCancel,
 }) => {
+  // Only show assignable users (admins and agents)
+  const assignableUsers = users.filter(
+    (u) => u.role === "admin" || u.role === "agent"
+  );
+
   return (
     <Box display="flex" justifyContent="flex-end" mb={2} position="relative">
       <IconButton onClick={onToggle}>
@@ -100,9 +110,11 @@ export const TicketFilters: React.FC<TicketFiltersProps> = ({
             displayEmpty
           >
             <MenuItem value="">All Categories</MenuItem>
-            <MenuItem value="Technical">Technical</MenuItem>
-            <MenuItem value="Billing">Billing</MenuItem>
-            <MenuItem value="General">General</MenuItem>
+            <MenuItem value="Hardware">Hardware</MenuItem>
+            <MenuItem value="Software">Software</MenuItem>
+            <MenuItem value="Network">Network</MenuItem>
+            <MenuItem value="Access/Account">Access/Account</MenuItem>
+            <MenuItem value="Security">Security</MenuItem>
             <MenuItem value="Other">Other</MenuItem>
           </Select>
 
@@ -113,8 +125,10 @@ export const TicketFilters: React.FC<TicketFiltersProps> = ({
             displayEmpty
           >
             <MenuItem value="">All Assignees</MenuItem>
-            {users.map((u) => (
-              <MenuItem key={u.id} value={u.id}>{u.name}</MenuItem>
+            {assignableUsers.map((u) => (
+              <MenuItem key={u.id} value={u.id}>
+                {u.name} ({u.role})
+              </MenuItem>
             ))}
           </Select>
 

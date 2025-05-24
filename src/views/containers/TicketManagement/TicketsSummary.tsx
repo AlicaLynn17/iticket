@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { Box, Button, Paper, Typography, Chip } from "@mui/material";
+import { Box, Button, Typography, Chip } from "@mui/material";
 import axios from "axios";
 import "./TicketsSummary.css";
 
@@ -25,7 +25,9 @@ export const TicketsSummary = () => {
   if (!ticket) return <p>Loading ticket summary...</p>;
 
   const isCreator = String(ticket.createdBy) === String(user.id);
+  const isRegularUser = user.role === "user";
   const isFeedbackEligible = isCreator && (ticket.status === "Resolved" || ticket.status === "Closed");
+  const canEdit = isCreator && isRegularUser;
 
   return (
     <div className="ticket-summary-container">
@@ -70,14 +72,28 @@ export const TicketsSummary = () => {
 
         <p className="description">{ticket.description}</p>
 
-        {isFeedbackEligible && (
-          <Button
-            className="feedback-button"
-            variant="contained"
-            onClick={() => navigate(`/collect-feedback/${ticket.id}`)}
-          >
-            Leave Feedback
-          </Button>
+        {(isFeedbackEligible || canEdit) && (
+          <div style={{ display: "flex", flexWrap: "wrap", gap: "1rem", marginTop: "2rem" }}>
+            {isFeedbackEligible && (
+              <Button
+                className="feedback-button"
+                variant="contained"
+                onClick={() => navigate(`/collect-feedback/${ticket.id}`)}
+              >
+                Leave Feedback
+              </Button>
+            )}
+
+            {canEdit && (
+              <Button
+                className="edit-button"
+                variant="contained"
+                onClick={() => navigate(`/edit-ticket/${ticket.id}`)}
+              >
+                Edit Ticket
+              </Button>
+            )}
+          </div>
         )}
       </div>
     </div>

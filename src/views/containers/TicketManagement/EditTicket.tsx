@@ -29,10 +29,16 @@ export const EditTicket = () => {
     priority: "Medium",
     status: "Open",
     attachment: "",
+    createdBy: ""
   });
 
   const [users, setUsers] = useState<any[]>([]);
   const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "success" });
+
+  const loggedInUser = JSON.parse(localStorage.getItem("user") || "{}");
+
+  const isCreator = formData.createdBy === loggedInUser.id;
+  const isAdmin = loggedInUser.role === "admin";
 
   useEffect(() => {
     const fetchData = async () => {
@@ -81,23 +87,26 @@ export const EditTicket = () => {
             />
           </div>
 
-          <div className="form-group">
-            <label>Assign to Agent</label>
-            <FormControl fullWidth size="small">
-              <Select
-                name="assignedTo"
-                value={formData.assignedTo}
-                onChange={handleChange}
-              >
-                <MenuItem value="">Unassigned</MenuItem>
-                {users.map((user) => (
-                  <MenuItem key={user.id} value={user.id}>
-                    {user.name} ({user.role})
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          </div>
+          {/* Only admins can assign tickets */}
+          {!isCreator || isAdmin ? (
+            <div className="form-group">
+              <label>Assign to Agent</label>
+              <FormControl fullWidth size="small">
+                <Select
+                  name="assignedTo"
+                  value={formData.assignedTo}
+                  onChange={handleChange}
+                >
+                  <MenuItem value="">Unassigned</MenuItem>
+                  {users.map((user) => (
+                    <MenuItem key={user.id} value={user.id}>
+                      {user.name} ({user.role})
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </div>
+          ) : null}
 
           <div className="form-group">
             <label>Due Date</label>
@@ -120,8 +129,11 @@ export const EditTicket = () => {
               value={formData.description}
               onChange={handleChange}
               required
+              multiline
+              minRows={4}
               size="small"
             />
+
           </div>
 
           <div className="form-group">
@@ -141,7 +153,6 @@ export const EditTicket = () => {
                 <MenuItem value="Other">Other</MenuItem>
               </Select>
             </FormControl>
-
           </div>
 
           <div className="form-group">

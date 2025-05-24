@@ -62,8 +62,12 @@ export const ViewUsers = () => {
   };
 
   const handleDeleteClick = (user: any) => {
-    const open = tickets.some(ticket => ticket.assignedTo === user.id && ticket.status === "Open");
-    setHasOpenTickets(open);
+    const openOrInProgress = tickets.some(
+      (ticket) =>
+        ticket.assignedTo === user.id &&
+        (ticket.status === "Open" || ticket.status === "In Progress")
+    );
+    setHasOpenTickets(openOrInProgress);
     setUserToDelete(user);
     setDeleteDialogOpen(true);
   };
@@ -189,7 +193,7 @@ export const ViewUsers = () => {
         <DialogContent>
           <Typography>
             {hasOpenTickets
-              ? "This user has open tickets. Deleting them will unassign those tickets. Are you sure you want to continue?"
+              ? "This user has open or in-progress tickets. Deleting them will unassign those tickets. Are you sure you want to continue?"
               : "Are you sure you want to delete this user?"}
           </Typography>
         </DialogContent>
