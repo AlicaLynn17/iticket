@@ -198,16 +198,18 @@ export const ViewTickets = () => {
             ) : (
               paginatedTickets.map((ticket) => {
                 const isOwner = String(ticket.createdBy) === String(user.id);
+                const canAccess = isOwner || isAdmin || isAgent;
 
                 return (
                   <TableRow
                     key={ticket.id}
-                    hover={isOwner}
+                    hover={canAccess}
                     onClick={() => {
-                      if (isOwner) {
+                      if (canAccess) {
                         navigate(`/ticket/${ticket.id}`);
                       }
                     }}
+                    style={{ cursor: canAccess ? "pointer" : "default" }}
                   >
                     <TableCell>{getAssignedUserName(ticket.createdBy, users)}</TableCell>
                     <TableCell>{ticket.title}</TableCell>

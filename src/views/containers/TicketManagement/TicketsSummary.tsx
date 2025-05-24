@@ -3,11 +3,14 @@ import { useParams, useNavigate } from "react-router-dom";
 import { Box, Button, Paper, Typography, Chip } from "@mui/material";
 import axios from "axios";
 import "./TicketsSummary.css";
+
 export const TicketsSummary = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [ticket, setTicket] = useState<any | null>(null);
   const [users, setUsers] = useState<any[]>([]);
+
+  const user = JSON.parse(localStorage.getItem("user") || "{}");
 
   useEffect(() => {
     axios.get(`http://localhost:3000/tickets/${id}`).then((res) => setTicket(res.data));
@@ -21,42 +24,53 @@ export const TicketsSummary = () => {
 
   if (!ticket) return <p>Loading ticket summary...</p>;
 
+  const isCreator = String(ticket.createdBy) === String(user.id);
+  const isFeedbackEligible = isCreator && (ticket.status === "Resolved" || ticket.status === "Closed");
+
   return (
     <div className="ticket-summary-container">
-        <div className="ticket-summary-box">
-          <Button
-            variant="outlined"
-            className="back-button"
-            onClick={() => navigate("/view-tickets")}
-          >
-            ← Back to Tickets
-          </Button>
-          <h1>{ticket.title}</h1>
-          <div className="meta">
-    <div className="meta-item">
-      <strong>Priority:</strong>
-      <Chip
-        label={ticket.priority}
-        className="chip"
-        color={
-          ticket.priority === "High"
-            ? "error"
-            : ticket.priority === "Medium"
-            ? "warning"
-            : "success"
-        }
-        size="small"
-      />
-    </div>
-    <div className="meta-item"><strong>Status:</strong> {ticket.status}</div>
-    <div className="meta-item"><strong>Due Date:</strong> {ticket.dueDate ? new Date(ticket.dueDate).toLocaleDateString("en-GB") : "—"}</div>
-    <div className="meta-item"><strong>Assigned To:</strong> {getAssignedUserName(ticket.assignedTo)}</div>
-  </div>
+      <div className="ticket-summary-box">
+        <Button
+          variant="outlined"
+          className="back-button"
+          onClick={() => navigate("/view-tickets")}
+        >
+          ← Back to Tickets
+        </Button>
 
+        <h1>{ticket.title}</h1>
+
+        <div className="meta">
+          <div className="meta-item">
+            <strong>Priority:</strong>
+            <Chip
+              label={ticket.priority}
+              className="chip"
+              color={
+                ticket.priority === "High"
+                  ? "error"
+                  : ticket.priority === "Medium"
+                  ? "warning"
+                  : "success"
+              }
+              size="small"
+            />
+          </div>
+          <div className="meta-item">
+            <strong>Status:</strong> {ticket.status}
+          </div>
+          <div className="meta-item">
+            <strong>Due Date:</strong>{" "}
+            {ticket.dueDate ? new Date(ticket.dueDate).toLocaleDateString("en-GB") : "—"}
+          </div>
+          <div className="meta-item">
+            <strong>Assigned To:</strong> {getAssignedUserName(ticket.assignedTo)}
+          </div>
+        </div>
 
         <p className="description">{ticket.description}</p>
 
-        {(ticket.status === "Resolved" || ticket.status === "Closed") && (
+        {isFeedbackEligible && (
           <Button
             className="feedback-button"
             variant="contained"
@@ -65,9 +79,7 @@ export const TicketsSummary = () => {
             Leave Feedback
           </Button>
         )}
-
       </div>
     </div>
   );
-
 };
