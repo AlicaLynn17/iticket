@@ -98,3 +98,23 @@ body {
   border-color: #2a4042;
   color: #2a4042;
 }
+
+.ticket-summary-box .edit-button {
+  margin-top: 32.9px;
+  border: 1px solid #3C5759;
+  background-color: transparent;
+  color: #3C5759;
+  font-weight: 600;
+  border-radius: 6px;
+  padding: 0.5rem 1rem;
+  text-transform: none;
+  margin-left: 1rem;
+  height: auto;
+}
+
+.ticket-summary-box .edit-button:hover {
+  background-color: rgba(60, 87, 89, 0.04);
+  border-color: #2a4042;
+  color: #2a4042;
+}
+
