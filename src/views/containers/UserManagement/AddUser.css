@@ -1,0 +1,89 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+* {
+  box-sizing: border-box;
+  font-family: 'Inter', sans-serif;
+}
+
+.add-user-container {
+  background-color: #ffffff;
+  min-height: 100vh;
+  padding: 4rem 6rem;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  margin-left: -140px;
+  margin-top: -70px
+}
+
+.add-user-box {
+  background-color: #fff;
+  padding: 2rem 2.5rem;
+  border-radius: 8px;
+  width: 100%;
+  max-width: 500px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  border: 1px solid #e0e0e0;
+}
+
+.add-user-box h1 {
+  color: #3C5759;
+  font-size: 26px;
+  margin-bottom: 9px;
+}
+
+.add-user-box h2 {
+  color: #3C5759;
+  font-size: 15px;
+  font-weight: 500;
+  margin-bottom: 1.5rem;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.4rem;
+  font-size: 12px;
+  color: #444;
+  font-weight: 500;
+  text-transform: uppercase;
+}
+
+.MuiInputBase-root {
+  background-color: #f9f9f9;
+  border-radius: 4px !important;
+}
+
+.MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+  border-color: #3C5759;
+}
+
+.MuiInputLabel-root.Mui-focused {
+  color: #3C5759;
+}
+
+button.MuiButton-contained {
+  background-color: #3C5759;
+  color: white;
+  font-weight: 600;
+  border-radius: 4px;
+  text-transform: none;
+}
+
+button.MuiButton-contained:hover {
+  background-color: #2a4042;
+}
+
+button.MuiButton-outlined {
+  border-color: #3C5759;
+  color: #3C5759;
+  text-transform: none;
+}
+
+button.MuiButton-outlined:hover {
+  background-color: rgba(60, 87, 89, 0.04);
+  border-color: #2a4042;
+}

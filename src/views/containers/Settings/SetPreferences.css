@@ -1,0 +1,98 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+* {
+  font-family: 'Inter', sans-serif;
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #fff;
+}
+
+.set-preferences-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 3rem 2rem;
+  min-height: 100vh;
+  background-color: #ffffff;
+  margin-right: 80px;
+}
+
+.set-preferences-box {
+  width: 100%;
+  max-width: 800px;
+  background-color: #fdfdfd;
+  padding: 2.5rem 3rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  border: 1px solid #e6e6e6;
+}
+
+.set-preferences-header {
+  font-size: 28px;
+  font-weight: 600;
+  color: #3C5759;
+  margin-bottom: 2rem;
+}
+
+.section-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #3C5759;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.switch-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #f9f9f9;
+  padding: 0.75rem 1rem;
+  border-radius: 6px;
+  border: 1px solid #e0e0e0;
+  margin-bottom: 1rem;
+}
+
+.MuiInputBase-root {
+  background-color: #f9f9f9;
+  border-radius: 4px !important;
+}
+
+.MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+  border-color: #3C5759;
+}
+
+.MuiInputLabel-root.Mui-focused {
+  color: #3C5759;
+}
+
+button.save-button {
+  background-color: #2a4042 !important;
+  color: white !important;
+  font-weight: 600;
+  border-radius: 6px;
+  text-transform: none;
+  padding: 0.75rem 2rem;
+  min-width: 180px;
+  font-size: 14px;
+  display: block;
+  margin: 2rem auto 0;
+}
+
+.save-button:hover {
+  background-color: #3C5759 !important;
+  box-shadow: 0 4px 12px rgba(60, 87, 89, 0.15);
+  transition: all 0.2s ease;
+}
+
+
+

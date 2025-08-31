@@ -10,7 +10,6 @@ import Typography from "@mui/material/Typography";
 import { useTheme } from "@mui/material/styles";
 import MenuIcon from "@mui/icons-material/Menu";
 import { styled } from "@mui/material/styles";
-// import MainLayoutComponent from "../../components/Main";
 import AppBar from "../../components/AppBar";
 import Divider from "@mui/material/Divider";
 import Toolbar from "@mui/material/Toolbar";
@@ -21,8 +20,7 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 
-
-// Material UI icons for each menu item
+// Material UI icons
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import PeopleIcon from "@mui/icons-material/People";
 import AssignmentIcon from "@mui/icons-material/Assignment";
@@ -33,7 +31,7 @@ import MenuBookIcon from "@mui/icons-material/MenuBook";
 import FeedbackIcon from "@mui/icons-material/Feedback";
 import LogoutIcon from "@mui/icons-material/Logout";
 
-// Map menu labels to icons
+// Icon map
 const iconMap: Record<string, React.ReactNode> = {
   Dashboard: <DashboardIcon />,
   Users: <PeopleIcon />,
@@ -47,23 +45,21 @@ const iconMap: Record<string, React.ReactNode> = {
 };
 
 export const Main = () => {
-  // NAVIGATE TO SPECIFIC USER
   const navigate = useNavigate();
   const location = useLocation();
-
-  // OPEN DRAWER LEFT SIDE
   const [openDrawer, setOpenDrawer] = React.useState(true);
-
   const drawerWidth = openDrawer ? drawerWidthOpen : drawerWidthClosed;
-
-  // THEME CUSTOMIZATION
   const theme = useTheme();
 
   useEffect(() => {
-    // AUTO DIRECT USER TO DASHBOARD WHEN PATH IS DEFAULT
     if (location.pathname === PATHS.MAIN.path) navigate(PATHS.LOGIN.path);
   }, [location.pathname, navigate]);
 
+  const user = JSON.parse(localStorage.getItem("user") || "{}");
+
+  const filteredMenu = SIDE_BAR_MENU.filter(
+    (item) => !item.role || item.role === user.role
+  );
 
   return (
     <Fragment>
@@ -75,21 +71,18 @@ export const Main = () => {
             aria-label="open drawer"
             onClick={() => setOpenDrawer(!openDrawer)}
             edge="start"
-            sx={[
-              { mr: 2 },
-              openDrawer && { display: "none" }
-            ]}
+            sx={[{ mr: 2 }, openDrawer && { display: "none" }]}
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap component="div">
+          <Typography variant="h6" noWrap component="div" sx={{ color: "#29404a" }}>
             ITicket Help Desk
           </Typography>
         </Toolbar>
       </AppBar>
-      {/* SIDE BAR DRAWER */}
+
       <Drawer
-       sx={{
+        sx={{
           width: drawerWidth,
           flexShrink: 0,
           "& .MuiDrawer-paper": {
@@ -100,22 +93,33 @@ export const Main = () => {
             borderRight: 0,
             overflowX: "hidden",
             transition: "width 0.3s",
-          }
+          },
         }}
         variant="persistent"
         anchor="left"
         open={openDrawer}
       >
-        {/* Close button at the top */}
-          <IconButton onClick={() => setOpenDrawer(!openDrawer)} sx={{ color: "#fff", mt: 1, mb: 1 }}>
-            {theme.direction === "ltr" ? <ChevronLeftIcon /> : <ChevronRightIcon />}
-          </IconButton>
-        
+        <IconButton
+          onClick={() => setOpenDrawer(!openDrawer)}
+          sx={{ color: "#fff", mt: 1, mb: 1 }}
+        >
+          {theme.direction === "ltr" ? (
+            <ChevronLeftIcon />
+          ) : (
+            <ChevronRightIcon />
+          )}
+        </IconButton>
+
         <Divider sx={{ borderColor: "#3e5c6d" }} />
-        {/* SIDE BAR MENU ITEMS */}
+
         <List>
-          {SIDE_BAR_MENU.map((item) => (
-            <ListItem key={item.path} disablePadding sx={{ display: "block" }}>
+          {filteredMenu.map((item) => (
+            <ListItem
+              key={item.path}
+              disablePadding
+              sx={{ display: "block", mb: 2 }} 
+            >
+
               <NavLink
                 to={item.path}
                 style={({ isActive }) => ({
@@ -124,55 +128,61 @@ export const Main = () => {
                   background: isActive ? "#3e5c6d" : "inherit",
                   borderRadius: 8,
                   margin: "8px 4px",
-                  display: "block"
+                  display: "block",
                 })}
               >
                 <ListItemButton
                   sx={{
-                    flexDirection: "column",
-                    alignItems: "center",
-                    py: 2,
-                    minHeight: 56,
+                    justifyContent: openDrawer ? "flex-start" : "center",
+                    px: 1.5,
+                    py: 1,
+                    minHeight: 48,
+                    gap: 1,
                   }}
                   selected={location.pathname.startsWith(item.path)}
                 >
-                  <ListItemIcon sx={{ color: "#fff", minWidth: 0, mb: 0.5 }}>
-                    {iconMap[item.label] || <DashboardIcon />}
-                  </ListItemIcon>
-                  <ListItemText
-                    primary={openDrawer ? item.label : ""}
-                    primaryTypographyProps={{
-                      fontSize: 12,
-                      textAlign: "center",
-                      color: "#fff"
-                    }}
-                  />
-                </ListItemButton>
-              </NavLink>
-            </ListItem>
-          ))}
-        </List>
-      </Drawer>
-      <MainLayout open={openDrawer}>
-        <DrawerHeader />
-        <Outlet />
-      </MainLayout>
-    </Fragment>
-  );
+                <ListItemIcon
+                  sx={{ color: "#fff", minWidth: 0, mr: openDrawer ? 1.5 : 0 }}
+                >
+                {iconMap[item.label] || <DashboardIcon />}
+              </ListItemIcon>
+              {openDrawer && (
+                <ListItemText
+                  primary={item.label}
+                  primaryTypographyProps={{
+                    fontSize: 13,
+                    fontWeight: 500,
+                  }}
+                />
+            )}
+            </ListItemButton>
+
+                          </NavLink>
+                        </ListItem>
+                      ))}
+                    </List>
+                  </Drawer>
+
+                  <MainLayout open={openDrawer}>
+                    <DrawerHeader />
+                    <Outlet />
+                  </MainLayout>
+                </Fragment>
+              );
 };
 
 export const drawerWidthOpen = 140;
 export const drawerWidthClosed = 56;
 
 const MainLayout = styled("main", {
-  shouldForwardProp: (prop) => prop !== "open"
+  shouldForwardProp: (prop) => prop !== "open",
 })<{ open?: boolean }>(({ theme, open }) => ({
   flexGrow: 1,
   padding: theme.spacing(3),
   marginLeft: open ? drawerWidthOpen : drawerWidthClosed,
   transition: theme.transitions.create("margin", {
     easing: theme.transitions.easing.sharp,
-    duration: theme.transitions.duration.leavingScreen
+    duration: theme.transitions.duration.leavingScreen,
   }),
 }));
 

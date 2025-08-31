@@ -1,0 +1,134 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+* {
+  font-family: 'Inter', sans-serif;
+  box-sizing: border-box;
+}
+
+.dashboard-container {
+  background-color: #ffffff;
+  padding: 3rem 4rem;
+  min-height: 100vh;
+  margin-left: -140px;
+}
+
+.dashboard-header h1 {
+  color: #3C5759;
+  font-size: 28px;
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.dashboard-header h2 {
+  font-size: 16px;
+  color: #666;
+  margin-bottom: 2rem;
+  font-weight: 500;
+}
+
+.dashboard-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.stat-card {
+  flex: 1 1 calc(25% - 1rem);
+  min-width: 180px;
+  text-align: center;
+  padding: 1.5rem;
+  border-radius: 10px;
+  background: linear-gradient(145deg, #ffffff, #f0f0f0);
+  box-shadow: 0 4px 6px rgba(60, 87, 89, 0.08), 0 1px 2px rgba(0, 0, 0, 0.04);
+  border: 1px solid #e0e0e0;
+  transition: all 0.3s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 12px rgba(60, 87, 89, 0.12), 0 2px 4px rgba(0, 0, 0, 0.06);
+}
+
+.stat-icon {
+  font-size: 34px;
+  color: #3C5759;
+  margin-bottom: 0.5rem;
+  opacity: 0.9;
+}
+
+.stat-title {
+  font-size: 13px;
+  text-transform: uppercase;
+  color: #777;
+  margin-bottom: 0.25rem;
+  letter-spacing: 0.5px;
+}
+
+.stat-value {
+  font-size: 26px;
+  font-weight: 700;
+  color: #3C5759;
+  margin-top: 4px;
+}
+
+.section-card {
+  background: linear-gradient(135deg, #ffffff, #f8f8f8);
+  border-radius: 12px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  border: 1px solid #e6e6e6;
+  box-shadow: 0 4px 10px rgba(60, 87, 89, 0.06);
+}
+
+.section-card h2 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #3C5759;
+  margin-bottom: 1.5rem;
+}
+
+.progress-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.progress-label {
+  min-width: 80px;
+  color: #333;
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.progress-bar {
+  flex: 1;
+  height: 10px;
+  border-radius: 5px;
+  background-color: #e0e0e0;
+  overflow: hidden;
+  position: relative;
+}
+
+.progress-bar::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: var(--progress, 50%);
+  background-color: #3C5759;
+  border-radius: 5px;
+  transition: width 0.3s ease;
+}
+
+.progress-percent {
+  width: 50px;
+  text-align: right;
+  font-size: 14px;
+  font-weight: 500;
+  color: #3C5759;
+}

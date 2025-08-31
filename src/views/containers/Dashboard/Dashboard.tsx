@@ -1,125 +1,139 @@
-import { Box, Grid, Paper, Typography, Divider, LinearProgress, Stack } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import { Typography, Divider, LinearProgress } from "@mui/material";
 import AssignmentIcon from "@mui/icons-material/Assignment";
 import AssignmentTurnedInIcon from "@mui/icons-material/AssignmentTurnedIn";
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import ThumbUpAltIcon from "@mui/icons-material/ThumbUpAlt";
 import ThumbDownAltIcon from "@mui/icons-material/ThumbDownAlt";
-import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import "./Dashboard.css";
 
 export const Dashboard = () => {
-  const navigate = useNavigate();
+  const [tickets, setTickets] = useState<any[]>([]);
+  const [stats, setStats] = useState({
+    unresolved: 0,
+    overdue: 0,
+    dueToday: 0,
+    resolved: 0,
+    avgResolutionTime: "N/A"
+  });
 
-  // Mock data for demonstration
-  const stats = {
-    unresolved: 5,
-    overdue: 2,
-    dueToday: 3,
-    resolved: 12,
-    avgResolutionTime: "4h 30m",
-    satisfaction: {
-      positive: 80,
-      neutral: 15,
-      negative: 5,
-    },
+  const satisfaction = {
+    positive: 80,
+    neutral: 15,
+    negative: 5
   };
 
+  const user = JSON.parse(localStorage.getItem("user") || "{}");
+
+  useEffect(() => {
+    axios.get("http://localhost:3000/tickets").then((res) => {
+      setTickets(res.data);
+    });
+  }, []);
+
+  useEffect(() => {
+    const today = new Date();
+
+    const unresolved = tickets.filter((t) => t.status !== "Closed").length;
+    const resolved = tickets.filter((t) => t.status === "Closed").length;
+    const overdue = tickets.filter((t) => {
+      const due = new Date(t.dueDate);
+      return t.status !== "Closed" && due < today;
+    }).length;
+    const dueToday = tickets.filter((t) => {
+      const due = new Date(t.dueDate);
+      return (
+        t.status !== "Closed" &&
+        due.getDate() === today.getDate() &&
+        due.getMonth() === today.getMonth() &&
+        due.getFullYear() === today.getFullYear()
+      );
+    }).length;
+
+    const resolutionTimes: number[] = tickets
+      .filter((t) => t.createdAt && t.resolvedAt)
+      .map((t) => {
+        const created = new Date(t.createdAt).getTime();
+        const resolved = new Date(t.resolvedAt).getTime();
+        return resolved - created;
+      });
+
+    let avgResolutionTime = "N/A";
+    if (resolutionTimes.length > 0) {
+      const avgMs = resolutionTimes.reduce((a, b) => a + b, 0) / resolutionTimes.length;
+      const hours = Math.floor(avgMs / (1000 * 60 * 60));
+      const minutes = Math.floor((avgMs % (1000 * 60 * 60)) / (1000 * 60));
+      avgResolutionTime = `${hours}h ${minutes}m`;
+    }
+
+    setStats({ unresolved, resolved, overdue, dueToday, avgResolutionTime });
+  }, [tickets]);
+
   return (
-    <Box sx={{ p: 3 }}>
-      <Typography variant="h4" gutterBottom>
-        ITicket Help Desk Dashboard
-      </Typography>
-      <Grid container spacing={2} sx={{ mb: 2 }}>
-        {/* Ticket Stats */}
-        <Grid item xs={12} sm={6} md={3}>
-          <Paper sx={{ p: 2, textAlign: "center" }}>
-            <AssignmentIcon color="primary" sx={{ fontSize: 40 }} />
-            <Typography variant="h6">Unresolved</Typography>
-            <Typography variant="h4">{stats.unresolved}</Typography>
-          </Paper>
-        </Grid>
-        <Grid item xs={12} sm={6} md={3}>
-          <Paper sx={{ p: 2, textAlign: "center" }}>
-            <ErrorOutlineIcon color="error" sx={{ fontSize: 40 }} />
-            <Typography variant="h6">Overdue</Typography>
-            <Typography variant="h4">{stats.overdue}</Typography>
-          </Paper>
-        </Grid>
-        <Grid item xs={12} sm={6} md={3}>
-          <Paper sx={{ p: 2, textAlign: "center" }}>
-            <AccessTimeIcon color="warning" sx={{ fontSize: 40 }} />
-            <Typography variant="h6">Due Today</Typography>
-            <Typography variant="h4">{stats.dueToday}</Typography>
-          </Paper>
-        </Grid>
-        <Grid item xs={12} sm={6} md={3}>
-          <Paper sx={{ p: 2, textAlign: "center" }}>
-            <AssignmentTurnedInIcon color="success" sx={{ fontSize: 40 }} />
-            <Typography variant="h6">Resolved</Typography>
-            <Typography variant="h4">{stats.resolved}</Typography>
-          </Paper>
-        </Grid>
-      </Grid>
+    <div className="dashboard-container">
+      <div className="dashboard-header">
+        <h1>Dashboard</h1>
+      </div>
 
-      <Grid container spacing={2}>
-        {/* Customer Satisfaction */}
-        <Grid item xs={12} md={6}>
-          <Paper sx={{ p: 3 }}>
-            <Typography variant="h6" gutterBottom>
-              Customer Satisfaction
-            </Typography>
-            <Stack direction="row" spacing={2} alignItems="center" sx={{ mb: 1 }}>
-              <ThumbUpAltIcon color="success" />
-              <Typography>Positive</Typography>
-              <LinearProgress
-                variant="determinate"
-                value={stats.satisfaction.positive}
-                sx={{ flex: 1, mx: 2, height: 10, borderRadius: 5, bgcolor: "#e0f2f1" }}
-                color="success"
-              />
-              <Typography>{stats.satisfaction.positive}%</Typography>
-            </Stack>
-            <Stack direction="row" spacing={2} alignItems="center" sx={{ mb: 1 }}>
-              <ThumbDownAltIcon color="warning" />
-              <Typography>Neutral</Typography>
-              <LinearProgress
-                variant="determinate"
-                value={stats.satisfaction.neutral}
-                sx={{ flex: 1, mx: 2, height: 10, borderRadius: 5, bgcolor: "#fffde7" }}
-                color="warning"
-              />
-              <Typography>{stats.satisfaction.neutral}%</Typography>
-            </Stack>
-            <Stack direction="row" spacing={2} alignItems="center">
-              <ThumbDownAltIcon color="error" />
-              <Typography>Negative</Typography>
-              <LinearProgress
-                variant="determinate"
-                value={stats.satisfaction.negative}
-                sx={{ flex: 1, mx: 2, height: 10, borderRadius: 5, bgcolor: "#ffebee" }}
-                color="error"
-              />
-              <Typography>{stats.satisfaction.negative}%</Typography>
-            </Stack>
-          </Paper>
-        </Grid>
+      <div className="dashboard-grid">
+        <div className="stat-card">
+          <AssignmentIcon className="stat-icon" />
+          <p className="stat-title">Unresolved</p>
+          <p className="stat-value">{stats.unresolved}</p>
+        </div>
+        <div className="stat-card">
+          <ErrorOutlineIcon className="stat-icon" />
+          <p className="stat-title">Overdue</p>
+          <p className="stat-value">{stats.overdue}</p>
+        </div>
+        <div className="stat-card">
+          <AccessTimeIcon className="stat-icon" />
+          <p className="stat-title">Due Today</p>
+          <p className="stat-value">{stats.dueToday}</p>
+        </div>
+        <div className="stat-card">
+          <AssignmentTurnedInIcon className="stat-icon" />
+          <p className="stat-title">Resolved</p>
+          <p className="stat-value">{stats.resolved}</p>
+        </div>
+      </div>
 
-        {/* Agent Performance */}
-        <Grid item xs={12} md={6}>
-          <Paper sx={{ p: 3 }}>
-            <Typography variant="h6" gutterBottom>
-              Agent Performance
-            </Typography>
-            <Typography>
-              <b>Number of Tickets Resolved:</b> {stats.resolved}
-            </Typography>
-            <Divider sx={{ my: 1 }} />
-            <Typography>
-              <b>Average Resolution Time:</b> {stats.avgResolutionTime}
-            </Typography>
-          </Paper>
-        </Grid>
-      </Grid>
-    </Box>
+      {/* Only show satisfaction stats for admins */}
+      {user.role === "admin" && (
+        <div className="section-card">
+          <h2>Customer Satisfaction</h2>
+
+          <div className="progress-row">
+            <ThumbUpAltIcon style={{ color: "#4CAF50" }} />
+            <p className="progress-label">Positive</p>
+            <LinearProgress variant="determinate" value={satisfaction.positive} className="progress-bar success" />
+            <p className="progress-percent">{satisfaction.positive}%</p>
+          </div>
+
+          <div className="progress-row">
+            <ThumbDownAltIcon style={{ color: "#F89B5D" }} />
+            <p className="progress-label">Neutral</p>
+            <LinearProgress variant="determinate" value={satisfaction.neutral} className="progress-bar warning" />
+            <p className="progress-percent">{satisfaction.neutral}%</p>
+          </div>
+
+          <div className="progress-row">
+            <ThumbDownAltIcon style={{ color: "#F44336" }} />
+            <p className="progress-label">Negative</p>
+            <LinearProgress variant="determinate" value={satisfaction.negative} className="progress-bar error" />
+            <p className="progress-percent">{satisfaction.negative}%</p>
+          </div>
+        </div>
+      )}
+
+      <div className="section-card">
+        <h2>Agent Performance</h2>
+        <p><strong>Tickets Resolved:</strong> {stats.resolved}</p>
+        <Divider sx={{ my: 1 }} />
+        <p><strong>Average Resolution Time:</strong> {stats.avgResolutionTime}</p>
+      </div>
+    </div>
   );
 };

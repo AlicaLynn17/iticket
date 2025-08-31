@@ -1,6 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { Box, Typography, Table, TableBody, TableCell, TableHead, TableRow } from "@mui/material";
+import {
+  Box,
+  Typography,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  Paper
+} from "@mui/material";
 import axios from "axios";
+
 
 export const AgentPerformanceReport = () => {
   const [performance, setPerformance] = useState([]);
@@ -29,7 +39,10 @@ export const AgentPerformanceReport = () => {
           return {
             agent: user.name,
             ticketsResolved: resolvedTickets.length,
-            averageResolutionTime: (averageResolutionTime / (1000 * 60 * 60)).toFixed(2) + " hours"
+            averageResolutionTime:
+              averageResolutionTime > 0
+                ? (averageResolutionTime / (1000 * 60 * 60)).toFixed(2) + " hours"
+                : "N/A"
           };
         });
 
@@ -43,25 +56,29 @@ export const AgentPerformanceReport = () => {
   }, []);
 
   return (
-    <Box sx={{ maxWidth: 800, margin: "auto", mt: 5 }}>
-      <Table>
-        <TableHead>
-          <TableRow>
-            <TableCell>Agent</TableCell>
-            <TableCell>Tickets Resolved</TableCell>
-            <TableCell>Average Resolution Time</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {performance.map((data: any, index: number) => (
-            <TableRow key={index}>
-              <TableCell>{data.agent}</TableCell>
-              <TableCell>{data.ticketsResolved}</TableCell>
-              <TableCell>{data.averageResolutionTime}</TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+    <Box className="performance-report-container">
+      <div className="performance-report-box">
+        <Paper className="report-table-wrapper">
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>Agent</TableCell>
+                <TableCell>Tickets Resolved</TableCell>
+                <TableCell>Avg. Resolution Time</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {performance.map((data: any, index: number) => (
+                <TableRow key={index}>
+                  <TableCell>{data.agent}</TableCell>
+                  <TableCell>{data.ticketsResolved}</TableCell>
+                  <TableCell>{data.averageResolutionTime}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </Paper>
+      </div>
     </Box>
   );
 };

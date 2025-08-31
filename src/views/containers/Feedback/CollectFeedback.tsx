@@ -1,18 +1,33 @@
 import React, { useState } from "react";
-import { Box, Button, TextField, Typography, Rating, Snackbar, Alert, Stack } from "@mui/material";
+import {
+  Box,
+  Button,
+  TextField,
+  Typography,
+  Rating,
+  Snackbar,
+  Alert,
+  Stack
+} from "@mui/material";
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
+import "./CollectFeedback.css";
 
 export const CollectFeedback = () => {
-  const { ticketId } = useParams(); // Get the ticket ID from the URL
+  const { ticketId } = useParams();
   const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     rating: 0,
     comments: "",
-    userId: "13ec", // Replace with the logged-in user's ID
+    userId: "13ec", 
   });
 
-  const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "success" });
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    severity: "success"
+  });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -32,61 +47,65 @@ export const CollectFeedback = () => {
         createdAt: new Date().toISOString(),
       });
       setSnackbar({ open: true, message: "Feedback submitted successfully!", severity: "success" });
-      setTimeout(() => {
-        navigate("/view-tickets");
-      }, 1000);
+      setTimeout(() => navigate("/view-tickets"), 1000);
     } catch (error) {
       console.error("Error submitting feedback:", error);
       setSnackbar({ open: true, message: "Failed to submit feedback.", severity: "error" });
     }
   };
 
-  const handleCloseSnackbar = () => setSnackbar({ ...snackbar, open: false });
-
   return (
-    <Box sx={{ maxWidth: 600, margin: "auto", mt: 5 }}>
-      <Typography variant="h5" gutterBottom>
-        Provide Feedback
-      </Typography>
-      <form onSubmit={handleSubmit}>
-        <Typography component="legend">Rating</Typography>
-        <Rating
-          name="rating"
-          value={formData.rating}
-          onChange={handleRatingChange}
-        />
-        <TextField
-          fullWidth
-          label="Comments"
-          name="comments"
-          value={formData.comments}
-          onChange={handleChange}
-          margin="normal"
-          multiline
-          rows={4}
-        />
-        <Stack direction="row" spacing={2} sx={{ mt: 2 }}>
-          <Button
-            variant="outlined"
-            color="primary"
-            fullWidth
-            onClick={() => navigate("/view-tickets")}
-            type="button"
-          >
-            Cancel
-          </Button>
-          <Button type="submit" variant="contained" color="primary" fullWidth>
-            Submit Feedback
-          </Button>
-        </Stack>
-      </form>
+    <Box className="collect-feedback-container">
+      <div className="collect-feedback-box">
+        <h1 className="feedback-header">Give Feedback</h1>
+        <Typography variant="subtitle1" className="feedback-subtext">
+          How was your support experience?
+        </Typography>
+        <form onSubmit={handleSubmit}>
+          <div className="form-group">
+            <label>Rating</label>
+            <Rating
+              name="rating"
+              value={formData.rating}
+              onChange={handleRatingChange}
+              size="large"
+            />
+          </div>
+          <div className="form-group">
+            <label>Comments</label>
+            <TextField
+              fullWidth
+              name="comments"
+              value={formData.comments}
+              onChange={handleChange}
+              multiline
+              rows={4}
+              placeholder="Tell us what went well or what we can improve..."
+              size="small"
+            />
+          </div>
+          <Stack direction="row" spacing={2} sx={{ mt: 2 }}>
+            <Button variant="outlined" fullWidth onClick={() => navigate("/view-tickets")}>
+              Cancel
+            </Button>
+            <Button type="submit" variant="contained" fullWidth>
+              Submit Feedback
+            </Button>
+          </Stack>
+        </form>
+      </div>
+
       <Snackbar
         open={snackbar.open}
         autoHideDuration={1500}
-        onClose={handleCloseSnackbar}
+        onClose={() => setSnackbar({ ...snackbar, open: false })}
         anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
       >
-        <Alert onClose={handleCloseSnackbar} severity={snackbar.severity as any} sx={{ width: "100%" }}>
+        <Alert
+          onClose={() => setSnackbar({ ...snackbar, open: false })}
+          severity={snackbar.severity as any}
+          sx={{ width: "100%" }}
+        >
           {snackbar.message}
         </Alert>
       </Snackbar>

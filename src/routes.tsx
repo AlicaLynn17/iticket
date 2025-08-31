@@ -15,6 +15,7 @@ import { AgentPerformanceReport } from "./views/containers/Reports/AgentPerforma
 import { SetPreferences } from "./views/containers/Settings/SetPreferences";
 import { CreateArticle } from "./views/containers/KnowledgeBase/CreateArticle";
 import { ViewArticles } from "./views/containers/KnowledgeBase/ViewArticles";
+import { ViewArticleDetail } from "./views/containers/KnowledgeBase/ViewArticleDetail";
 import { EditArticle } from "./views/containers/KnowledgeBase/EditArticle";
 import { CollectFeedback } from "./views/containers/Feedback/CollectFeedback";
 import { ViewFeedback } from "./views/containers/Feedback/ViewFeedback";
@@ -40,11 +41,13 @@ export const AppRoutes = () => {
           <Route path="/set-preferences" element={<SetPreferences />} />
           <Route path="/create-article" element={<CreateArticle />} />
           <Route path="/view-articles" element={<ViewArticles />} />
+          <Route path="/view-article/:id" element={<ViewArticleDetail />} />
           <Route path="/edit-article/:id" element={<EditArticle />} />
           <Route path="/collect-feedback/:ticketId" element={<CollectFeedback />} />
           <Route path="/view-feedback" element={<ViewFeedback />} />
         </Route>
         {/* ADD PUBLIC ROUTES HERE (e.g., Login, Sign Up, Forgot Pass, etc. ) */}
+        <Route path={PATHS.SIGNUP.path} element={<Views.SignUp />} />
         <Route path={PATHS.LOGIN.path} element={<Views.Login />} />
         <Route path={PATHS.LOGOUT.path} element={<Views.Logout />} />
         <Route path={PATHS.NOT_FOUND.path} element={<Views.NotFound />} />

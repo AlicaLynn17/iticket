@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import { Box, Button, TextField, Typography, Snackbar, Alert } from "@mui/material";
+import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import "./Login.css";
 
-export const Login = () => {
+export const Login: React.FC = () => {
   const [credentials, setCredentials] = useState({ email: "", password: "" });
-  const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "success" });
   const navigate = useNavigate();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -12,72 +12,87 @@ export const Login = () => {
     setCredentials({ ...credentials, [name]: value });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Simulate authentication (replace with real API call)
-    if (credentials.email === "admin@example.com" && credentials.password === "password") {
-      localStorage.setItem("authToken", "sampleToken"); // Save token to localStorage
 
-      // Simulate user object (replace with real user data from API)
-      const user = {
-        id: "13ec",
-        name: "Admin",
-        email: credentials.email,
-        role: "admin"
-      };
-      localStorage.setItem("user", JSON.stringify(user));
+    try {
+      const response = await axios.get("http://localhost:3000/users");
+      const users = response.data;
 
-      setSnackbar({ open: true, message: "Login successful!", severity: "success" });
-      setTimeout(() => {
+      const matchedUser = users.find(
+        (user: any) =>
+          user.email === credentials.email &&
+          user.password === credentials.password
+      );
+
+      if (matchedUser) {
+        // Assign role based on email before saving user
+        let role = "user";
+        if (matchedUser.email.toLowerCase() === "jsc@iticket.com") {
+          role = "admin";
+        }
+
+        const userWithRole = { ...matchedUser, role };
+
+        // Save user and token in localStorage
+        localStorage.setItem("authToken", "sampleToken");
+        localStorage.setItem("user", JSON.stringify(userWithRole));
+
+        console.log("User logged in:", userWithRole); // Optional debug
+
+        alert("Login successful!");
         navigate("/dashboard");
-      }, 1000);
-    } else {
-      setSnackbar({ open: true, message: "Invalid email or password.", severity: "error" });
+      } else {
+        alert("Invalid email or password.");
+      }
+    } catch (error) {
+      console.error("Login error:", error);
+      alert("Server error. Please try again later.");
     }
   };
 
-  const handleCloseSnackbar = () => setSnackbar({ ...snackbar, open: false });
-
   return (
-    <Box sx={{ maxWidth: 400, margin: "auto", mt: 5 }}>
-      <Typography variant="h5" gutterBottom>
-        Login
-      </Typography>
-      <form onSubmit={handleSubmit}>
-        <TextField
-          fullWidth
-          label="Email"
-          name="email"
-          type="email"
-          value={credentials.email}
-          onChange={handleChange}
-          margin="normal"
-          required
-        />
-        <TextField
-          fullWidth
-          label="Password"
-          name="password"
-          type="password"
-          value={credentials.password}
-          onChange={handleChange}
-          margin="normal"
-          required
-        />
-        <Button type="submit" variant="contained" color="primary" fullWidth>
-          Login
-        </Button>
-      </form>
-      <Snackbar
-        open={snackbar.open}
-        autoHideDuration={1500}
-        onClose={handleCloseSnackbar}
-        anchorOrigin={{ vertical: "top", horizontal: "center" }}
-      >
-        <Alert onClose={handleCloseSnackbar} severity={snackbar.severity as any} sx={{ width: "100%" }}>
-          {snackbar.message}
-        </Alert>
-      </Snackbar>
-    </Box>
+    <div className="signup-container">
+      <div className="signup-form">
+        <form onSubmit={handleSubmit}>
+          <h1>ITicket</h1>
+          <h3 className="welcome">WELCOME BACK</h3>
+          <h2>Continue to your Account.</h2>
+
+          <div className="form-group">
+            <label htmlFor="email">Email</label>
+            <input
+              type="email"
+              name="email"
+              id="email"
+              value={credentials.email}
+              onChange={handleChange}
+              required
+            />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="password">Password</label>
+            <input
+              type="password"
+              name="password"
+              id="password"
+              value={credentials.password}
+              onChange={handleChange}
+              required
+            />
+          </div>
+
+          <button type="submit">Login</button>
+
+          <div className="login">
+            <span>Don’t have an account? </span>
+            <a href="/signup" className="login-span">
+              SIGN UP
+            </a>
+          </div>
+        </form>
+      </div>
+    </div>
   );
 };
