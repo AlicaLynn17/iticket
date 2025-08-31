@@ -92,7 +92,12 @@ export const ViewArticles = () => {
               </TableRow>
             ) : (
               articles.map(article => (
-                <TableRow key={article.id} hover>
+                <TableRow
+                  key={article.id}
+                  hover
+                  sx={{ cursor: "pointer" }}
+                  onClick={() => navigate(`/article-details/${article.id}`)}
+                >
                   <TableCell>{article.title}</TableCell>
                   <TableCell>{article.author}</TableCell>
                   <TableCell>
@@ -100,7 +105,7 @@ export const ViewArticles = () => {
                       ? new Date(article.createdAt).toLocaleDateString()
                       : "-"}
                   </TableCell>
-                  <TableCell align="center">
+                  <TableCell align="center" onClick={e => e.stopPropagation()}>
                     <Tooltip title="Edit">
                       <IconButton
                         color="primary"

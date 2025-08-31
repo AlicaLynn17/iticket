@@ -1,2 +1,2 @@
-export * from "./CollectFeedback";
-export * from "./ViewFeedback";
+export { CollectFeedback } from "./CollectFeedback";
+export { ViewFeedback } from "./ViewFeedback";
