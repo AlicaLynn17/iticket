@@ -41,6 +41,13 @@
       "email": "jsc@iticket.com",
       "role": "admin",
       "password": "123"
+    },
+    {
+      "id": "a9ef",
+      "name": "trial crypt",
+      "email": "trialcrypt@test.com",
+      "password": "$2b$10$41uXNbxxv1Es70ZJ4w4EAOpXmQwKC0vp5X8eb1qVlKBJ5Z/WxcJP2",
+      "role": "admin"
     }
   ],
   "tickets": [

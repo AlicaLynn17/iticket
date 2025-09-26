@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import bcrypt from "bcryptjs";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
@@ -29,11 +30,14 @@ export const SignUp: React.FC = () => {
       return;
     }
 
+    const saltRounds = 10;
+    const hashed = await bcrypt.hash(formData.password, saltRounds);
+
     const newUser = {
       id: uuidv4().slice(0, 4), 
       name: `${formData.firstName} ${formData.lastName}`,
       email: formData.email,
-      password: formData.password,
+      password: hashed,
       role: "user"
     };
 

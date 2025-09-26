@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import bcrypt from "bcryptjs";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "./Login.css";
@@ -14,40 +15,44 @@ export const Login: React.FC = () => {
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    try {
-      const response = await axios.get("http://localhost:3000/users");
-      const users = response.data;
+  try {
+    const response = await axios.get("http://localhost:3000/users");
+    const users = response.data;
 
-      const matchedUser = users.find(
-        (user: any) =>
-          user.email === credentials.email &&
-          user.password === credentials.password
-      );
-
-      if (matchedUser) {
-        localStorage.setItem("authToken", "sampleToken");
-        localStorage.setItem("user", JSON.stringify(matchedUser));
-        setShowSnackbar(true);
-        setTimeout(() => {
-          setShowSnackbar(false);
-          if (matchedUser.role === "admin" || matchedUser.role === "agent") {
-            navigate("/dashboard");
-          } else if (matchedUser.role === "user") {
-            navigate("/view-tickets");
-          } else {
-            navigate("/dashboard");
-          }
-        }, 1000);
-      } else {
-        alert("Invalid email or password.");
+    let matchedUser = null;
+    for (const user of users) {
+      if (user.email === credentials.email) {
+        const isMatch = await bcrypt.compare(credentials.password, user.password);
+        if (isMatch) {
+          matchedUser = user;
+          break;
+        }
       }
-    } catch (error) {
-      console.error("Login error:", error);
-      alert("Server error. Please try again later.");
     }
-  };
+
+    if (matchedUser) {
+      localStorage.setItem("authToken", "sampleToken");
+      localStorage.setItem("user", JSON.stringify(matchedUser));
+      setShowSnackbar(true);
+      setTimeout(() => {
+        setShowSnackbar(false);
+        if (matchedUser.role === "admin" || matchedUser.role === "agent") {
+          navigate("/dashboard");
+        } else {
+          navigate("/view-tickets");
+        }
+      }, 1000);
+    } else {
+      alert("Invalid email or password.");
+    }
+  } catch (error) {
+    console.error("Login error:", error);
+    alert("Server error. Please try again later.");
+  }
+};
+
 
   return (
     <div className="signup-container">
