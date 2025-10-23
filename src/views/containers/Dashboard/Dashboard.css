@@ -132,3 +132,14 @@
   font-weight: 500;
   color: #3C5759;
 }
+
+.MuiLinearProgress-root {
+  background-color: #e0e0e0 !important;
+  border-radius: 5px !important;
+  height: 10px !important;
+}
+
+.MuiLinearProgress-bar {
+  background-color: #3C5759 !important;
+}
+

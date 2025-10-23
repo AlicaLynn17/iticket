@@ -40,7 +40,6 @@ export const TicketFilters: React.FC<TicketFiltersProps> = ({
   onReset,
   onCancel,
 }) => {
-  // Only show assignable users (admins and agents)
   const assignableUsers = users.filter(
     (u) => u.role === "admin" || u.role === "agent"
   );

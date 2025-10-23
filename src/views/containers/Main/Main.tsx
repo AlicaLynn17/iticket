@@ -59,7 +59,7 @@ export const Main = () => {
   const user = JSON.parse(localStorage.getItem("user") || "{}");
 
   const filteredMenu = SIDE_BAR_MENU.filter(
-    (item) => !item.roles || item.roles.includes(user.role)
+    (item) => !item.roles || item.roles.includes(user.role.toLowerCase())
   );
 
   return (

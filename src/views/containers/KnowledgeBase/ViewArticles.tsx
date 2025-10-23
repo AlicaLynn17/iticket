@@ -8,7 +8,9 @@ import {
   Dialog,
   DialogTitle,
   DialogContent,
-  DialogActions
+  DialogActions,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import { useNavigate } from "react-router-dom";
@@ -18,16 +20,22 @@ import "./ViewArticles.css";
 export const ViewArticles = () => {
   const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem("user") || "{}");
-  const isAdmin = user.role === "admin";
+  const isAdmin = user.role === "Admin";
 
   const [articles, setArticles] = useState<any[]>([]);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [selectedArticleId, setSelectedArticleId] = useState<string | null>(null);
 
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    severity: "success",
+  });
+
   const categories = ["FAQs", "How-Tos", "Troubleshooting", "Other"];
 
   useEffect(() => {
-    axios.get("http://localhost:3000/knowledgeBase").then((res) => {
+    axios.get("https://localhost:5001/api/KnowledgeBase/GetArticles").then((res) => {
       setArticles(res.data);
     });
   }, []);
@@ -40,12 +48,25 @@ export const ViewArticles = () => {
   const confirmDelete = async () => {
     if (selectedArticleId) {
       try {
-        await axios.delete(`http://localhost:3000/knowledgeBase/${selectedArticleId}`);
+        await axios.delete(`https://localhost:5001/api/KnowledgeBase/DeleteArticle/${selectedArticleId}`);
         setArticles((prev) => prev.filter((a) => a.id !== selectedArticleId));
-      } catch (err) {
-        console.error("Failed to delete article", err);
+
+        setSnackbar({
+          open: true,
+          message: "Article deleted successfully!",
+          severity: "success",
+        });
+      } catch (error) {
+        console.error("Failed to delete article", error);
+
+        setSnackbar({
+          open: true,
+          message: "Failed to delete article.",
+          severity: "error",
+        });
       }
     }
+
     setDeleteModalOpen(false);
     setSelectedArticleId(null);
   };
@@ -140,6 +161,21 @@ export const ViewArticles = () => {
           </Button>
         </DialogActions>
       </Dialog>
+
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={1500}
+        onClose={() => setSnackbar({ ...snackbar, open: false })}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+      >
+        <Alert
+          onClose={() => setSnackbar({ ...snackbar, open: false })}
+          severity={snackbar.severity as any}
+          sx={{ width: "100%" }}
+        >
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
     </Box>
   );
 };

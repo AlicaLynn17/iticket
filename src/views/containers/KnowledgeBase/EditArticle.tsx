@@ -13,13 +13,13 @@ import "./EditArticle.css";
 
 export const EditArticle = () => {
   const navigate = useNavigate();
-  const { id } = useParams();
+  const { id: articleId } = useParams<{ id: string }>();
+
   const [formData, setFormData] = useState({
+    id: 0,
     title: "",
     content: "",
-    author: "",
-    category: "",
-    createdAt: ""
+    category: ""
   });
 
   const [snackbar, setSnackbar] = useState({
@@ -28,10 +28,20 @@ export const EditArticle = () => {
     severity: "success"
   });
 
+  // 🔹 Fetch existing article details
   useEffect(() => {
-    if (id) {
-      axios.get(`http://localhost:3000/knowledgeBase/${id}`)
-        .then((res) => setFormData(res.data))
+    if (articleId) {
+      axios
+        .get(`https://localhost:5001/api/KnowledgeBase/GetById/${articleId}`)
+        .then((res) => {
+          const a = res.data;
+          setFormData({
+            id: a.id,
+            title: a.title || "",
+            content: a.content || "",
+            category: a.category || ""
+          });
+        })
         .catch(() => {
           setSnackbar({
             open: true,
@@ -40,21 +50,29 @@ export const EditArticle = () => {
           });
         });
     }
-  }, [id]);
+  }, [articleId]);
 
+  // 🔹 Handle input and dropdown changes
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  // 🔹 Update article
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!articleId) {
+      console.error("No article ID provided.");
+      return;
+    }
+
     try {
-      await axios.put(`http://localhost:3000/knowledgeBase/${id}`, {
+      await axios.put(`https://localhost:5001/api/KnowledgeBase/UpdateArticle/${articleId}`, {
         ...formData,
-        updatedAt: new Date().toISOString()
+        id: parseInt(articleId)
       });
 
       setSnackbar({
@@ -105,6 +123,23 @@ export const EditArticle = () => {
             />
           </div>
 
+          {/* ✅ Category dropdown now matches CreateArticle */}
+          <div className="form-group">
+            <label>Category</label>
+            <select
+              name="category"
+              value={formData.category}
+              onChange={handleChange}
+              required
+            >
+              <option value="">Select Category</option>
+              <option value="FAQs">FAQs</option>
+              <option value="How-Tos">How-Tos</option>
+              <option value="Troubleshooting">Troubleshooting</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+
           <Stack direction="row" spacing={2} sx={{ mt: 2 }}>
             <Button
               variant="outlined"
@@ -122,13 +157,13 @@ export const EditArticle = () => {
 
       <Snackbar
         open={snackbar.open}
-        autoHideDuration={1500}
+        autoHideDuration={2000}
         onClose={() => setSnackbar({ ...snackbar, open: false })}
         anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
       >
         <Alert
           onClose={() => setSnackbar({ ...snackbar, open: false })}
-          severity={snackbar.severity as any}
+          severity={snackbar.severity as "success" | "error"}
           sx={{ width: "100%" }}
         >
           {snackbar.message}

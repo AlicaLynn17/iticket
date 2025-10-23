@@ -35,15 +35,18 @@ export const CreateTicket = () => {
   const [dragActive, setDragActive] = useState(false);
 
   const user = JSON.parse(localStorage.getItem("user") || "{}");
-  const isAdmin = user.role === "admin";
+  const isAdmin = user.role === "Admin";
   const [customCategory, setCustomCategory] = useState("");
 
 
   const todayDate = new Date().toISOString().split("T")[0];
 
   useEffect(() => {
-    axios.get("http://localhost:3000/users").then(res => setUsers(res.data));
+  axios.get("https://localhost:5001/api/Account/GetUsers")
+       .then(res => setUsers(res.data))
+       .catch(err => console.error("Error fetching users:", err));
   }, []);
+
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -68,7 +71,7 @@ export const CreateTicket = () => {
     };
 
     try {
-      await axios.post("http://localhost:3000/tickets", newTicket);
+      await axios.post("https://localhost:5001/api/Ticket/CreateTicket", newTicket);
       setSnackbar({ open: true, message: "Ticket created successfully!", severity: "success" });
       setTimeout(() => navigate("/view-tickets"), 1000);
     } catch (error) {
@@ -179,7 +182,7 @@ export const CreateTicket = () => {
             </FormControl>
           </div>
 
-          {(isAdmin || user.role === "agent") && (
+          {(isAdmin || user.role === "Agent") && (
             <div className="form-group">
               <label>Assign to Agent</label>
               <FormControl fullWidth size="small" sx={{ mt: 2 }}>
@@ -193,7 +196,7 @@ export const CreateTicket = () => {
                 >
                   <MenuItem value="">Unassigned</MenuItem>
                   {users
-                    .filter(user => user.role === "agent" || user.role === "admin")
+                    .filter(user => user.role === "Agent" || user.role === "Admin")
                     .map((user) => (
                       <MenuItem key={user.id} value={user.id}>
                         {user.name} ({user.role})

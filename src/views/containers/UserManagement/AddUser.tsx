@@ -3,7 +3,6 @@ import {
   Box,
   Button,
   TextField,
-  Typography,
   FormControl,
   Select,
   MenuItem,
@@ -25,7 +24,11 @@ export const AddUser = () => {
   });
 
   const navigate = useNavigate();
-  const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "success" });
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    severity: "success",
+  });
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | { name?: string; value: unknown }>
@@ -41,31 +44,58 @@ export const AddUser = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // ✅ Password length validation
+    if (formData.password.length < 7) {
+      setSnackbar({
+        open: true,
+        message: "Password must be at least 7 characters long.",
+        severity: "error",
+      });
+      return;
+    }
+
     try {
-      const existingUsers = await axios.get("http://localhost:3000/users");
-      const isEmailTaken = existingUsers.data.some(
-        (user: any) => user.email.toLowerCase() === formData.email.toLowerCase()
-      );
+      const currentUser = JSON.parse(localStorage.getItem("user") || "{}");
 
-      if (isEmailTaken) {
-        setSnackbar({ open: true, message: "Email is already registered", severity: "error" });
-        return;
-      }
+      const newUser = {
+        ...formData,
+        password: formData.password,
+        createdTime: new Date().toISOString(),
+        updateTime: new Date().toISOString(),
+        createdBy: currentUser?.id || null,
+        preferences: {
+          showStats: true,
+          showSatisfaction: true,
+          cardOrder: ["unresolved", "overdue", "dueToday", "resolved"],
+        },
+      };
 
-      await axios.post("http://localhost:3000/users", formData);
-      setSnackbar({ open: true, message: "User added successfully!", severity: "success" });
+      await axios.post("https://localhost:5001/api/Account/Register", newUser);
+
+      setSnackbar({
+        open: true,
+        message: "User added successfully!",
+        severity: "success",
+      });
+
       setFormData({
         name: "",
         email: "",
         role: "",
         password: "",
       });
-      setTimeout(() => navigate("/view-users"), 1000);
-    } catch {
-      setSnackbar({ open: true, message: "Failed to add user.", severity: "error" });
+
+      setTimeout(() => navigate("/view-users"), 1200);
+    } catch (err) {
+      console.error("Error adding user:", err);
+      setSnackbar({
+        open: true,
+        message: "Failed to add user.",
+        severity: "error",
+      });
     }
   };
-
 
   return (
     <Box className="add-user-container">
@@ -85,6 +115,7 @@ export const AddUser = () => {
               size="small"
             />
           </div>
+
           <div className="form-group">
             <label>Email</label>
             <TextField
@@ -98,6 +129,7 @@ export const AddUser = () => {
               size="small"
             />
           </div>
+
           <div className="form-group">
             <label>Role</label>
             <FormControl fullWidth size="small">
@@ -107,12 +139,13 @@ export const AddUser = () => {
                 onChange={handleSelectChange}
                 required
               >
-                <MenuItem value="admin">Admin</MenuItem>
-                <MenuItem value="agent">Agent</MenuItem>
-                <MenuItem value="user">User</MenuItem>
+                <MenuItem value="Admin">Admin</MenuItem>
+                <MenuItem value="Agent">Agent</MenuItem>
+                <MenuItem value="User">User</MenuItem>
               </Select>
             </FormControl>
           </div>
+
           <div className="form-group">
             <label>Password</label>
             <TextField
@@ -126,6 +159,7 @@ export const AddUser = () => {
               size="small"
             />
           </div>
+
           <Stack direction="row" spacing={2} sx={{ mt: 2 }}>
             <Button
               type="button"
@@ -135,11 +169,7 @@ export const AddUser = () => {
             >
               Cancel
             </Button>
-            <Button
-              type="submit"
-              variant="contained"
-              fullWidth
-            >
+            <Button type="submit" variant="contained" fullWidth>
               Add User
             </Button>
           </Stack>

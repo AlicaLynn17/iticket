@@ -8,18 +8,18 @@ import {
   Stack,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import "./CreateArticle.css";
 
 export const CreateArticle = () => {
   const navigate = useNavigate();
-
 
   const user = JSON.parse(localStorage.getItem("user") || "{}");
 
   const [formData, setFormData] = useState({
     title: "",
     content: "",
-    author: user.name || "", 
+    author: user.name || "",
     category: "",
   });
 
@@ -40,13 +40,9 @@ export const CreateArticle = () => {
     e.preventDefault();
 
     try {
-      await fetch("http://localhost:3000/knowledgeBase", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          ...formData,
-          createdAt: new Date().toISOString(),
-        }),
+      await axios.post("https://localhost:5001/api/KnowledgeBase/CreateArticle", {
+        ...formData,
+        createdAt: new Date().toISOString(),
       });
 
       setSnackbar({
@@ -59,6 +55,7 @@ export const CreateArticle = () => {
         navigate("/view-articles");
       }, 1200);
     } catch (error) {
+      console.error("Error creating article:", error);
       setSnackbar({
         open: true,
         message: "Failed to create article.",
@@ -105,7 +102,7 @@ export const CreateArticle = () => {
               fullWidth
               name="author"
               value={formData.author}
-              disabled 
+              disabled
               size="small"
             />
           </div>

@@ -3,56 +3,107 @@ import {
   Box,
   Button,
   TextField,
-  Typography,
   FormControl,
-  InputLabel,
   MenuItem,
   Snackbar,
   Alert,
-  Stack
+  Stack,
 } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import axios from "axios";
 import "./EditUser.css";
 
+type UserFormData = {
+  name?: string;
+  email?: string;
+  role?: string;
+  password?: string;
+};
+
 export const EditUser = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    role: "",
-    password: ""
-  });
-  const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "success" });
 
+  const [formData, setFormData] = useState<UserFormData>({});
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    severity: "success",
+  });
+
+  // ✅ Load existing user data
   useEffect(() => {
-    axios.get(`http://localhost:3000/users/${id}`).then(res => setFormData(res.data));
+    axios
+      .get(`https://localhost:5001/api/account/GetUser/${id}`, {
+        withCredentials: true,
+      })
+      .then((res) => setFormData(res.data))
+      .catch(() =>
+        setSnackbar({
+          open: true,
+          message: "Failed to load user data.",
+          severity: "error",
+        })
+      );
   }, [id]);
 
+  // ✅ Handle text input changes
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  // ✅ Handle role selection
   const handleSelectChange = (e: SelectChangeEvent<string>) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name as string]: value });
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    try {
-      await axios.put(`http://localhost:3000/users/${id}`, formData);
-      setSnackbar({ open: true, message: "User updated successfully!", severity: "success" });
-      setTimeout(() => {
-        navigate("/view-users");
-      }, 1000);
-    } catch (error) {
-      setSnackbar({ open: true, message: "Failed to update user.", severity: "error" });
-    }
-  };
+  e.preventDefault();
+
+  const password = formData.password ?? ""; // fallback to empty string
+
+  // ✅ Only validate if password is provided
+  if (password.trim() !== "" && password.length < 7) {
+    setSnackbar({
+      open: true,
+      message: "Password must be at least 7 characters long!",
+      severity: "error",
+    });
+    return;
+  }
+
+  // ✅ Only include password if provided
+  const updatedUser = { ...formData };
+  if (!password.trim()) {
+    delete updatedUser.password;
+  }
+
+  try {
+    await axios.put(
+      `https://localhost:5001/api/account/UpdateUser/${id}`,
+      updatedUser,
+      { withCredentials: true }
+    );
+
+    setSnackbar({
+      open: true,
+      message: "User updated successfully!",
+      severity: "success",
+    });
+
+    setTimeout(() => navigate("/view-users"), 1000);
+  } catch {
+    setSnackbar({
+      open: true,
+      message: "Failed to update user.",
+      severity: "error",
+    });
+  }
+};
+
 
   return (
     <Box className="edit-user-container">
@@ -65,51 +116,52 @@ export const EditUser = () => {
             <TextField
               fullWidth
               name="name"
-              value={formData.name}
+              value={formData.name || ""}
               onChange={handleChange}
-              required
               size="small"
             />
           </div>
+
           <div className="form-group">
             <label>Email</label>
             <TextField
               fullWidth
               name="email"
               type="email"
-              value={formData.email}
+              value={formData.email || ""}
               onChange={handleChange}
-              required
               size="small"
             />
           </div>
+
           <div className="form-group">
             <label>Role</label>
             <FormControl fullWidth size="small">
               <Select
                 name="role"
-                value={formData.role}
+                value={formData.role || ""}
                 onChange={handleSelectChange}
-                required
               >
-                <MenuItem value="admin">Admin</MenuItem>
-                <MenuItem value="agent">Agent</MenuItem>
-                <MenuItem value="user">User</MenuItem>
+                <MenuItem value="Admin">Admin</MenuItem>
+                <MenuItem value="Agent">Agent</MenuItem>
+                <MenuItem value="User">User</MenuItem>
               </Select>
             </FormControl>
           </div>
+
           <div className="form-group">
             <label>Password</label>
             <TextField
               fullWidth
               name="password"
               type="password"
-              value={formData.password}
+              value={formData.password || ""}
               onChange={handleChange}
-              required
               size="small"
+              placeholder="Enter new password (optional)"
             />
           </div>
+
           <Stack direction="row" spacing={2} sx={{ mt: 2 }}>
             <Button
               variant="outlined"
@@ -119,16 +171,13 @@ export const EditUser = () => {
             >
               Cancel
             </Button>
-            <Button
-              type="submit"
-              variant="contained"
-              fullWidth
-            >
+            <Button type="submit" variant="contained" fullWidth>
               Update User
             </Button>
           </Stack>
         </form>
       </div>
+
       <Snackbar
         open={snackbar.open}
         autoHideDuration={3000}

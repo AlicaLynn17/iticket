@@ -50,14 +50,14 @@ export const ViewTickets = () => {
   const [showFilters, setShowFilters] = useState(false);
 
   const navigate = useNavigate();
-  const user = JSON.parse(localStorage.getItem("user") || "{}");
-  const isAdmin = user.role === "admin" || user.role === "superadmin";
-  const isAgent = user.role === "agent";
-  const isUser = user.role === "user";
+  const user = JSON.parse(localStorage.getItem("User") || "{}");
+  const isAdmin = user.role === "Admin" || user.role === "Superadmin";
+  const isAgent = user.role === "Agent";
+  const isUser = user.role === "User";
 
   useEffect(() => {
-    axios.get("http://localhost:3000/tickets").then((res) => setTickets(res.data));
-    axios.get("http://localhost:3000/users").then((res) => setUsers(res.data));
+    axios.get("https://localhost:5001/api/Ticket/GetTickets").then((res) => setTickets(res.data));
+    axios.get("https://localhost:5001/api/Account/GetUsers").then((res) => setUsers(res.data));
   }, []);
 
   const visibleTickets = isUser
@@ -109,12 +109,22 @@ export const ViewTickets = () => {
     setDeleteDialogOpen(false);
     if (ticketToDelete) {
       try {
-        await axios.delete(`http://localhost:3000/tickets/${ticketToDelete.id}`);
+        await axios.delete(`https://localhost:5001/api/Ticket/DeleteTicket/${ticketToDelete.id}`);
         setTickets((prev) => prev.filter((t) => t.id !== ticketToDelete.id));
         setSnackbar({ open: true, message: "Ticket deleted successfully!", severity: "success" });
-      } catch {
-        setSnackbar({ open: true, message: "Failed to delete ticket.", severity: "error" });
-      }
+      } catch (err:any) {
+  console.error("❌ Error deleting ticket:", err);
+  if (err.response) {
+    console.error("🔹 Response data:", err.response.data);
+    console.error("🔹 Status:", err.response.status);
+  }
+  setSnackbar({
+    open: true,
+    message: `Failed to delete ticket: ${err.response?.data?.message || "Unknown error"}`,
+    severity: "error",
+  });
+}
+
       setTicketToDelete(null);
     }
   };

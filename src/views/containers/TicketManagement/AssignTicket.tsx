@@ -25,7 +25,7 @@ export const AssignTicket = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const res = await axios.get("http://localhost:3000/users");
+        const res = await axios.get("https://localhost:5001/api/Account/GetUsers");
         setAgents(res.data);
       } catch (err) {
         console.error("Error fetching users:", err);
@@ -34,7 +34,7 @@ export const AssignTicket = () => {
 
     const fetchTicket = async () => {
       try {
-        const res = await axios.get(`http://localhost:3000/tickets/${id}`);
+        const res = await axios.get(`https://localhost:5001/api/Ticket/GetById/${id}`);
         setAssignedTo(res.data.assignedTo || "");
       } catch (err) {
         console.error("Error fetching ticket:", err);
@@ -48,11 +48,15 @@ export const AssignTicket = () => {
 
   const handleAssign = async () => {
     try {
-      await axios.patch(`http://localhost:3000/tickets/${id}`, { assignedTo });
+      await axios.patch(`https://localhost:5001/api/Ticket/AssignTicket/${id}`, { assignedTo });
       setSnackbar({ open: true, message: "Ticket assigned successfully!", severity: "success" });
       setTimeout(() => navigate("/view-tickets"), 1000);
-    } catch (err) {
-      setSnackbar({ open: true, message: "Failed to assign ticket.", severity: "error" });
+    } catch (err:any) {
+      setSnackbar({
+        open: true,
+        message: `Failed to assign ticket`,
+        severity: "error",
+      });
     }
   };
 
@@ -70,7 +74,7 @@ export const AssignTicket = () => {
             label="Assign To"
           >
             {agents
-              .filter((agent: any) => agent.role === "admin" || agent.role === "agent")
+              .filter((agent: any) => agent.role === "Admin" || agent.role === "Agent")
               .map((agent: any) => (
                 <MenuItem key={agent.id} value={agent.id}>
                   {agent.name} ({agent.role})

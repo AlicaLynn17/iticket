@@ -94,5 +94,82 @@ button.save-button {
   transition: all 0.2s ease;
 }
 
+.drag-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.draggable-item {
+  padding: 10px 14px;
+  background-color: #f1f3f4;
+  border-radius: 8px;
+  cursor: grab;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
+}
+
+.draggable-item:hover {
+  background-color: #e0e0e0;
+}
 
 
+.switches-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 1rem;
+}
+
+
+.drag-card-container {
+  display: flex;
+  flex-direction: column; /* vertical stacking */
+  gap: 12px;
+  margin-top: 1rem;
+  width: 100%;
+  max-width: 400px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.draggable-stat-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100px;
+  background: linear-gradient(145deg, #ffffff, #f5f5f5);
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  box-shadow: 0 3px 6px rgba(60, 87, 89, 0.08);
+  cursor: grab;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+.draggable-stat-card:active {
+  cursor: grabbing;
+  transform: scale(1.02);
+}
+
+.draggable-stat-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 12px rgba(60, 87, 89, 0.12);
+}
+
+.drag-icon {
+  font-size: 26px;
+  color: #3C5759;
+  margin-bottom: 0.4rem;
+  opacity: 0.9;
+}
+
+.drag-title {
+  font-size: 13px;
+  text-transform: uppercase;
+  color: #555;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+}

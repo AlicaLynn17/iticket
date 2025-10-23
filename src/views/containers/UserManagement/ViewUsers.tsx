@@ -38,10 +38,21 @@ export const ViewUsers = () => {
   const [roleFilter, setRoleFilter] = useState("");
   const [hasOpenTickets, setHasOpenTickets] = useState(false);
 
-  useEffect(() => {
-    axios.get("http://localhost:3000/users").then((res) => setUsers(res.data));
-    axios.get("http://localhost:3000/tickets").then((res) => setTickets(res.data));
-  }, []);
+useEffect(() => {
+  // Fetch users from backend
+  axios
+    .get("https://localhost:5001/api/Account/GetUsers")
+    .then((res) => {
+      setUsers(res.data);
+    })
+    .catch((err) => {
+      console.error("Failed to fetch users:", err);
+    });
+
+  // You can comment out tickets for now since you’re focusing on AccountController
+  // axios.get("http://localhost:3000/tickets").then((res) => setTickets(res.data));
+}, []);
+
 
   const getTicketsAssignedCount = (userId: string) =>
     tickets.filter((ticket) => ticket.assignedTo === userId).length;
@@ -78,11 +89,11 @@ export const ViewUsers = () => {
       const affectedTickets = tickets.filter(
         (ticket) => ticket.assignedTo === user.id
       );
-      for (const ticket of affectedTickets) {
-        await axios.patch(`http://localhost:3000/tickets/${ticket.id}`, { assignedTo: "" });
-      }
+      // for (const ticket of affectedTickets) {
+      //   await axios.patch(`http://localhost:3000/tickets/${ticket.id}`, { assignedTo: "" });
+      // }
 
-      await axios.delete(`http://localhost:3000/users/${user.id}`);
+      await axios.delete(`https://localhost:5001/api/Account/DeleteUser/${user.id}`, { withCredentials: true });
       setUsers((prev) => prev.filter((u) => u.id !== user.id));
       setTickets((prev) =>
         prev.map((ticket) =>

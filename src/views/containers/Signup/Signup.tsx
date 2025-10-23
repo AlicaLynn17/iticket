@@ -23,33 +23,39 @@ export const SignUp: React.FC = () => {
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    if (formData.password !== formData.confirmPassword) {
-      alert("Passwords do not match!");
-      return;
-    }
+  if (formData.password.length < 7) {
+    alert("Password must be at least 7 characters long!");
+    return;
+  }
 
-    const saltRounds = 10;
-    const hashed = await bcrypt.hash(formData.password, saltRounds);
+  if (formData.password !== formData.confirmPassword) {
+    alert("Passwords do not match!");
+    return;
+  }
 
-    const newUser = {
-      id: uuidv4().slice(0, 4), 
-      name: `${formData.firstName} ${formData.lastName}`,
-      email: formData.email,
-      password: hashed,
-      role: "user"
-    };
-
-    try {
-      await axios.post("http://localhost:3000/users", newUser);
-      alert("User registered successfully!");
-      navigate("/login");
-    } catch (err) {
-      console.error(err);
-      alert("Error registering user.");
-    }
+  const newUser = {
+    email: formData.email,
+    name: `${formData.firstName} ${formData.lastName}`,
+    password: formData.password,
+    role: "User",
+    createdBy: null, 
+    createdTime: new Date().toISOString(),
+    updateTime: new Date().toISOString()
   };
+
+
+try {
+  await axios.post("https://localhost:5001/api/Account/Register", newUser);
+  alert("User registered successfully!");
+  navigate("/login");
+} catch (err) {
+  console.error(err);
+  alert("Error registering user.");
+}
+};
+
 
   return (
   <div className="signup-container">

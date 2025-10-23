@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import bcrypt from "bcryptjs";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "./Login.css";
@@ -15,44 +14,43 @@ export const Login: React.FC = () => {
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  try {
-    const response = await axios.get("http://localhost:3000/users");
-    const users = response.data;
+    try {
+      const response = await axios.post(
+        "https://localhost:5001/api/Account/Login",
+        {
+          email: credentials.email,
+          password: credentials.password,
+        },
+        { withCredentials: true }
+      );
 
-    let matchedUser = null;
-    for (const user of users) {
-      if (user.email === credentials.email) {
-        const isMatch = await bcrypt.compare(credentials.password, user.password);
-        if (isMatch) {
-          matchedUser = user;
-          break;
-        }
-      }
-    }
+      const user = response.data.user;
 
-    if (matchedUser) {
-      localStorage.setItem("authToken", "sampleToken");
-      localStorage.setItem("user", JSON.stringify(matchedUser));
+      localStorage.setItem("authToken", "backendToken"); 
+      localStorage.setItem("user", JSON.stringify(user));
+
       setShowSnackbar(true);
       setTimeout(() => {
         setShowSnackbar(false);
-        if (matchedUser.role === "admin" || matchedUser.role === "agent") {
+        if (user.role === "admin" || user.role === "agent") {
           navigate("/dashboard");
         } else {
           navigate("/view-tickets");
         }
       }, 1000);
-    } else {
-      alert("Invalid email or password.");
-    }
-  } catch (error) {
-    console.error("Login error:", error);
-    alert("Server error. Please try again later.");
-  }
-};
 
+    } catch (error: any) {
+      console.error("Login error:", error);
+
+      if (error.response?.status === 401) {
+        alert("Invalid email or password.");
+      } else {
+        alert("Server error. Please try again later.");
+      }
+    }
+  };
 
   return (
     <div className="signup-container">
@@ -90,9 +88,7 @@ export const Login: React.FC = () => {
 
           <div className="login">
             <span>Don’t have an account? </span>
-            <a href="/signup" className="login-span">
-              SIGN UP
-            </a>
+            <a href="/signup" className="login-span">SIGN UP</a>
           </div>
         </form>
       </div>

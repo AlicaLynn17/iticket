@@ -17,7 +17,7 @@ import axios from "axios";
 import "./EditTicket.css";
 
 export const EditTicket = () => {
-  const { id } = useParams();
+  const { id: ticketId } = useParams<{ id: string }>();
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
@@ -38,18 +38,30 @@ export const EditTicket = () => {
   const loggedInUser = JSON.parse(localStorage.getItem("user") || "{}");
 
   const isCreator = formData.createdBy === loggedInUser.id;
-  const isAdmin = loggedInUser.role === "admin";
+  const isAdmin = loggedInUser.role === "Admin";
 
   useEffect(() => {
     const fetchData = async () => {
-      const ticketRes = await axios.get(`http://localhost:3000/tickets/${id}`);
-      const usersRes = await axios.get("http://localhost:3000/users");
-      setFormData(ticketRes.data);
+      const ticketRes = await axios.get(`https://localhost:5001/api/Ticket/GetById/${ticketId}`);
+      const usersRes = await axios.get("https://localhost:5001/api/Account/GetUsers");
+      const t = ticketRes.data;
+      setFormData({
+        title: t.title || "",
+        assignedTo: t.assignedTo ? t.assignedTo.toString() : "",
+        dueDate: t.dueDate ? t.dueDate.split("T")[0] : "",
+        description: t.description || "",
+        category: t.category || "",
+        priority: t.priority || "Medium",
+        status: t.status || "Open",
+        attachment: t.attachment || "",
+        createdBy: t.createdBy || ""
+      });
+
       setUsers(usersRes.data);
     };
 
     fetchData();
-  }, [id]);
+  }, [ticketId]);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | SelectChangeEvent<string>
@@ -58,16 +70,40 @@ export const EditTicket = () => {
     setFormData({ ...formData, [name!]: value });
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    try {
-      await axios.put(`http://localhost:3000/tickets/${id}`, formData);
-      setSnackbar({ open: true, message: "Ticket updated successfully!", severity: "success" });
-      setTimeout(() => navigate("/view-tickets"), 1000);
-    } catch (error) {
-      setSnackbar({ open: true, message: "Failed to update ticket.", severity: "error" });
-    }
-  };
+
+const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+
+  if (!ticketId) {
+    console.error("No ticket ID provided.");
+    return;
+  }
+
+  try {
+    await axios.put(`https://localhost:5001/api/Ticket/UpdateTicket/${ticketId}`, {
+      ...formData,
+      id: parseInt(ticketId),
+      assignedTo: formData.assignedTo ? parseInt(formData.assignedTo) : null,
+      createdBy: formData.createdBy ? parseInt(formData.createdBy) : null,
+    });
+
+    setSnackbar({
+      open: true,
+      message: "Ticket updated successfully!",
+      severity: "success",
+    });
+
+    setTimeout(() => navigate("/view-tickets"), 1000);
+  } catch (error) {
+    console.error("Update error:", error);
+    setSnackbar({
+      open: true,
+      message: "Failed to update ticket.",
+      severity: "error",
+    });
+  }
+};
+
 
   return (
     <Box className="edit-ticket-container">
@@ -87,7 +123,6 @@ export const EditTicket = () => {
             />
           </div>
 
-          {/* Only admins can assign tickets */}
           {!isCreator || isAdmin ? (
             <div className="form-group">
               <label>Assign to Agent</label>
@@ -98,11 +133,14 @@ export const EditTicket = () => {
                   onChange={handleChange}
                 >
                   <MenuItem value="">Unassigned</MenuItem>
-                  {users.map((user) => (
-                    <MenuItem key={user.id} value={user.id}>
-                      {user.name} ({user.role})
-                    </MenuItem>
+                  {users
+                    .filter(user => user.role === "Admin" || user.role === "Agent")
+                    .map(user => (
+                      <MenuItem key={user.id} value={user.id}>
+                        {user.name} ({user.role})
+                      </MenuItem>
                   ))}
+
                 </Select>
               </FormControl>
             </div>
@@ -207,6 +245,22 @@ export const EditTicket = () => {
           </Stack>
         </form>
       </div>
+
+      <Snackbar
+  open={snackbar.open}
+  autoHideDuration={3000}
+  onClose={() => setSnackbar({ ...snackbar, open: false })}
+  anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+>
+  <Alert
+    onClose={() => setSnackbar({ ...snackbar, open: false })}
+    severity={snackbar.severity as "success" | "error"}
+    sx={{ width: "100%" }}
+  >
+    {snackbar.message}
+  </Alert>
+</Snackbar>
+
     </Box>
   );
 };

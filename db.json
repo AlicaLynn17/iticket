@@ -47,7 +47,60 @@
       "name": "trial crypt",
       "email": "trialcrypt@test.com",
       "password": "$2b$10$41uXNbxxv1Es70ZJ4w4EAOpXmQwKC0vp5X8eb1qVlKBJ5Z/WxcJP2",
-      "role": "admin"
+      "role": "admin",
+      "preferences": {
+        "showStats": true,
+        "showSatisfaction": true,
+        "cardOrder": [
+          "overdue",
+          "resolved",
+          "dueToday",
+          "unresolved"
+        ],
+        "showPerformance": true,
+        "ticketViewOrder": [
+          "dueToday",
+          "unresolved",
+          "overdue",
+          "resolved"
+        ],
+        "defaultView": "All Tickets",
+        "timezone": "Asia/Manila",
+        "notifications": true,
+        "theme": "system",
+        "language": "en"
+      }
+    },
+    {
+      "id": "e547",
+      "name": "myacc acc",
+      "email": "myacc@iticket.com",
+      "password": "$2b$10$wxjggbiwL7zVVLDDPWPNleVBgCqDiCsL0S2oJXvcRGVDkelGkXYK6",
+      "role": "user"
+    },
+    {
+      "id": "fdcb",
+      "name": "aaaa",
+      "email": "aaa11@aa.com",
+      "role": "agent",
+      "password": "aaaa"
+    },
+    {
+      "id": "9f3c",
+      "name": "trialtrial",
+      "email": "trialtrial@trial.com",
+      "role": "admin",
+      "password": "$2b$10$3ZCNwdkqtK/7slkMm2UH/uTShWSNv2GXsLrcn6HnXEycEyg6iI3lS",
+      "preferences": {
+        "showStats": true,
+        "showSatisfaction": true,
+        "cardOrder": [
+          "unresolved",
+          "overdue",
+          "dueToday",
+          "resolved"
+        ]
+      }
     }
   ],
   "tickets": [
