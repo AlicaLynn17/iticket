@@ -8,7 +8,7 @@ module.exports = {
     hot: true,
     open: true,
     server: {
-    type: 'https', 
+    type: 'http', 
   },
   },
   plugins: [

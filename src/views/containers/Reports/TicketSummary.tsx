@@ -22,7 +22,7 @@ export const TicketSummary = () => {
   useEffect(() => {
     const fetchSummary = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/tickets");
+        const response = await axios.get("https://localhost:5001/api/Ticket/GetTickets");
         const tickets = response.data;
 
         const byCategory: Record<string, number> = {};

@@ -35,7 +35,7 @@ export const ReportsDashboard = () => {
   useEffect(() => {
     const fetchTickets = async () => {
       try {
-        const response = await axios.get<Ticket[]>("http://localhost:3000/tickets");
+        const response = await axios.get<Ticket[]>("https://localhost:5001/api/Ticket/GetTickets");
         setTickets(response.data);
       } catch (error) {
         console.error("Error fetching tickets:", error);
@@ -47,7 +47,6 @@ export const ReportsDashboard = () => {
     fetchTickets();
   }, []);
 
-  // --- Compute ticket stats ---
   const totalTickets = tickets.length;
   const resolved = tickets.filter(
     (t) => t.status?.toLowerCase() === "resolved" || t.status?.toLowerCase() === "closed"
@@ -56,7 +55,6 @@ export const ReportsDashboard = () => {
   const open = tickets.filter((t) => t.status?.toLowerCase() === "open").length;
   const overdue = tickets.filter((t) => t.status?.toLowerCase() === "overdue").length;
 
-  // --- Compute category and priority breakdown ---
   const countBy = (key: keyof Ticket) =>
     tickets.reduce<Record<string, number>>((acc, t) => {
       const value = t[key] || "Uncategorized";

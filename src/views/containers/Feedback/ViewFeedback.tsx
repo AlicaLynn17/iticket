@@ -8,7 +8,7 @@ import {
   TableHead,
   TableRow,
   Stack,
-  Button,
+  Typography,
 } from "@mui/material";
 import StarIcon from "@mui/icons-material/Star";
 import StarHalfIcon from "@mui/icons-material/StarHalf";
@@ -20,17 +20,24 @@ export const ViewFeedback = () => {
   const [feedbackList, setFeedbackList] = useState<any[]>([]);
   const [users, setUsers] = useState<any[]>([]);
   const [tickets, setTickets] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
-      const [feedbackRes, usersRes, ticketsRes] = await Promise.all([
-        axios.get("http://localhost:3000/feedback"),
-        axios.get("http://localhost:3000/users"),
-        axios.get("http://localhost:3000/tickets"),
-      ]);
-      setFeedbackList(feedbackRes.data);
-      setUsers(usersRes.data);
-      setTickets(ticketsRes.data);
+      try {
+        const [feedbackRes, usersRes, ticketsRes] = await Promise.all([
+          axios.get("https://localhost:5001/api/Feedback/GetAll"),
+          axios.get("https://localhost:5001/api/Account/GetUsers"),
+          axios.get("https://localhost:5001/api/Ticket/GetTickets"),
+        ]);
+        setFeedbackList(feedbackRes.data);
+        setUsers(usersRes.data);
+        setTickets(ticketsRes.data);
+      } catch (error) {
+        console.error("Error fetching feedback data:", error);
+      } finally {
+        setLoading(false);
+      }
     };
 
     fetchData();
@@ -65,41 +72,55 @@ export const ViewFeedback = () => {
       <div className="view-feedback-box">
         <h1>Customer Feedback</h1>
         <Paper className="feedback-table-wrapper">
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell>Ticket</TableCell>
-                <TableCell>User</TableCell>
-                <TableCell>Rating</TableCell>
-                <TableCell>Comments</TableCell>
-                <TableCell>Submitted At</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {feedbackList.length === 0 ? (
+          {loading ? (
+            <div className="loading-container">
+              <div className="loading-spinner"></div>
+              <p className="loading-text">Loading feedback...</p>
+            </div>
+          ) : (
+            <Table>
+              <TableHead>
                 <TableRow>
-                  <TableCell colSpan={5} className="no-feedback">
-                    No feedback found.
-                  </TableCell>
+                  <TableCell>Ticket</TableCell>
+                  <TableCell>User</TableCell>
+                  <TableCell>Rating</TableCell>
+                  <TableCell>Comments</TableCell>
+                  <TableCell>Submitted At</TableCell>
                 </TableRow>
-              ) : (
-                feedbackList.map((item) => (
-                  <TableRow key={item.id}>
-                    <TableCell>{getTicketDescription(item.ticketId)}</TableCell>
-                    <TableCell>{getUserName(item.userId || item.submittedBy)}</TableCell>
-                    <TableCell>{renderStars(item.rating)}</TableCell>
-                    <TableCell>{item.comments || item.content || "—"}</TableCell>
-                    <TableCell>
-                      {item.createdAt
-                      ? new Date(item.createdAt).toLocaleDateString("en-GB")
-                      : "N/A"}
-
+              </TableHead>
+              <TableBody>
+                {feedbackList.length === 0 ? (
+                  <TableRow>
+                    <TableCell
+                      colSpan={5}
+                      style={{
+                        textAlign: "center",
+                        height: "150px",
+                        color: "#888",
+                        verticalAlign: "middle",
+                      }}
+                    >
+                      No feedback found.
                     </TableCell>
                   </TableRow>
-                ))
-              )}
-            </TableBody>
-          </Table>
+                ) : (
+                  feedbackList.map((item) => (
+                    <TableRow key={item.id}>
+                      <TableCell>{getTicketDescription(item.ticketId)}</TableCell>
+                      <TableCell>{getUserName(item.userId || item.submittedBy)}</TableCell>
+                      <TableCell>{renderStars(item.rating)}</TableCell>
+                      <TableCell>{item.comments || item.content || "—"}</TableCell>
+                      <TableCell>
+                        {item.createdAt
+                          ? new Date(item.createdAt).toLocaleDateString("en-GB")
+                          : "N/A"}
+                      </TableCell>
+                    </TableRow>
+                  ))
+                )}
+              </TableBody>
+            </Table>
+          )}
         </Paper>
       </div>
     </Box>

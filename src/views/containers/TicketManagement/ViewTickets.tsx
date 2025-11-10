@@ -24,6 +24,8 @@ import { TicketSummaryCards } from "../../components/TicketComponents/TicketSumm
 import { TicketFilters } from "../../components/TicketComponents/TicketFilters";
 import { DeleteTicketDialog } from "../../components/TicketComponents/DeleteTicketDialog";
 import { TicketSnackbar } from "../../components/TicketComponents/TicketSnackbar";
+import FeedbackIcon from "@mui/icons-material/Feedback";
+
 
 const getAssignedUserName = (userId: string, users: any[]) => {
   const user = users.find((u) => u.id === userId);
@@ -50,7 +52,7 @@ export const ViewTickets = () => {
   const [showFilters, setShowFilters] = useState(false);
 
   const navigate = useNavigate();
-  const user = JSON.parse(localStorage.getItem("User") || "{}");
+  const user = JSON.parse(localStorage.getItem("user") || "{}");
   const isAdmin = user.role === "Admin" || user.role === "Superadmin";
   const isAgent = user.role === "Agent";
   const isUser = user.role === "User";
@@ -113,17 +115,17 @@ export const ViewTickets = () => {
         setTickets((prev) => prev.filter((t) => t.id !== ticketToDelete.id));
         setSnackbar({ open: true, message: "Ticket deleted successfully!", severity: "success" });
       } catch (err:any) {
-  console.error("❌ Error deleting ticket:", err);
-  if (err.response) {
-    console.error("🔹 Response data:", err.response.data);
-    console.error("🔹 Status:", err.response.status);
-  }
-  setSnackbar({
-    open: true,
-    message: `Failed to delete ticket: ${err.response?.data?.message || "Unknown error"}`,
-    severity: "error",
-  });
-}
+        console.error("❌ Error deleting ticket:", err);
+        if (err.response) {
+          console.error("🔹 Response data:", err.response.data);
+          console.error("🔹 Status:", err.response.status);
+        }
+        setSnackbar({
+          open: true,
+          message: `Failed to delete ticket: ${err.response?.data?.message || "Unknown error"}`,
+          severity: "error",
+        });
+      }
 
       setTicketToDelete(null);
     }
@@ -195,7 +197,9 @@ export const ViewTickets = () => {
               <TableCell>Status</TableCell>
               <TableCell>Due Date</TableCell>
               <TableCell>Assigned To</TableCell>
-              {!isUser && <TableCell align="center">Actions</TableCell>}
+              {(isAdmin || isAgent || tickets.some(t => String(t.createdBy) === String(user.id))) && (
+                <TableCell align="center">Actions</TableCell>
+              )}
             </TableRow>
           </TableHead>
           <TableBody>
@@ -248,36 +252,68 @@ export const ViewTickets = () => {
                         ? getAssignedUserName(ticket.assignedTo, users)
                         : "Unassigned"}
                     </TableCell>
-                    {!isUser && (
-                      <TableCell align="center" onClick={(e) => e.stopPropagation()}>
-                        <Box display="flex" justifyContent="center" gap={1}>
-                          <IconButton
-                            color="primary"
-                            onClick={() => navigate(`/assign-ticket/${ticket.id}`)}
-                            title="Assign"
-                          >
-                            <AssignmentIndIcon />
-                          </IconButton>
-                          <IconButton
-                            color="secondary"
-                            onClick={() => navigate(`/edit-ticket/${ticket.id}`)}
-                            title="Edit"
-                          >
-                            <EditIcon />
-                          </IconButton>
-                          <IconButton
-                            color="error"
-                            onClick={() => {
-                              setTicketToDelete(ticket);
-                              setDeleteDialogOpen(true);
-                            }}
-                            title="Delete"
-                          >
-                            <DeleteIcon />
-                          </IconButton>
-                        </Box>
-                      </TableCell>
-                    )}
+                    <TableCell align="center" onClick={(e) => e.stopPropagation()}>
+  <Box display="flex" justifyContent="center" gap={1}>
+    {/* 🔹 Admins & Agents: Full control on all tickets */}
+    {(isAdmin || isAgent) && (
+      <>
+        <IconButton
+          color="primary"
+          onClick={() => navigate(`/assign-ticket/${ticket.id}`)}
+          title="Assign"
+        >
+          <AssignmentIndIcon />
+        </IconButton>
+
+        <IconButton
+          color="secondary"
+          onClick={() => navigate(`/edit-ticket/${ticket.id}`)}
+          title="Edit"
+        >
+          <EditIcon />
+        </IconButton>
+
+        <IconButton
+          color="error"
+          onClick={() => {
+            setTicketToDelete(ticket);
+            setDeleteDialogOpen(true);
+          }}
+          title="Delete"
+        >
+          <DeleteIcon />
+        </IconButton>
+      </>
+    )}
+
+    {/* 🔹 Users — can only manage their own tickets */}
+    {isUser && String(ticket.createdBy) === String(user.id) && (
+      <>
+        <IconButton
+          color="secondary"
+          onClick={() => navigate(`/edit-ticket/${ticket.id}`)}
+          title="Edit"
+        >
+          <EditIcon />
+        </IconButton>
+
+        <IconButton
+          color="error"
+          onClick={() => {
+            setTicketToDelete(ticket);
+            setDeleteDialogOpen(true);
+          }}
+          title="Delete"
+        >
+          <DeleteIcon />
+        </IconButton>
+      </>
+    )}
+  </Box>
+</TableCell>
+
+
+
                   </TableRow>
                 );
               })

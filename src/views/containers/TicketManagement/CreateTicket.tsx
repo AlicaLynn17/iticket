@@ -18,14 +18,25 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./CreateTicket.css";
 
+type TicketFormData = {
+  title: string;
+  description: string;
+  category: string;
+  priority: string;
+  attachment: string;
+  assignedTo: number | null;
+  dueDate: string;
+};
+
+
 export const CreateTicket = () => {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<TicketFormData>({
     title: "",
     description: "",
     category: "",
     priority: "Medium",
     attachment: "",
-    assignedTo: "",
+    assignedTo: null,
     dueDate: ""
   });
 
@@ -34,8 +45,13 @@ export const CreateTicket = () => {
   const navigate = useNavigate();
   const [dragActive, setDragActive] = useState(false);
 
-  const user = JSON.parse(localStorage.getItem("user") || "{}");
-  const isAdmin = user.role === "Admin";
+const storedUser = localStorage.getItem("user");
+console.log("Raw stored user:", storedUser);
+const user = storedUser ? JSON.parse(storedUser) : null;
+console.log("Parsed user object:", user);
+
+const isAdmin = user?.role === "Admin"; // <-- optional chaining prevents crash
+
   const [customCategory, setCustomCategory] = useState("");
 
 
@@ -70,13 +86,18 @@ export const CreateTicket = () => {
       createdBy: user.id,
     };
 
+    console.log("User from localStorage:", user);
+console.log("Submitting ticket:", newTicket);
+
+
+
     try {
       await axios.post("https://localhost:5001/api/Ticket/CreateTicket", newTicket);
       setSnackbar({ open: true, message: "Ticket created successfully!", severity: "success" });
       setTimeout(() => navigate("/view-tickets"), 1000);
     } catch (error) {
       console.error("Error creating ticket:", error);
-      setSnackbar({ open: true, message: "Failed to create ticket.", severity: "error" });
+      setSnackbar({ open: true, message: "Failed to create ticket. Ensure all fields are filled.", severity: "error" });
     }
   };
 
@@ -182,27 +203,34 @@ export const CreateTicket = () => {
             </FormControl>
           </div>
 
-          {(isAdmin || user.role === "Agent") && (
+          {(isAdmin || user?.role === "Agent") && (
             <div className="form-group">
               <label>Assign to Agent</label>
               <FormControl fullWidth size="small" sx={{ mt: 2 }}>
                 <InputLabel id="assignedTo-label">Assign To</InputLabel>
                 <Select
-                  labelId="assignedTo-label"
-                  name="assignedTo"
-                  value={formData.assignedTo}
-                  label="Assign To"
-                  onChange={handleSelectChange}
-                >
-                  <MenuItem value="">Unassigned</MenuItem>
-                  {users
-                    .filter(user => user.role === "Agent" || user.role === "Admin")
-                    .map((user) => (
-                      <MenuItem key={user.id} value={user.id}>
-                        {user.name} ({user.role})
-                      </MenuItem>
-                    ))}
-                </Select>
+                labelId="assignedTo-label"
+                name="assignedTo"
+                value={formData.assignedTo ?? ""}
+                label="Assign To"
+                onChange={(e) => {
+                  const value = e.target.value;
+                  setFormData({
+                    ...formData,
+                    assignedTo: value === "" ? null : Number(value),
+                  });
+                }}
+              >
+                <MenuItem value="">Unassigned</MenuItem>
+                {users
+                  .filter(user => user.role === "Agent" || user.role === "Admin")
+                  .map((user) => (
+                    <MenuItem key={user.id} value={user.id}>
+                      {user.name} ({user.role})
+                    </MenuItem>
+                  ))}
+              </Select>
+
               </FormControl>
             </div>
           )}
@@ -256,6 +284,22 @@ export const CreateTicket = () => {
           </Stack>
         </div>
       </Box>
+
+      <Snackbar
+      open={snackbar.open}
+      autoHideDuration={3000}
+      onClose={() => setSnackbar({ ...snackbar, open: false })}
+      anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+    >
+      <Alert
+        onClose={() => setSnackbar({ ...snackbar, open: false })}
+        severity={snackbar.severity as "success" | "error"}
+        sx={{ width: "100%" }}
+      >
+        {snackbar.message}
+      </Alert>
+    </Snackbar>
+
     </form>
   );
 };

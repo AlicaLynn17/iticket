@@ -50,7 +50,7 @@ useEffect(() => {
     });
 
   // You can comment out tickets for now since you’re focusing on AccountController
-  // axios.get("http://localhost:3000/tickets").then((res) => setTickets(res.data));
+   axios.get("https://localhost:5001/api/Ticket/GetTickets").then((res) => setTickets(res.data));
 }, []);
 
 
@@ -89,9 +89,10 @@ useEffect(() => {
       const affectedTickets = tickets.filter(
         (ticket) => ticket.assignedTo === user.id
       );
-      // for (const ticket of affectedTickets) {
-      //   await axios.patch(`http://localhost:3000/tickets/${ticket.id}`, { assignedTo: "" });
-      // }
+       for (const ticket of affectedTickets) {
+        await axios.patch(`https://localhost:5001/api/Ticket/UnassignTicket/Unassign/${ticket.id}`);
+      }
+
 
       await axios.delete(`https://localhost:5001/api/Account/DeleteUser/${user.id}`, { withCredentials: true });
       setUsers((prev) => prev.filter((u) => u.id !== user.id));
@@ -136,9 +137,9 @@ useEffect(() => {
           className="user-role-select"
         >
           <option value="">All Roles</option>
-          <option value="admin">Admin</option>
-          <option value="agent">Agent</option>
-          <option value="user">User</option>
+          <option value="Admin">Admin</option>
+          <option value="Agent">Agent</option>
+          <option value="User">User</option>
         </select>
       </div>
 

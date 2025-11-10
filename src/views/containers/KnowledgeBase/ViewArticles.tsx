@@ -20,7 +20,10 @@ import "./ViewArticles.css";
 export const ViewArticles = () => {
   const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem("user") || "{}");
-  const isAdmin = user.role === "Admin";
+  const role = user.role;
+  const canCreateEdit = role === "Admin" || role === "Agent";
+  const canDelete = role === "Admin";
+
 
   const [articles, setArticles] = useState<any[]>([]);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
@@ -75,7 +78,7 @@ export const ViewArticles = () => {
     <Box className="view-articles-container">
       <div className="view-articles-header">
         <h1>Knowledge Base</h1>
-        {isAdmin && (
+        {canCreateEdit && (
           <Button
             variant="contained"
             startIcon={<AddIcon />}
@@ -84,6 +87,7 @@ export const ViewArticles = () => {
             New Article
           </Button>
         )}
+
       </div>
 
       {categories.map((cat) => (
@@ -115,14 +119,15 @@ export const ViewArticles = () => {
                     </Typography>
                   </div>
 
-                  {isAdmin && (
-                    <div className="article-actions">
-                      <Button
-                        size="small"
-                        onClick={() => navigate(`/edit-article/${article.id}`)}
-                      >
-                        Edit
-                      </Button>
+                  {canCreateEdit && (
+                  <div className="article-actions">
+                    <Button
+                      size="small"
+                      onClick={() => navigate(`/edit-article/${article.id}`)}
+                    >
+                      Edit
+                    </Button>
+                    {canDelete && (
                       <Button
                         size="small"
                         color="error"
@@ -130,8 +135,10 @@ export const ViewArticles = () => {
                       >
                         Delete
                       </Button>
-                    </div>
-                  )}
+                    )}
+                  </div>
+                )}
+
                 </Paper>
               ))}
           </Stack>

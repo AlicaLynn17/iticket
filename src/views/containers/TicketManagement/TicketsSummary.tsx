@@ -13,8 +13,8 @@ export const TicketsSummary = () => {
   const user = JSON.parse(localStorage.getItem("user") || "{}");
 
   useEffect(() => {
-    axios.get(`http://localhost:3000/tickets/${id}`).then((res) => setTicket(res.data));
-    axios.get("http://localhost:3000/users").then((res) => setUsers(res.data));
+    axios.get(`https://localhost:5001/api/Ticket/GetById/${id}`).then((res) => setTicket(res.data));
+    axios.get("https://localhost:5001/api/Account/GetUsers").then((res) => setUsers(res.data));
   }, [id]);
 
   const getAssignedUserName = (userId: string) => {
