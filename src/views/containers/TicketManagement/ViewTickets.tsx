@@ -286,31 +286,30 @@ export const ViewTickets = () => {
       </>
     )}
 
-    {/* 🔹 Users — can only manage their own tickets */}
-    {isUser && String(ticket.createdBy) === String(user.id) && (
-      <>
-        <IconButton
-          color="secondary"
-          onClick={() => navigate(`/edit-ticket/${ticket.id}`)}
-          title="Edit"
-        >
-          <EditIcon />
-        </IconButton>
+      {isUser && String(ticket.createdBy) === String(user.id) && (
+        <>
+          <IconButton
+            color="secondary"
+            onClick={() => navigate(`/edit-ticket/${ticket.id}`)}
+            title="Edit"
+          >
+            <EditIcon />
+          </IconButton>
 
-        <IconButton
-          color="error"
-          onClick={() => {
-            setTicketToDelete(ticket);
-            setDeleteDialogOpen(true);
-          }}
-          title="Delete"
-        >
-          <DeleteIcon />
-        </IconButton>
-      </>
-    )}
-  </Box>
-</TableCell>
+          <IconButton
+            color="error"
+            onClick={() => {
+              setTicketToDelete(ticket);
+              setDeleteDialogOpen(true);
+            }}
+            title="Delete"
+          >
+            <DeleteIcon />
+          </IconButton>
+        </>
+      )}
+    </Box>
+  </TableCell>
 
 
 
