@@ -72,6 +72,33 @@ export const TicketsSummary = () => {
 
         <p className="description">{ticket.description}</p>
 
+        {ticket.attachment && (
+          <div className="meta-item" style={{ marginTop: "1rem" }}>
+            <strong>Attachment: </strong>
+            <a
+              href={`https://localhost:5001/uploads/${ticket.attachment}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ marginLeft: "5px", color: "#1976d2", textDecoration: "underline" }}
+            >
+              {ticket.attachment}
+            </a>
+
+            {/* {ticket.attachment &&
+            (ticket.attachment.endsWith(".png") ||
+              ticket.attachment.endsWith(".jpg") ||
+              ticket.attachment.endsWith(".jpeg")) && (
+              <img
+                src={`https://localhost:5001/uploads/${ticket.attachment}`}
+                alt="Attachment Preview"
+                style={{ width: "150px", marginTop: "10px", borderRadius: "4px" }}
+              />
+            )} */}
+
+          </div>
+        )}
+
+
         {(isFeedbackEligible || canEdit) && (
           <div style={{ display: "flex", flexWrap: "wrap", gap: "1rem", marginTop: "2rem" }}>
             {isFeedbackEligible && (
