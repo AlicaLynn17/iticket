@@ -32,12 +32,10 @@ export const SetPreferences = () => {
     if (!userId) return;
     const fetchPrefs = async () => {
       try {
-        const res = await axios.get(`http://localhost:3000/users/${userId}`);
-        if (res.data.preferences) {
-          setPreferences({
-            ...preferences,
-            ...res.data.preferences,
-          });
+        const res = await axios.get(`https://localhost:5001/api/preference/${userId}`);
+        // console.log("Fetched preferences:", res.data);
+        if (res.data) {
+          setPreferences(res.data);
         }
       } catch (err) {
         console.error("Error loading preferences:", err);
@@ -60,7 +58,12 @@ export const SetPreferences = () => {
 
   const handleSave = async () => {
     try {
-      await axios.patch(`http://localhost:3000/users/${userId}`, { preferences });
+      await axios.patch(`https://localhost:5001/api/preference/${userId}`, {
+        userId,
+        showStats: preferences.showStats,
+        showSatisfaction: preferences.showSatisfaction,
+        cardOrder: preferences.cardOrder, 
+      });
       setSnackbar({
         open: true,
         message: "Dashboard preferences saved!",

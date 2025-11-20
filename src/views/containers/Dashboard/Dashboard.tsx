@@ -15,10 +15,16 @@ export const Dashboard = () => {
 
   const [tickets, setTickets] = useState<any[]>([]);
   const [feedback, setFeedback] = useState<any[]>([]);
-  const [preferences, setPreferences] = useState({
+
+  type Preferences = {
+    showStats: boolean;
+    showSatisfaction: boolean;
+    cardOrder: string[];
+  };
+
+  const [preferences, setPreferences] = useState<Preferences>({
     showStats: true,
     showSatisfaction: true,
-    showPerformance: true,
     cardOrder: ["unresolved", "overdue", "dueToday", "resolved"],
   });
 
@@ -41,8 +47,8 @@ export const Dashboard = () => {
     const fetchData = async () => {
       try {
         const [ticketsRes, feedbackRes] = await Promise.all([
-          axios.get("http://localhost:3000/tickets"),
-          axios.get("http://localhost:3000/feedback"),
+          axios.get("https://localhost:5001/api/ticket/gettickets"),
+          axios.get("https://localhost:5001/api/feedback"),
         ]);
         setTickets(ticketsRes.data);
         setFeedback(feedbackRes.data);
@@ -56,19 +62,9 @@ export const Dashboard = () => {
   // ✅ Fetch preferences
   useEffect(() => {
     if (!userId) return;
-    axios.get(`http://localhost:3000/users/${userId}`).then((res) => {
-      if (res.data.preferences) {
-        setPreferences((prev) => ({
-          ...prev,
-          ...res.data.preferences,
-          cardOrder:
-            res.data.preferences.cardOrder || [
-              "unresolved",
-              "overdue",
-              "dueToday",
-              "resolved",
-            ],
-        }));
+    axios.get(`https://localhost:5001/api/preference/${userId}`).then((res) => {
+      if (res.data) {
+        setPreferences(res.data);
       }
     });
   }, [userId]);
