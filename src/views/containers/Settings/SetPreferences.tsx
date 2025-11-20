@@ -14,7 +14,7 @@ import "./SetPreferences.css";
 
 export const SetPreferences = () => {
   const user = JSON.parse(localStorage.getItem("user") || "{}");
-  const userId = user?.id;
+  const userId = user.id;
 
   const [preferences, setPreferences] = useState({
     showStats: true,

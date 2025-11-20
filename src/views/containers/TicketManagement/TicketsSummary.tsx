@@ -13,8 +13,8 @@ export const TicketsSummary = () => {
   const user = JSON.parse(localStorage.getItem("user") || "{}");
 
   useEffect(() => {
-    axios.get(`http://localhost:3000/tickets/${id}`).then((res) => setTicket(res.data));
-    axios.get("http://localhost:3000/users").then((res) => setUsers(res.data));
+    axios.get(`https://localhost:5001/api/Ticket/GetById/${id}`).then((res) => setTicket(res.data));
+    axios.get("https://localhost:5001/api/Account/GetUsers").then((res) => setUsers(res.data));
   }, [id]);
 
   const getAssignedUserName = (userId: string) => {
@@ -71,6 +71,33 @@ export const TicketsSummary = () => {
         </div>
 
         <p className="description">{ticket.description}</p>
+
+        {ticket.attachment && (
+          <div className="meta-item" style={{ marginTop: "1rem" }}>
+            <strong>Attachment: </strong>
+            <a
+              href={`https://localhost:5001/uploads/${ticket.attachment}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ marginLeft: "5px", color: "#1976d2", textDecoration: "underline" }}
+            >
+              {ticket.attachment}
+            </a>
+
+            {/* {ticket.attachment &&
+            (ticket.attachment.endsWith(".png") ||
+              ticket.attachment.endsWith(".jpg") ||
+              ticket.attachment.endsWith(".jpeg")) && (
+              <img
+                src={`https://localhost:5001/uploads/${ticket.attachment}`}
+                alt="Attachment Preview"
+                style={{ width: "150px", marginTop: "10px", borderRadius: "4px" }}
+              />
+            )} */}
+
+          </div>
+        )}
+
 
         {(isFeedbackEligible || canEdit) && (
           <div style={{ display: "flex", flexWrap: "wrap", gap: "1rem", marginTop: "2rem" }}>

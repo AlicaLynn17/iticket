@@ -11,7 +11,7 @@ import "./Dashboard.css";
 
 export const Dashboard = () => {
   const user = JSON.parse(localStorage.getItem("user") || "{}");
-  const userId = user?.id;
+  const userId = user.id;
 
   const [tickets, setTickets] = useState<any[]>([]);
   const [feedback, setFeedback] = useState<any[]>([]);
@@ -47,9 +47,13 @@ export const Dashboard = () => {
     const fetchData = async () => {
       try {
         const [ticketsRes, feedbackRes] = await Promise.all([
-          axios.get("https://localhost:5001/api/ticket/gettickets"),
-          axios.get("https://localhost:5001/api/feedback"),
+          axios.get("https://localhost:5001/api/Ticket/GetTickets"),
+          axios.get("https://localhost:5001/api/Feedback/GetAll"),
         ]);
+
+        console.log("🎟️ Tickets from API:", ticketsRes.data);
+        console.log("👤 userId:", userId);
+
         setTickets(ticketsRes.data);
         setFeedback(feedbackRes.data);
       } catch (err) {
@@ -62,7 +66,7 @@ export const Dashboard = () => {
   // ✅ Fetch preferences
   useEffect(() => {
     if (!userId) return;
-    axios.get(`https://localhost:5001/api/preference/${userId}`).then((res) => {
+    axios.get(`https://localhost:5001/api/Preference/${userId}`).then((res) => {
       if (res.data) {
         setPreferences(res.data);
       }
@@ -71,50 +75,53 @@ export const Dashboard = () => {
 
   // ✅ Compute ticket stats
   useEffect(() => {
-    if (tickets.length === 0) return;
+    if (tickets.length === 0 || !userId) return; // <-- important guard
+
+    const userTickets = tickets.filter(
+      (t) =>
+        Number(t.createdBy) === Number(userId) ||
+        Number(t.assignedTo) === Number(userId)
+    );
+
+    console.log("🧾 Filtered userTickets:", userTickets);
 
     const today = new Date();
 
-    const unresolved = tickets.filter(
-      (t) => t.status && !["Closed", "Resolved"].includes(t.status)
+    const resolved = userTickets.filter((t) =>
+      ["closed", "resolved"].includes(t.status?.toLowerCase())
     ).length;
-    const resolved = tickets.filter((t) =>
-      ["Closed", "Resolved"].includes(t.status)
+
+    const unresolved = userTickets.filter(
+      (t) => !["closed", "resolved"].includes(t.status?.toLowerCase())
     ).length;
-    const overdue = tickets.filter((t) => {
+
+    const overdue = userTickets.filter((t) => {
       const due = new Date(t.dueDate);
-      return t.status !== "Closed" && t.status !== "Resolved" && due < today;
+      const status = t.status?.toLowerCase();
+      return !["closed", "resolved"].includes(status) && due < today;
     }).length;
-    const dueToday = tickets.filter((t) => {
+
+    const dueToday = userTickets.filter((t) => {
       const due = new Date(t.dueDate);
+      const status = t.status?.toLowerCase();
       return (
-        t.status !== "Closed" &&
-        t.status !== "Resolved" &&
+        !["closed", "resolved"].includes(status) &&
         due.getDate() === today.getDate() &&
         due.getMonth() === today.getMonth() &&
         due.getFullYear() === today.getFullYear()
       );
     }).length;
 
-    // Compute average resolution time
-    const resolutionTimes = tickets
-      .filter((t) => t.createdAt && t.resolvedAt)
-      .map(
-        (t) =>
-          new Date(t.resolvedAt).getTime() - new Date(t.createdAt).getTime()
-      );
+    console.log({ resolved, unresolved, overdue, dueToday });
 
-    let avgResolutionTime = "N/A";
-    if (resolutionTimes.length > 0) {
-      const avgMs =
-        resolutionTimes.reduce((a, b) => a + b, 0) / resolutionTimes.length;
-      const hours = Math.floor(avgMs / (1000 * 60 * 60));
-      const minutes = Math.floor((avgMs % (1000 * 60 * 60)) / (1000 * 60));
-      avgResolutionTime = `${hours}h ${minutes}m`;
-    }
-
-    setStats({ unresolved, overdue, dueToday, resolved, avgResolutionTime });
-  }, [tickets]);
+    setStats({
+      unresolved,
+      overdue,
+      dueToday,
+      resolved,
+      avgResolutionTime: "N/A",
+    });
+  }, [tickets, userId]);
 
   // ✅ Compute satisfaction stats
   useEffect(() => {

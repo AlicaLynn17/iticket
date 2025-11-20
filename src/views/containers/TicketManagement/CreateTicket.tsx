@@ -18,14 +18,25 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./CreateTicket.css";
 
+type TicketFormData = {
+  title: string;
+  description: string;
+  category: string;
+  priority: string;
+  attachment: File | null;
+  assignedTo: number | null;
+  dueDate: string;
+};
+
+
 export const CreateTicket = () => {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<TicketFormData>({
     title: "",
     description: "",
     category: "",
     priority: "Medium",
-    attachment: "",
-    assignedTo: "",
+    attachment: null,
+    assignedTo: null,
     dueDate: ""
   });
 
@@ -34,8 +45,13 @@ export const CreateTicket = () => {
   const navigate = useNavigate();
   const [dragActive, setDragActive] = useState(false);
 
-  const user = JSON.parse(localStorage.getItem("user") || "{}");
-  const isAdmin = user.role === "Admin";
+const storedUser = localStorage.getItem("user");
+console.log("Raw stored user:", storedUser);
+const user = storedUser ? JSON.parse(storedUser) : null;
+console.log("Parsed user object:", user);
+
+const isAdmin = user?.role === "Admin"; 
+
   const [customCategory, setCustomCategory] = useState("");
 
 
@@ -61,22 +77,52 @@ export const CreateTicket = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const newTicket = {
-      ...formData,
-      category: formData.category === "Other" ? customCategory : formData.category,
-      status: "Open",
-      createdAt: new Date().toISOString(),
-      resolvedAt: null,
-      createdBy: user.id,
-    };
+    const data = new FormData();
+
+    data.append("title", formData.title);
+    data.append("description", formData.description);
+
+    data.append(
+      "category",
+      formData.category === "Other" ? customCategory : formData.category
+    );
+
+    data.append("priority", formData.priority);
+
+    if (formData.assignedTo !== null) {
+      data.append("assignedTo", formData.assignedTo.toString());
+    }
+
+    data.append("dueDate", formData.dueDate);
+    data.append("status", "Open");
+    data.append("createdAt", new Date().toISOString());
+    data.append("createdBy", user.id.toString());
+
+    if (formData.attachment) {
+      data.append("attachment", formData.attachment);
+    }
 
     try {
-      await axios.post("https://localhost:5001/api/Ticket/CreateTicket", newTicket);
-      setSnackbar({ open: true, message: "Ticket created successfully!", severity: "success" });
+      await axios.post(
+        "https://localhost:5001/api/Ticket/CreateTicket",
+        data,
+        { headers: { "Content-Type": "multipart/form-data" } }
+      );
+
+      setSnackbar({
+        open: true,
+        message: "Ticket created successfully!",
+        severity: "success",
+      });
+
       setTimeout(() => navigate("/view-tickets"), 1000);
     } catch (error) {
       console.error("Error creating ticket:", error);
-      setSnackbar({ open: true, message: "Failed to create ticket.", severity: "error" });
+      setSnackbar({
+        open: true,
+        message: "Failed to create ticket.",
+        severity: "error",
+      });
     }
   };
 
@@ -92,14 +138,16 @@ export const CreateTicket = () => {
     e.preventDefault();
     setDragActive(false);
     if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-      setFormData({ ...formData, attachment: e.dataTransfer.files[0].name });
+      setFormData({ ...formData, attachment: e.dataTransfer.files[0] });
     }
   };
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
-      setFormData({ ...formData, attachment: e.target.files[0].name });
+      setFormData({ ...formData, attachment: e.target.files[0] });
     }
   };
+
 
   return (
     <form onSubmit={handleSubmit}>
@@ -182,27 +230,34 @@ export const CreateTicket = () => {
             </FormControl>
           </div>
 
-          {(isAdmin || user.role === "Agent") && (
+          {(isAdmin || user?.role === "Agent") && (
             <div className="form-group">
               <label>Assign to Agent</label>
               <FormControl fullWidth size="small" sx={{ mt: 2 }}>
                 <InputLabel id="assignedTo-label">Assign To</InputLabel>
                 <Select
-                  labelId="assignedTo-label"
-                  name="assignedTo"
-                  value={formData.assignedTo}
-                  label="Assign To"
-                  onChange={handleSelectChange}
-                >
-                  <MenuItem value="">Unassigned</MenuItem>
-                  {users
-                    .filter(user => user.role === "Agent" || user.role === "Admin")
-                    .map((user) => (
-                      <MenuItem key={user.id} value={user.id}>
-                        {user.name} ({user.role})
-                      </MenuItem>
-                    ))}
-                </Select>
+                labelId="assignedTo-label"
+                name="assignedTo"
+                value={formData.assignedTo ?? ""}
+                label="Assign To"
+                onChange={(e) => {
+                  const value = e.target.value;
+                  setFormData({
+                    ...formData,
+                    assignedTo: value === "" ? null : Number(value),
+                  });
+                }}
+              >
+                <MenuItem value="">Unassigned</MenuItem>
+                {users
+                  .filter(user => user.role === "Agent" || user.role === "Admin")
+                  .map((user) => (
+                    <MenuItem key={user.id} value={user.id}>
+                      {user.name} ({user.role})
+                    </MenuItem>
+                  ))}
+              </Select>
+
               </FormControl>
             </div>
           )}
@@ -241,7 +296,9 @@ export const CreateTicket = () => {
                 onChange={handleFileChange}
               />
               {formData.attachment && (
-                <Typography sx={{ mt: 1, fontSize: 13 }}>{formData.attachment}</Typography>
+                <Typography sx={{ mt: 1, fontSize: 13 }}>
+                  {formData.attachment.name}
+                </Typography>
               )}
             </Box>
           </div>
@@ -256,6 +313,22 @@ export const CreateTicket = () => {
           </Stack>
         </div>
       </Box>
+
+      <Snackbar
+      open={snackbar.open}
+      autoHideDuration={3000}
+      onClose={() => setSnackbar({ ...snackbar, open: false })}
+      anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+    >
+      <Alert
+        onClose={() => setSnackbar({ ...snackbar, open: false })}
+        severity={snackbar.severity as "success" | "error"}
+        sx={{ width: "100%" }}
+      >
+        {snackbar.message}
+      </Alert>
+    </Snackbar>
+
     </form>
   );
 };

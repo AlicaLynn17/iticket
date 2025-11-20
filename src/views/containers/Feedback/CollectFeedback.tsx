@@ -42,7 +42,7 @@ export const CollectFeedback = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:3000/feedback", {
+      await axios.post("https://localhost:5001/api/Feedback/CreateFeedback", {
         title: `Feedback for Ticket ${ticketId}`,
         content: formData.comments,
         rating: formData.rating,
