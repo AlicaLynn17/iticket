@@ -151,7 +151,7 @@ label {
   padding: 16px;
   position: fixed;
   left: 50%;
-  bottom: 30px;
+  top: 30px;
   transform: translateX(-50%);
   z-index: 1000;
   font-size: 16px;

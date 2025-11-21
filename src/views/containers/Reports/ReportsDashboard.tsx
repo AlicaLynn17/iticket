@@ -69,7 +69,7 @@ export const ReportsDashboard = () => {
     <Box className="reports-dashboard-container">
       <div className="reports-dashboard-header">
         <h1>Reports & Analytics</h1>
-        <h2>Visual insights into system performance, ticket trends, and agent efficiency</h2>
+        <h2>Visual insights into ticket break down and parameters</h2>
       </div>
 
       {loading ? (

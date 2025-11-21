@@ -32,7 +32,6 @@ export const EditUser = () => {
     severity: "success",
   });
 
-  // ✅ Load existing user data
   useEffect(() => {
     axios
       .get(`https://localhost:5001/api/account/GetUser/${id}`, {
@@ -48,13 +47,11 @@ export const EditUser = () => {
       );
   }, [id]);
 
-  // ✅ Handle text input changes
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  // ✅ Handle role selection
   const handleSelectChange = (e: SelectChangeEvent<string>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -63,9 +60,8 @@ export const EditUser = () => {
   const handleSubmit = async (e: React.FormEvent) => {
   e.preventDefault();
 
-  const password = formData.password ?? ""; // fallback to empty string
+  const password = formData.password ?? ""; 
 
-  // ✅ Only validate if password is provided
   if (password.trim() !== "" && password.length < 7) {
     setSnackbar({
       open: true,
@@ -75,7 +71,6 @@ export const EditUser = () => {
     return;
   }
 
-  // ✅ Only include password if provided
   const updatedUser = { ...formData };
   if (!password.trim()) {
     delete updatedUser.password;
@@ -182,7 +177,7 @@ export const EditUser = () => {
         open={snackbar.open}
         autoHideDuration={3000}
         onClose={() => setSnackbar({ ...snackbar, open: false })}
-        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
       >
         <Alert
           onClose={() => setSnackbar({ ...snackbar, open: false })}

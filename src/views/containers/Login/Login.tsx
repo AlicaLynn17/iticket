@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "./Login.css";
-
+import { TicketSnackbar } from "../../components/TicketComponents/TicketSnackbar";
 export const Login: React.FC = () => {
   const [credentials, setCredentials] = useState({ email: "", password: "" });
   const navigate = useNavigate();
@@ -92,9 +92,13 @@ export const Login: React.FC = () => {
           </div>
         </form>
       </div>
-      {showSnackbar && (
-        <div className="snackbar">Login Successful!</div>
-      )}
+      <TicketSnackbar
+  open={showSnackbar}
+  message="Login successful!"
+  severity="success"
+  onClose={() => setShowSnackbar(false)}
+/>
+
     </div>
   );
 };

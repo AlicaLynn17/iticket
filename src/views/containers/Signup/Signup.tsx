@@ -4,9 +4,17 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 import "./Signup.css";
+import { TicketSnackbar } from "../../components/TicketComponents/TicketSnackbar";
 
 export const SignUp: React.FC = () => {
   const navigate = useNavigate();
+const [showSnackbar, setShowSnackbar] = useState(false);
+const [snackbar, setSnackbar] = useState({
+  open: false,
+  message: "",
+  severity: "success" as "success" | "error",
+});
+
 
   const [formData, setFormData] = useState({
     firstName: "",
@@ -26,13 +34,22 @@ export const SignUp: React.FC = () => {
   e.preventDefault();
 
   if (formData.password.length < 7) {
-    alert("Password must be at least 7 characters long!");
+    setSnackbar({
+      open: true,
+      message: "Password must be at least 7 characters long!",
+      severity: "error",
+    });
     return;
   }
 
   if (formData.password !== formData.confirmPassword) {
-    alert("Passwords do not match!");
+    setSnackbar({
+      open: true,
+      message: "Password does not match!",
+      severity: "error",
+    });
     return;
+
   }
 
   const newUser = {
@@ -48,11 +65,20 @@ export const SignUp: React.FC = () => {
 
 try {
   await axios.post("https://localhost:5001/api/Account/Register", newUser);
-  alert("User registered successfully!");
+  setShowSnackbar(true);
+
+setTimeout(() => {
+  setShowSnackbar(false);
   navigate("/login");
+}, 1000);
+
 } catch (err) {
   console.error(err);
-  alert("Error registering user.");
+  setSnackbar({
+      open: true,
+      message: "Error registering user.",
+      severity: "error",
+    });
 }
 };
 
@@ -100,6 +126,14 @@ try {
         </div>
 
       </form>
+
+      <TicketSnackbar
+  open={showSnackbar}
+  message="User registered successfully!"
+  severity="success"
+  onClose={() => setShowSnackbar(false)}
+/>
+
     </div>
 
   </div>

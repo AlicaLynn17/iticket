@@ -39,7 +39,6 @@ export const ViewUsers = () => {
   const [hasOpenTickets, setHasOpenTickets] = useState(false);
 
 useEffect(() => {
-  // Fetch users from backend
   axios
     .get("https://localhost:5001/api/Account/GetUsers")
     .then((res) => {
@@ -49,7 +48,6 @@ useEffect(() => {
       console.error("Failed to fetch users:", err);
     });
 
-  // You can comment out tickets for now since you’re focusing on AccountController
    axios.get("https://localhost:5001/api/Ticket/GetTickets").then((res) => setTickets(res.data));
 }, []);
 
@@ -85,12 +83,12 @@ useEffect(() => {
 
   const handleDelete = async (user: any) => {
     try {
-      // Unassign tickets
+      
       const affectedTickets = tickets.filter(
         (ticket) => ticket.assignedTo === user.id
       );
        for (const ticket of affectedTickets) {
-        await axios.patch(`https://localhost:5001/api/Ticket/UnassignTicket/Unassign/${ticket.id}`);
+        await axios.put(`https://localhost:5001/api/Ticket/UnassignTicket/Unassign/${ticket.id}`);
       }
 
 
@@ -223,7 +221,7 @@ useEffect(() => {
         open={snackbar.open}
         autoHideDuration={1500}
         onClose={() => setSnackbar({ ...snackbar, open: false })}
-        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
       >
         <Alert onClose={() => setSnackbar({ ...snackbar, open: false })} severity={snackbar.severity as any}>
           {snackbar.message}
