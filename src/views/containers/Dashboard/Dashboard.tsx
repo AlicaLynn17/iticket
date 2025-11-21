@@ -51,9 +51,6 @@ export const Dashboard = () => {
           axios.get("https://localhost:5001/api/Feedback/GetAll"),
         ]);
 
-        console.log("🎟️ Tickets from API:", ticketsRes.data);
-        console.log("👤 userId:", userId);
-
         setTickets(ticketsRes.data);
         setFeedback(feedbackRes.data);
       } catch (err) {
