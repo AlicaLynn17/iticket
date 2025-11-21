@@ -58,7 +58,7 @@ export const SetPreferences = () => {
 
   const handleSave = async () => {
     try {
-      await axios.patch(`https://localhost:5001/api/preference/${userId}`, {
+      await axios.put(`https://localhost:5001/api/preference/${userId}`, {
         userId,
         showStats: preferences.showStats,
         showSatisfaction: preferences.showSatisfaction,
@@ -97,7 +97,6 @@ export const SetPreferences = () => {
           Choose what sections to show and reorder your cards.
         </Typography>
 
-        {/* Switches Section */}
 <div className="switches-container">
   <div className="switch-box">
     <FormControlLabel
@@ -169,7 +168,7 @@ export const SetPreferences = () => {
         open={snackbar.open}
         autoHideDuration={2000}
         onClose={handleCloseSnackbar}
-        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
       >
         <Alert severity={snackbar.severity as any}>
           {snackbar.message}

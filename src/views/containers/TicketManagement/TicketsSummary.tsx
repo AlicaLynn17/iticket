@@ -84,16 +84,7 @@ export const TicketsSummary = () => {
               {ticket.attachment}
             </a>
 
-            {/* {ticket.attachment &&
-            (ticket.attachment.endsWith(".png") ||
-              ticket.attachment.endsWith(".jpg") ||
-              ticket.attachment.endsWith(".jpeg")) && (
-              <img
-                src={`https://localhost:5001/uploads/${ticket.attachment}`}
-                alt="Attachment Preview"
-                style={{ width: "150px", marginTop: "10px", borderRadius: "4px" }}
-              />
-            )} */}
+            
 
           </div>
         )}

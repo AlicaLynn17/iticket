@@ -28,7 +28,6 @@ export const EditArticle = () => {
     severity: "success"
   });
 
-  // 🔹 Fetch existing article details
   useEffect(() => {
     if (articleId) {
       axios
@@ -52,7 +51,6 @@ export const EditArticle = () => {
     }
   }, [articleId]);
 
-  // 🔹 Handle input and dropdown changes
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
@@ -60,7 +58,6 @@ export const EditArticle = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  // 🔹 Update article
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -123,7 +120,6 @@ export const EditArticle = () => {
             />
           </div>
 
-          {/* ✅ Category dropdown now matches CreateArticle */}
           <div className="form-group">
             <label>Category</label>
             <select
@@ -159,7 +155,7 @@ export const EditArticle = () => {
         open={snackbar.open}
         autoHideDuration={2000}
         onClose={() => setSnackbar({ ...snackbar, open: false })}
-        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
       >
         <Alert
           onClose={() => setSnackbar({ ...snackbar, open: false })}

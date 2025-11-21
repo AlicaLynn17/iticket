@@ -173,7 +173,7 @@ export const ViewArticles = () => {
         open={snackbar.open}
         autoHideDuration={1500}
         onClose={() => setSnackbar({ ...snackbar, open: false })}
-        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
       >
         <Alert
           onClose={() => setSnackbar({ ...snackbar, open: false })}

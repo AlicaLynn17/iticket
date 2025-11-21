@@ -80,7 +80,7 @@ const handleSubmit = async (e: React.FormEvent) => {
   }
 
   try {
-    await axios.put(`https://localhost:5001/api/Ticket/UpdateTicket/${ticketId}`, {
+    await axios.put(`https://localhost:5001/api/Ticket/UpdateTicket/Update/${ticketId}`, {
       ...formData,
       id: parseInt(ticketId),
       assignedTo: formData.assignedTo ? parseInt(formData.assignedTo) : null,
@@ -247,19 +247,19 @@ const handleSubmit = async (e: React.FormEvent) => {
       </div>
 
       <Snackbar
-  open={snackbar.open}
-  autoHideDuration={3000}
-  onClose={() => setSnackbar({ ...snackbar, open: false })}
-  anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
->
-  <Alert
-    onClose={() => setSnackbar({ ...snackbar, open: false })}
-    severity={snackbar.severity as "success" | "error"}
-    sx={{ width: "100%" }}
-  >
-    {snackbar.message}
-  </Alert>
-</Snackbar>
+      open={snackbar.open}
+      autoHideDuration={3000}
+      onClose={() => setSnackbar({ ...snackbar, open: false })}
+      anchorOrigin={{ vertical: "top", horizontal: "center" }}
+    >
+      <Alert
+        onClose={() => setSnackbar({ ...snackbar, open: false })}
+        severity={snackbar.severity as "success" | "error"}
+        sx={{ width: "100%" }}
+      >
+        {snackbar.message}
+      </Alert>
+    </Snackbar>
 
     </Box>
   );

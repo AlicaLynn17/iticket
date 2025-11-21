@@ -115,10 +115,10 @@ export const ViewTickets = () => {
         setTickets((prev) => prev.filter((t) => t.id !== ticketToDelete.id));
         setSnackbar({ open: true, message: "Ticket deleted successfully!", severity: "success" });
       } catch (err:any) {
-        console.error("❌ Error deleting ticket:", err);
+        console.error("Error deleting ticket:", err);
         if (err.response) {
-          console.error("🔹 Response data:", err.response.data);
-          console.error("🔹 Status:", err.response.status);
+          console.error("Response data:", err.response.data);
+          console.error("Status:", err.response.status);
         }
         setSnackbar({
           open: true,
@@ -345,6 +345,7 @@ export const ViewTickets = () => {
         message={snackbar.message}
         severity={snackbar.severity as "success" | "error"}
         onClose={() => setSnackbar({ ...snackbar, open: false })}
+        
       />
     </Box>
   );

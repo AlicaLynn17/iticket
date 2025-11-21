@@ -6,20 +6,22 @@ interface TicketSnackbarProps {
   message: string;
   severity: "success" | "error";
   onClose: () => void;
+  anchorOrigin?: { vertical: "top" | "bottom"; horizontal: "left" | "center" | "right" };
 }
 
 export const TicketSnackbar: React.FC<TicketSnackbarProps> = ({
   open,
   message,
   severity,
-  onClose
+  onClose,
+  anchorOrigin = { vertical: "top", horizontal: "center" }
 }) => {
   return (
     <Snackbar
       open={open}
       autoHideDuration={1500}
       onClose={onClose}
-      anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+      anchorOrigin={{ vertical: "top", horizontal: "center" }}
     >
       <Alert onClose={onClose} severity={severity} sx={{ width: "100%" }}>
         {message}
