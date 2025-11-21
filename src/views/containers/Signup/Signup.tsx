@@ -74,7 +74,11 @@ setTimeout(() => {
 
 } catch (err) {
   console.error(err);
-  alert("Error registering user.");
+  setSnackbar({
+      open: true,
+      message: "Error registering user.",
+      severity: "error",
+    });
 }
 };
 
