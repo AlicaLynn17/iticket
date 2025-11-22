@@ -48,7 +48,7 @@ export const AssignTicket = () => {
 
   const handleAssign = async () => {
     try {
-      await axios.put(`https://localhost:5001/api/Ticket/AssignTicket/Assign/${id}`, { assignedTo });
+      await axios.put(`https://localhost:5001/api/Ticket/AssignTicket/${id}`, { assignedTo });
       setSnackbar({ open: true, message: "Ticket assigned successfully!", severity: "success" });
       setTimeout(() => navigate("/view-tickets"), 1000);
     } catch (err:any) {

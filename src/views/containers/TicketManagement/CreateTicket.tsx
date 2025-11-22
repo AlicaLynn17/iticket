@@ -46,9 +46,8 @@ export const CreateTicket = () => {
   const [dragActive, setDragActive] = useState(false);
 
 const storedUser = localStorage.getItem("user");
-console.log("Raw stored user:", storedUser);
+
 const user = storedUser ? JSON.parse(storedUser) : null;
-console.log("Parsed user object:", user);
 
 const isAdmin = user?.role === "Admin"; 
 

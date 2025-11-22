@@ -42,7 +42,6 @@ export const Dashboard = () => {
     negative: 0,
   });
 
-  // ✅ Fetch tickets and feedback
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -60,7 +59,6 @@ export const Dashboard = () => {
     fetchData();
   }, []);
 
-  // ✅ Fetch preferences
   useEffect(() => {
     if (!userId) return;
     axios.get(`https://localhost:5001/api/Preference/${userId}`).then((res) => {
@@ -70,9 +68,9 @@ export const Dashboard = () => {
     });
   }, [userId]);
 
-  // ✅ Compute ticket stats
+
   useEffect(() => {
-    if (tickets.length === 0 || !userId) return; // <-- important guard
+    if (tickets.length === 0 || !userId) return;
 
     const userTickets = tickets.filter(
       (t) =>
@@ -80,7 +78,6 @@ export const Dashboard = () => {
         Number(t.assignedTo) === Number(userId)
     );
 
-    console.log("🧾 Filtered userTickets:", userTickets);
 
     const today = new Date();
 
@@ -120,7 +117,7 @@ export const Dashboard = () => {
     });
   }, [tickets, userId]);
 
-  // ✅ Compute satisfaction stats
+
   useEffect(() => {
     if (feedback.length === 0) return;
 
@@ -142,7 +139,6 @@ export const Dashboard = () => {
         <h1>Dashboard</h1>
       </div>
 
-      {/* --- Ticket Stats --- */}
       {preferences.showStats && (
         <div className="dashboard-grid">
           {preferences.cardOrder.map((card) => {
@@ -186,7 +182,6 @@ export const Dashboard = () => {
         </div>
       )}
 
-      {/* --- Customer Satisfaction --- */}
       {preferences.showSatisfaction && (
         <div className="section-card">
           <h2>Customer Satisfaction</h2>

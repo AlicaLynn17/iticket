@@ -40,6 +40,8 @@ export const EditTicket = () => {
   const isCreator = formData.createdBy === loggedInUser.id;
   const isAdmin = loggedInUser.role === "Admin";
 
+  const [customCategory, setCustomCategory] = useState("");
+
   useEffect(() => {
     const fetchData = async () => {
       const ticketRes = await axios.get(`https://localhost:5001/api/Ticket/GetById/${ticketId}`);
@@ -50,13 +52,26 @@ export const EditTicket = () => {
         assignedTo: t.assignedTo ? t.assignedTo.toString() : "",
         dueDate: t.dueDate ? t.dueDate.split("T")[0] : "",
         description: t.description || "",
-        category: t.category || "",
+        category: t.category === "Hardware" || t.category === "Software" || t.category === "Network" || t.category === "Access/Account" || t.category === "Security" || t.category === "Other"
+          ? t.category
+          : "Other",
         priority: t.priority || "Medium",
         status: t.status || "Open",
         attachment: t.attachment || "",
         createdBy: t.createdBy || ""
       });
-
+      if (
+        t.category !== "Hardware" &&
+        t.category !== "Software" &&
+        t.category !== "Network" &&
+        t.category !== "Access/Account" &&
+        t.category !== "Security" &&
+        t.category !== "Other"
+      ) {
+        setCustomCategory(t.category || "");
+      } else {
+        setCustomCategory("");
+      }
       setUsers(usersRes.data);
     };
 
@@ -68,6 +83,9 @@ export const EditTicket = () => {
   ) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name!]: value });
+    if (value !== "Other") {
+      setCustomCategory("");
+    }
   };
 
 
@@ -80,8 +98,9 @@ const handleSubmit = async (e: React.FormEvent) => {
   }
 
   try {
-    await axios.put(`https://localhost:5001/api/Ticket/UpdateTicket/Update/${ticketId}`, {
+    await axios.put(`https://localhost:5001/api/Ticket/UpdateTicket/${ticketId}`, {
       ...formData,
+      category: formData.category === "Other" ? customCategory : formData.category,
       id: parseInt(ticketId),
       assignedTo: formData.assignedTo ? parseInt(formData.assignedTo) : null,
       createdBy: formData.createdBy ? parseInt(formData.createdBy) : null,
@@ -102,7 +121,54 @@ const handleSubmit = async (e: React.FormEvent) => {
       severity: "error",
     });
   }
+    if (!ticketId) {
+    console.error("No ticket ID provided.");
+    return;
+  }
+
+
+  try {
+    let attachmentFileName = formData.attachment;
+
+    if (newAttachment) {
+      const uploadData = new FormData();
+      uploadData.append("file", newAttachment);
+
+      const uploadRes = await axios.post(
+        "https://localhost:5001/api/Ticket/UploadAttachment",
+        uploadData,
+        { headers: { "Content-Type": "multipart/form-data" } }
+      );
+      attachmentFileName = uploadRes.data.fileName; 
+    }
+
+    await axios.put(`https://localhost:5001/api/Ticket/UpdateTicket/${ticketId}`, {
+      ...formData,
+      category: formData.category === "Other" ? customCategory : formData.category,
+      id: parseInt(ticketId),
+      assignedTo: formData.assignedTo ? parseInt(formData.assignedTo) : null,
+      createdBy: formData.createdBy ? parseInt(formData.createdBy) : null,
+      attachment: attachmentFileName,
+    });
+
+    setSnackbar({
+      open: true,
+      message: "Ticket updated successfully!",
+      severity: "success",
+    });
+
+    setTimeout(() => navigate("/view-tickets"), 1000);
+  } catch (error) {
+    console.error("Update error:", error);
+    setSnackbar({
+      open: true,
+      message: "Failed to update ticket.",
+      severity: "error",
+    });
+  }
 };
+
+const [newAttachment, setNewAttachment] = useState<File | null>(null);
 
 
   return (
@@ -191,6 +257,17 @@ const handleSubmit = async (e: React.FormEvent) => {
                 <MenuItem value="Other">Other</MenuItem>
               </Select>
             </FormControl>
+            {formData.category === "Other" && (
+              <TextField
+                label="Specify Category"
+                fullWidth
+                size="small"
+                value={customCategory}
+                onChange={e => setCustomCategory(e.target.value)}
+                sx={{ mt: 1 }}
+                required
+              />
+            )}
           </div>
 
           <div className="form-group">
@@ -227,12 +304,59 @@ const handleSubmit = async (e: React.FormEvent) => {
           </div>
 
           <div className="form-group">
-            <label>Attachments</label>
-            <Box className="drop-zone">
-              <Typography variant="body2" color="textSecondary">
-                Drag & drop files here or click to upload
+            <label>Attachment</label>
+            {formData.attachment && !newAttachment && (
+              <Box sx={{ mb: 1 }}>
+                <Typography variant="body2">
+                  Current:{" "}
+                  <a
+                    href={`https://localhost:5001/uploads/${formData.attachment}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {formData.attachment}
+                  </a>
+                </Typography>
+                <Button
+                  size="small"
+                  color="error"
+                  onClick={() => setFormData({ ...formData, attachment: "" })}
+                >
+                  Remove
+                </Button>
+              </Box>
+            )}
+            {/* Upload new attachment */}
+            <Button
+              variant="outlined"
+              component="label"
+              size="small"
+              sx={{ mt: 1 }}
+            >
+              {newAttachment ? "Change File" : "Upload New"}
+              <input
+                type="file"
+                hidden
+                onChange={e => {
+                  if (e.target.files && e.target.files[0]) {
+                    setNewAttachment(e.target.files[0]);
+                  }
+                }}
+              />
+            </Button>
+            {newAttachment && (
+              <Typography variant="body2" sx={{ mt: 1 }}>
+                Selected: {newAttachment.name}
+                <Button
+                  size="small"
+                  color="error"
+                  onClick={() => setNewAttachment(null)}
+                  sx={{ ml: 1 }}
+                >
+                  Remove
+                </Button>
               </Typography>
-            </Box>
+            )}
           </div>
 
           <Stack direction="row" spacing={2} sx={{ mt: 2 }}>

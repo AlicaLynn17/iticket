@@ -33,7 +33,6 @@ export const SetPreferences = () => {
     const fetchPrefs = async () => {
       try {
         const res = await axios.get(`https://localhost:5001/api/preference/${userId}`);
-        // console.log("Fetched preferences:", res.data);
         if (res.data) {
           setPreferences(res.data);
         }
